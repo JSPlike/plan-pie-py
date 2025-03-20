@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ko">
+    
+    {% include 'config.html' %} <!-- config.html에서 head 부분을 포함 -->
+
+    <body  class="bg-gray-100 flex justify-center items-center h-screen">
+        <!-- 헤더 -->
+        <header>
+            <nav>
+                <!--
+                <ul>
+                    <li><a href="/">홈</a></li>
+                    <li><a href="/about/">소개</a></li>
+                    <li><a href="/contact/">연락처</a></li>
+                </ul>
+                -->
+            </nav>
+        </header>
+
+        <!-- 메인 콘텐츠 -->
+        <main>
+            {% block content %}
+            <!-- 페이지별 콘텐츠는 여기에 삽입됩니다. -->
+            {% endblock %}
+        </main>
+
+        <!-- 푸터 -->
+        <footer>
+            <p>© 2025 My Website</p>
+        </footer>
+
+        <!-- JS 파일 추가 -->
+        {% block scripts %}
+        {% endblock %}
+    </body>
+</html>

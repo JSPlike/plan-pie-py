@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+<div class="container-event mx-auto p-6 bg-gray-100 text-gray-900">
+    <div class="left-section">
+        <!-- 달력 -->
+        <div id="calendar"></div>
+    </div>
+    <div class="right-section">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-2xl font-bold">내 일정</h2>
+            <a href="{% url 'event:create_event' %}" class="bg-blue-500 hover:bg-blue-600 px-4 py-2 text-white rounded transition">일정 생성</a>
+        </div>
+
+        {% if events %}
+            <table class="w-full bg-white shadow-md rounded-lg overflow-hidden">
+                <thead class="bg-gray-200">
+                    <tr>
+                        <th class="p-3 text-left">일정명</th>
+                        <th class="p-3 text-left">시작 시간</th>
+                        <th class="p-3 text-left">종료 시간</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for event in events %}
+                        <tr class="border-b hover:bg-gray-100">
+                            <td class="p-3">{{ event.title }}</td>
+                            <td class="p-3">{{ event.start_time }}</td>
+                            <td class="p-3">{{ event.end_time }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p class="text-gray-600">참여한 일정이 없습니다.</p>
+        {% endif %}
+
+        <h2 class="text-2xl font-bold mt-8 mb-4">초대받은 일정</h2>
+        {% if invites %}
+            <table class="w-full bg-white shadow-md rounded-lg overflow-hidden">
+                <thead class="bg-gray-200">
+                    <tr>
+                        <th class="p-3 text-left">일정명</th>
+                        <th class="p-3 text-left">초대 상태</th>
+                        <th class="p-3 text-left">액션</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for event in invites %}
+                        <tr class="border-b hover:bg-gray-100">
+                            <td class="p-3">{{ event.title }}</td>
+                            <td class="p-3 text-yellow-500">초대받음</td>
+                            <td class="p-3">
+                                <a href="{% url 'events:accept_invite' event.id %}" class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition">수락</a>
+                                <a href="{% url 'events:decline_invite' event.id %}" class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition ml-2">거절</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p class="text-gray-600">초대받은 일정이 없습니다.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+    <!-- 페이지별 자바스크립트 추가 -->
+    <script type="text/javascript">
+        // Django에서 전달한 JSON 데이터를 JavaScript 객체로 변환
+        var events = {{ events_json|escapejs }};
+        var invites = {{ invites_json|escapejs }};
+        
+        // FullCalendar 초기화
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            events: events.map(function(event) {
+                return {
+                    title: event.title,
+                    start: event.start_time,  // 날짜 형식에 맞게 처리
+                    end: event.end_time,      // 날짜 형식에 맞게 처리
+                    url: "/events/" + event.pk + "/accept/"
+                };
+            }),
+            eventClick: function(info) {
+                alert('이벤트: ' + info.event.title + '\n' + '시작 시간: ' + info.event.start.toISOString());
+            }
+        });
+        calendar.render();
+    </script>
+
+    <script src="{% static 'events/js/events.js' %}"></script>
+    {{ block.super }}  <!-- base.html에서 정의된 기본 스크립트도 호출 -->
+{% endblock %}
