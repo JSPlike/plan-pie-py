@@ -12,7 +12,7 @@ def signup(request):
             return JsonResponse({
                 "success": True,
                 "message": "회원가입 성공!",
-                "redirect_url": "/events/"  # 회원가입 성공 후 리다이렉트할 URL
+                "redirect_url": "/event/"  # 회원가입 성공 후 리다이렉트할 URL
             })
         else:
             # 폼이 유효하지 않을 경우, 오류 메시지를 JSON으로 반환
