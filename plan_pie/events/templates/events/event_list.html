@@ -6,17 +6,22 @@
 <div class="container-event mx-auto p-6 bg-gray-100 text-gray-900">
 
     <div class="event-header flex justify-between items-center mb-4 bg-white p-4 shadow rounded-lg">
+        <div id="calendarHd">
+        </div>
         <!-- 왼쪽: 연도 및 좌우 버튼 -->
+         <!--
         <div class="flex items-center space-x-4">
+            
+
             <button id="prevYear" class="px-3 py-1 bg-gray-300 rounded">&lt;</button>
             <span id="currentYear" class="text-lg font-bold">2025</span>
             <button id="nextYear" class="px-3 py-1 bg-gray-300 rounded">&gt;</button>
         </div>
-
+        -->
         <!-- 오른쪽: 사용자 프로필 및 + 버튼 -->
         <div class="flex items-center space-x-4">
             <div class="flex items-center space-x-2">
-                <img src="https://via.placeholder.com/40" alt="프로필" class="w-10 h-10 rounded-full">
+                <img src="{% static 'image/icon-profile.png' %}" alt="프로필" class="w-10 h-10 rounded-full">
                 <span class="font-semibold">사용자명</span>
             </div>
             <button id="toggleEvent" class="px-4 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition">+</button>
@@ -89,6 +94,7 @@
 
 {% block scripts %}
     <!-- 페이지별 자바스크립트 추가 -->
+     <!--
     <script type="text/javascript">
         // Django에서 전달한 JSON 데이터를 JavaScript 객체로 변환
         var events = {{ events_json|escapejs }};
@@ -112,7 +118,7 @@
         });
         calendar.render();
     </script>
-
+-->
     <script src="{% static 'events/js/events.js' %}"></script>
     {{ block.super }}  <!-- base.html에서 정의된 기본 스크립트도 호출 -->
 {% endblock %}

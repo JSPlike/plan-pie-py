@@ -4,8 +4,8 @@ body {
     background-color: #f4f4f4;
     margin: 0;
     padding: 0;
-    height: 100vh; /* 화면 전체 높이 */
-    display: flex;
+   /*height: 100vh;  화면 전체 높이 */
+    /*display: flex;*/
     flex-direction: column; /* 세로 방향으로 요소 배치 */
 }
 
@@ -32,7 +32,6 @@ main {
     flex-direction: column;
     justify-content: center; /* 세로로 가운데 정렬 */
     align-items: center; /* 가로로 가운데 정렬 */
-    padding: 50px 0; /* 위쪽과 아래쪽 여백 추가 */
 }
 
 .header {
@@ -101,17 +100,6 @@ footer {
     box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
 }
 
-/*
-.right-section {
-    position: absolute;
-    top: 0;
-    right: 0;
-    height: 100%;
-    background: white;
-    
-}*/
-
-
 /* 오른쪽으로 숨김 */
 .hidden-slide {
     transform: translateX(100%);
@@ -126,20 +114,36 @@ footer {
 }
 
 .calendar-header {
-    display: flex;
-    justify-content: space-between;
+    justify-content: space-between; /* 왼쪽과 오른쪽 끝으로 요소를 분리 */
     align-items: center;
-    padding: 10px;
-    font-size: 20px;
-    background: lightgrey;
+    padding: 10px 50px; /* 양 옆에 더 많은 여백 추가 */
+    font-size: 20px; /* 글자 크기 키움 */
+    background: linear-gradient(135deg, #4e8cf7, #3e6ab8); /* 그라데이션 배경 */
     color: white;
+    border-radius: 10px; /* 둥근 모서리 */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
 }
 
 .calendar-header button {
-    background: white;
-    border: none;
-    padding: 5px 10px;
+    background: #fff;
+    border: 2px solid #4e8cf7; /* 버튼 테두리 색상 */
+    padding: 10px 12px; /* 버튼 크기 조정 */
+    font-size: 18px; /* 버튼 글자 크기 */
+    border-radius: 5px; /* 둥근 버튼 */
     cursor: pointer;
+    color: #4e8cf7; /* 버튼 텍스트 색상 */
+    transition: all 0.3s ease; /* 버튼에 전환 효과 추가 */
+    margin-left: 20px; /* 버튼 간의 간격 추가 */
+}
+
+.calendar-header button:hover {
+    background: #4e8cf7; /* 호버 시 배경색 변화 */
+    color: white; /* 호버 시 텍스트 색상 변경 */
+    transform: translateY(-2px); /* 마우스 올리면 약간 올라가는 효과 */
+}
+
+.calendar-header button:active {
+    transform: translateY(2px); /* 클릭 시 약간 내려가는 효과 */
 }
 
 .calendar-grid {
@@ -151,20 +155,30 @@ footer {
 
 .day-header {
     font-weight: bold;
-    background: #ddd;
+    border-bottom: 1px solid #ccc;
     padding: 5px;
 }
 
 .day {
-    padding: 40px;
-    background: #f5f5f5;
-    border-radius: 5px;
+    padding: 70px 40px;
+    background: white;
+    border-bottom: 1px solid #ccc;
+    border-radius: 1px;
     cursor: pointer;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* 세로 방향으로 상단 정렬 */
+    align-items: center; /* 가로 방향으로 가운데 정렬 */
+    position: relative; /* 숫자를 상단으로 위치시키기 위한 상대적 위치 */
 }
 
-.day:hover {
-    background: #007bff;
-    color: white;
+.day span {
+    position: absolute; /* 숫자 위치 조정 */
+    top: 0; /* 상단에 배치 */
+    left: 50%; /* 가로 중앙 배치 */
+    transform: translateX(-50%); /* 정확한 가운데 정렬 */
+    font-size: 17px; /* 숫자 크기 조정 */
 }
 
 .empty {
