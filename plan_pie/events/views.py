@@ -11,10 +11,12 @@ def create_event(request):
         if form.is_valid():
             event = form.save()
             # Owner 추가
-            EventParticipant.objects.create(event=event, user=request.user, role='owner', status='accepted')
+            EventParticipant.objects.create(
+                event=event, user=request.user, role='owner', status='accepted'
+            )
             return redirect('event:event_list')
     else:
-        form = EventForm()
+        form = EventForm(user=request.user)
     return render(request, 'events/event_form.html', {'form': form})
 
 @login_required
