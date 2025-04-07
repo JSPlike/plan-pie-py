@@ -68,7 +68,7 @@ footer {
     
 }
 .event-contents {
-    /*display: flex;*/
+    overflow: hidden; /* 전체 스크롤 막기 */
     flex-direction: row; /* 좌우로 배치 */
     justify-content: space-between; /* 두 영역 사이에 여백 추가 */
     gap: 20px;
@@ -83,16 +83,16 @@ footer {
 
 /* 왼쪽 섹션(달력) */
 .left-section {
-    flex: 4; /* 왼쪽 영역을 1:1 비율로 설정 */
+    flex: 0 0 80%;; /* 왼쪽 영역을 1:1 비율로 설정 */
     padding: 20px;
     border: 1px solid #ddd; /* 달력 주위에 테두리 */
-    width: 80%;
-    /*height: 95vh;  달력 높이 설정 */
+    width: 100%;
+    transition: all 0.3s ease-in-out;
 }
 
 /* 오른쪽 섹션(일정 등록) */
 .right-section {
-    flex: 1; /* 오른쪽 영역을 1:1 비율로 설정 */
+    flex: 0 0 20%; /* 오른쪽 영역을 1:1 비율로 설정 */
     padding: 20px;
     border: 1px solid #ddd; /* 폼 주위에 테두리 */
     /*height: 95vh;  폼 영역 높이 설정 */
@@ -133,7 +133,8 @@ footer {
     cursor: pointer;
     color: #4e8cf7; /* 버튼 텍스트 색상 */
     transition: all 0.3s ease; /* 버튼에 전환 효과 추가 */
-    margin-left: 20px; /* 버튼 간의 간격 추가 */
+    margin-left: 10px; /* 버튼 간의 간격 추가 */
+    margin-right: 10px;
 }
 
 .calendar-header button:hover {
@@ -183,4 +184,15 @@ footer {
 
 .empty {
     visibility: hidden;
+}
+
+/* side section slide*/
+.slide-out-right {
+    transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+    transform: translateX(100%);
+    opacity: 0;
+}
+
+.expand-main {
+    flex: 0 0 100%;
 }

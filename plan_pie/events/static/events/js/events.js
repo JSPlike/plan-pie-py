@@ -41,4 +41,14 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     renderCalendar(today.getFullYear(), today.getMonth());
+
+    $('#close-section-btn').on('click', function () {
+        $('.right-section').addClass('slide-out-right');
+        $('.left-section').addClass('expand-main');
+    });
+
+    $('#toggleEvent').on('click', function() {
+        $('.right-section').removeClass('slide-out-right');
+        $('.left-section').removeClass('expand-main');
+    });
 });
