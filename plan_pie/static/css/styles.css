@@ -1,11 +1,9 @@
 /* static/styles.css */
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+    background-color: #fff;
     margin: 0;
     padding: 0;
-   /*height: 100vh;  화면 전체 높이 */
-    /*display: flex;*/
     flex-direction: column; /* 세로 방향으로 요소 배치 */
 }
 
@@ -14,7 +12,6 @@ body {
     margin: 0 auto;
     padding: 20px;
     background-color: #fff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     margin-top: 10px;
 }
 
@@ -62,7 +59,6 @@ footer {
 
 .container-event {
     flex-direction: column;
-    padding: 20px;
     width: 100%;
     height: 100vh; /* main 영역이 화면을 꽉 채우도록 설정 */
     
@@ -83,7 +79,7 @@ footer {
 /* 왼쪽 섹션(달력) */
 .left-section {
     flex: 0 0 75%;; /* 왼쪽 영역을 1:1 비율로 설정 */
-    border: 0.5px solid #ddd; /* 달력 주위에 테두리 */
+    border: 0.5px solid #e6e6e6; /* 달력 주위에 테두리 */
     width: 100%;
     transition: all 0.3s ease-in-out;
 }
@@ -91,10 +87,10 @@ footer {
 /* 오른쪽 섹션(일정 등록) */
 .right-section {
     flex: 0 0 25%; /* 오른쪽 영역을 1:1 비율로 설정 */
-    border: 0.5px solid #ddd; /* 폼 주위에 테두리 */
+    border: 0.5px solid #e6e6e6; /* 폼 주위에 테두리 */
+    border-left: none;
     /*height: 95vh;  폼 영역 높이 설정 */
     transition: transform 0.3s ease-in-out;
-    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
     flex-shrink: 0;
     background-color: white;
     box-sizing: border-box;
@@ -121,7 +117,6 @@ footer {
     /*background: linear-gradient(135deg, #4e8cf7, #3e6ab8);  그라데이션 배경 */
     color: black;
     border-radius: 5px; /* 둥근 모서리 */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
 }
 
 .calendar-header button {
@@ -150,20 +145,19 @@ footer {
 .calendar-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: 5px;
+    gap: 3px;
 }
 
 .day-header {
     font-weight: bold;
-    border-bottom: 1px solid #ccc;
-    padding: 5px;
+    border-bottom: 0.5px solid #e6e6e6;
+    padding: 3px;
 }
 
 .day {
     padding: 80px 50px;
     background: white;
-    border-bottom: 1px solid #ccc;
-    border-radius: 1px;
+    border-bottom: 1px solid #e6e6e6;
     cursor: pointer;
 
     display: flex;
@@ -239,9 +233,29 @@ footer {
     border-bottom: 0.5px solid rgb(237, 237, 237);
 }
 
+#custom-event-form .option-section {
+    padding: 20px 24px;
+    /*border-top: 0.5px solid rgb(237, 237, 237);*/
+    border-bottom: 0.5px solid rgb(237, 237, 237);
+}
+
+#custom-event-form .option-section .event-option{
+    display: flex;
+    width: 100%;
+    padding: 10px 0px;
+}
+
 #custom-event-form .event-date .name-date {
     margin-right: 16px;
     color: rgb(33, 33, 33);
     font-size: 14px;
     white-space: nowrap;
+}
+
+/* 아이콘 스타일 정의*/
+.icon {
+    width: 24px;
+    height: 24px;
+    stroke: #4f46e5; /* 색상 바꾸기 (indigo-600 같은 느낌) */
+    stroke-width: 2;
 }

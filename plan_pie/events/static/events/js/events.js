@@ -1,4 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
+    lucide.createIcons();  // 아이콘 렌더링
+
     const calendarEl = document.getElementById("calendar");
     const calendarHd = document.getElementById("calendarHd");
     const today = new Date();
@@ -109,5 +111,15 @@ document.addEventListener("DOMContentLoaded", function () {
         } else {
             $('.time-input').removeClass('hidden');
         }
+    });
+
+    /**
+     * 태그 색상 변경 이벤트
+     */
+    $('#event-color-select').on('change', function () {
+        const selectedColor = $(this).val();
+        console.log(selectedColor);
+
+        $('.icon').css('stroke', selectedColor);
     });
 });

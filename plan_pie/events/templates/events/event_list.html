@@ -3,9 +3,9 @@
 {% load static %}
 
 {% block content %}
-<div class="container-event mx-auto p-6 bg-gray-100 text-gray-900">
+<div class="container-event mx-auto text-gray-900">
 
-    <div class="event-header flex justify-between items-center mb-2 bg-white p-2 shadow rounded-lg">
+    <div class="event-header flex justify-between items-center bg-white p-2 shadow rounded-lg">
         <div id="calendarHd">
         </div>
         <!-- 왼쪽: 연도 및 좌우 버튼 -->
@@ -85,27 +85,32 @@
                         </div>
                     </div>
                     
-                
-                    <!-- 색상 선택 -->
-                    <div>
-                        <label class="text-sm font-semibold mb-1">색상 태그</label>
-                        <div class="flex gap-2">
-                            <input type="color" id="event-color" value="#3b82f6" class="w-10 h-10 border rounded-full p-1">
+                    <div class="option-section">
+                        <!-- 색상 선택 -->
+                        <div class="event-option flex items-center gap-3">
+                            <i data-lucide="tag" class="icon"></i>
+                            <select id="event-color-select" class="border rounded px-3 py-2">
+                                <option value="#6366f1">🟣 퍼플 블루</option>
+                                <option value="#f472b6">🌸 핑크 로즈</option>
+                                <option value="#34d399">💚 민트 그린</option>
+                                <option value="#facc15">💛 레몬 옐로우</option>
+                                <option value="#60a5fa">💙 스카이 블루</option>
+                                <option value="#fb923c">🧡 코랄 오렌지</option>
+                                <option value="#a78bfa">💜 라벤더</option>
+                              </select>
+                        </div>
+                    
+                        <!-- 참여자 목록 -->
+                        <div class="event-option flex items-center gap-3">
+                            <i data-lucide="circle-user-round" class="icon"></i>
+                            <div id="participant-list" class="flex flex-wrap gap-2 text-sm">
+                                <span class="bg-gray-200 rounded-full px-2 py-1">박준영</span>
+                                <span class="bg-gray-200 rounded-full px-2 py-1">이순신</span>
+                                <!-- 실제로는 동적으로 추가 -->
+                            </div>
                         </div>
                     </div>
-                
-                    <!-- 참여자 목록 -->
-                    <div>
-                        <label class="text-sm font-semibold mb-1">참여자</label>
-                        <div id="participant-list" class="flex flex-wrap gap-2 text-sm">
-                            <span class="bg-gray-200 rounded-full px-2 py-1">박준영</span>
-                            <span class="bg-gray-200 rounded-full px-2 py-1">이순신</span>
-                            <!-- 실제로는 동적으로 추가 -->
-                        </div>
-                    </div>
-                
                 </form>
-                
                 <!--<a href="{% url 'event:create_event' %}" class="bg-blue-500 hover:bg-blue-600 px-4 py-2 text-white rounded transition">일정 생성</a>-->
             </div>
             <div class="text-right mt-6">
