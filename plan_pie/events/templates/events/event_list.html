@@ -37,30 +37,58 @@
                 <form id="custom-event-form" class="w-full space-y-4 bg-white">
                     <!-- 제목 -->
                     <div>
-                        <input type="text" id="event-title" class="w-full border rounded px-3 py-2" placeholder="Title">
+                        <input type="text" id="event-title" class="event-title" placeholder="Title">
                     </div>
                 
                     <!-- 시작일 / 종료일 -->
-                    <div class="flex-1">
-                        <label class="block text-sm font-semibold mb-1">시작일</label>
-                        <input type="date" id="start-date" class="w-full border rounded px-3 py-2">
-                        <input type="time" id="start-time" class="w-full border rounded px-3 py-2 mt-2 time-input hidden">
+                    <div class="date-section">
+                        <div class="event-date">
+                            <div class="start-date">
+                                <div class="name-date">시작일</div>
+                                <div>
+                                    <input 
+                                    type="text" id="start-date" 
+                                    class="w-full border-none border-b border-gray-300 focus:border-blue-500 focus:ring-0 focus:outline-none px-3 py-2"
+                                    placeholder="날짜 선택"
+                                    readonly
+                                    >
+                                </div>
+                                <div class="time-input">
+                                    <input type="time" id="start-time" 
+                                    class="w-full border-none border-b border-gray-300 focus:border-blue-500 focus:ring-0 focus:outline-none px-3 py-2"
+                                    >
+                                </div>
+                            </div>
+
+                            <div class="end-date">
+                                <div class="name-date">종료일</div>
+                                <div>
+                                    <input 
+                                    type="text" id="end-date" 
+                                    class="w-full border-none border-b border-gray-300 focus:border-blue-500 focus:ring-0 focus:outline-none px-3 py-2"
+                                    placeholder="날짜 선택"
+                                    readonly
+                                    >
+                                </div>
+                                <div class="flex-1 time-input">
+                                    <input type="time" id="end-time" 
+                                    class="w-full border-none border-b border-gray-300 focus:border-blue-500 focus:ring-0 focus:outline-none px-3 py-2"
+                                    >
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 종일 여부 -->
+                        <div class="flex items-center space-x-2">
+                            <input type="checkbox" id="all-day" class="w-4 h-4">
+                            <label for="all-day" class="text-sm">종일</label>
+                        </div>
                     </div>
-                    <div class="flex-1">
-                        <label class="block text-sm font-semibold mb-1">종료일</label>
-                        <input type="date" id="end-date" class="w-full border rounded px-3 py-2">
-                        <input type="time" id="end-time" class="w-full border rounded px-3 py-2 mt-2 time-input hidden">
-                    </div>
-                
-                    <!-- 종일 여부 -->
-                    <div class="flex items-center space-x-2">
-                        <input type="checkbox" id="all-day" class="w-4 h-4">
-                        <label for="all-day" class="text-sm">종일</label>
-                    </div>
+                    
                 
                     <!-- 색상 선택 -->
                     <div>
-                        <label class="block text-sm font-semibold mb-1">색상 태그</label>
+                        <label class="text-sm font-semibold mb-1">색상 태그</label>
                         <div class="flex gap-2">
                             <input type="color" id="event-color" value="#3b82f6" class="w-10 h-10 border rounded-full p-1">
                         </div>
@@ -68,7 +96,7 @@
                 
                     <!-- 참여자 목록 -->
                     <div>
-                        <label class="block text-sm font-semibold mb-1">참여자</label>
+                        <label class="text-sm font-semibold mb-1">참여자</label>
                         <div id="participant-list" class="flex flex-wrap gap-2 text-sm">
                             <span class="bg-gray-200 rounded-full px-2 py-1">박준영</span>
                             <span class="bg-gray-200 rounded-full px-2 py-1">이순신</span>
@@ -76,16 +104,19 @@
                         </div>
                     </div>
                 
-                    <!-- 저장 버튼 -->
-                    <div class="text-right pt-4">
-                        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">
-                            저장
-                        </button>
-                    </div>
                 </form>
+                
                 <!--<a href="{% url 'event:create_event' %}" class="bg-blue-500 hover:bg-blue-600 px-4 py-2 text-white rounded transition">일정 생성</a>-->
             </div>
-    
+            <div class="text-right mt-6">
+                <button id="close-section-btn" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition">
+                    취소
+                </button>
+                <button id="save-section-btn" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">
+                    저장
+                </button>
+            </div>
+            <!--
             {% if events %}
                 <table class="w-full bg-white shadow-md rounded-lg overflow-hidden">
                     <thead class="bg-gray-200">
@@ -135,12 +166,8 @@
             {% else %}
                 <p class="text-gray-600">초대받은 일정이 없습니다.</p>
             {% endif %}
-
-            <div class="text-right mt-6">
-                <button id="close-section-btn" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition">
-                    취소
-                </button>
-            </div>
+            -->
+            
         </div>
     </div>
 </div>

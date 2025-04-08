@@ -82,4 +82,32 @@ document.addEventListener("DOMContentLoaded", function () {
         
         console.log("클릭한 날짜 + 1:", format(nextDate));
     });
+
+
+    flatpickr("#start-date", {
+        dateFormat: "Y-m-d",
+        defaultDate: new Date(),
+        allowInput: false,
+        onChange: function (selectedDates, dateStr, instance) {
+            console.log("선택된 날짜:", dateStr);
+        }
+    });
+
+    flatpickr("#end-date", {
+        dateFormat: "Y-m-d",
+        defaultDate: new Date(),
+        allowInput: false,
+        onChange: function (selectedDates, dateStr, instance) {
+            console.log("선택된 날짜:", dateStr);
+        }
+    });
+
+    // 종일 체크박스 toggle
+    $('#all-day').on('change', function () {
+        if ($(this).is(':checked')) {
+            $('.time-input').addClass('hidden');
+        } else {
+            $('.time-input').removeClass('hidden');
+        }
+    });
 });
