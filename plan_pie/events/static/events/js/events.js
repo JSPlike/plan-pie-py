@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let holidayDates = {}; // 공휴일 날짜 저장용
 
      // 휴일데이터 API 요청
+     /*
      fetch(`https://date.nager.at/api/v3/publicholidays/${today.getFullYear()}/${countryCode}`)
      .then(response => response.json())
      .then(data => {
@@ -20,6 +21,21 @@ document.addEventListener("DOMContentLoaded", function () {
             holidayDates[h.date].push(h.localName);
          });
      });
+     */
+    const holidaysJson = JSON.parse(document.getElementById('holidays-data').textContent); 
+    holidaysJson.forEach(event => {
+        const dateStr = event.start_time.split(' ')[0]; // 'YYYY-MM-DD'
+        
+        // holidayDates[dateStr]이 없으면 배열 생성
+        if (!holidayDates[dateStr]) {
+            holidayDates[dateStr] = [];
+        }
+    
+        // 해당 날짜에 공휴일 이름 추가
+        holidayDates[dateStr].push(event.title);
+    });
+
+     
 
     function renderCalendar(year, month) {
         calendarEl.innerHTML = ""; // 기존 내용 지우기

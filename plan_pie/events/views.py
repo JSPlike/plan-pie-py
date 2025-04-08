@@ -2,6 +2,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .models import Event, EventParticipant
 from .forms import EventForm
+import redis
+import json
+from django.conf import settings
 from django.core.serializers import serialize
 
 @login_required
@@ -62,9 +65,26 @@ def event_list(request):
         }
         invites_json.append(invite_data)
 
+    # 🔥 Redis에서 휴일 가져오기
+    r = redis.StrictRedis(host='127.0.0.1', port=6379, db=0, decode_responses=True)
+    holiday_keys = r.keys('holiday:*') # redis key
+
+    holidays_json = []
+    for key in holiday_keys:
+        date_str = key.split(':')[1]
+        title = r.get(key)
+        holidays_json.append({
+            'title': title,
+            'start_time': f"{date_str[:4]}-{date_str[4:6]}-{date_str[6:]}" + " 00:00:00",
+            'end_time': f"{date_str[:4]}-{date_str[4:6]}-{date_str[6:]}" + " 23:59:59",
+            'allDay': True,
+            'type': 'holiday',
+        })    
+
     return render(request, 'events/event_list.html', {
         'events': events, 
         'invites': invites, 
         'events_json': events_json, 
-        'invites_json': invites_json
+        'invites_json': invites_json,
+        'holidays_json': json.dumps(holidays_json, ensure_ascii=False),
     })

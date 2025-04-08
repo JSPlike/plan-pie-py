@@ -178,6 +178,19 @@ footer {
     overflow: hidden;
 }
 
+@media (max-height: 1000px) {
+    .day {
+      font-size: 14px;
+      height: 148px;
+    }
+  }
+
+  @media (min-height: 1000px) {
+    .day {
+      height: 168px;
+    }
+  }s
+
 .day .day-number-container {
     width: 100%;
     text-align: center;
@@ -199,7 +212,7 @@ footer {
 
 .holiday-label {
     text-align: left;
-    font-size: 11px;
+    font-size: 10px;
     font-weight: bold;
     white-space: nowrap;
     overflow: hidden; /* 넘칠 때 잘리게 */

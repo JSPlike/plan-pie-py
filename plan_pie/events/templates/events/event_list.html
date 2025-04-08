@@ -207,5 +207,9 @@
     </script>
 -->
     <script src="{% static 'events/js/events.js' %}"></script>
+
+    <script id="holidays-data" type="application/json">
+        {{ holidays_json|safe }}
+      </script>
     {{ block.super }}  <!-- base.html에서 정의된 기본 스크립트도 호출 -->
 {% endblock %}
