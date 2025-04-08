@@ -69,6 +69,7 @@ footer {
 }
 .event-contents {
     overflow: hidden; /* 전체 스크롤 막기 */
+    height: 100%;
     flex-direction: row; /* 좌우로 배치 */
     justify-content: space-between; /* 두 영역 사이에 여백 추가 */
 }
@@ -162,7 +163,7 @@ footer {
 }
 
 .day {
-    height: 164px; /* 고정 높이 지정 */
+    height: 168px; /* 고정 높이 지정 */
     padding: 10px 8px;
 
     /* padding: 80px 50px; */

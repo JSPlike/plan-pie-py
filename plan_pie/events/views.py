@@ -33,7 +33,7 @@ def decline_invite(request, event_id):
     participant = get_object_or_404(EventParticipant, event=event, user=request.user, status='pending')
     participant.status = 'declined'
     participant.save()
-    return redirect('events:event_list')
+    return redirect('events:event_list') 
 
 @login_required
 def event_list(request):
