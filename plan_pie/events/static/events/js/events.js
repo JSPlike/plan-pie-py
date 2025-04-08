@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // 날짜 채우기
         for (let day = 1; day <= daysInMonth; day++) {
-            calendarHTML += `<div class="day"><span>${day}</span></div>`;
+            calendarHTML += `<div class="day" data-year="${year}" data-month="${month}" data-day="${day}"><span>${day}</span></div>`;
         }
 
         calendarHTML += `</div>`;
@@ -42,13 +42,44 @@ document.addEventListener("DOMContentLoaded", function () {
 
     renderCalendar(today.getFullYear(), today.getMonth());
 
+    /**
+     * 일정 생성 섹션을 닫는다
+     */
     $('#close-section-btn').on('click', function () {
         $('.right-section').addClass('slide-out-right');
         $('.left-section').addClass('expand-main');
     });
 
+    /**
+     * 일정 생성 섹션을 호출한다
+     */
     $('#toggleEvent').on('click', function() {
         $('.right-section').removeClass('slide-out-right');
         $('.left-section').removeClass('expand-main');
+    });
+
+    /**
+     * 캘린더에서 특정 날짜를 클릭했을때 이벤트를 발생시킨다
+     */
+    $('.day').on('click', function() {
+
+        // 클릭한 개체를 탐지한다.
+        const year = $(this).data('year');
+        const month = $(this).data('month');
+        const day = $(this).data('day');
+
+        const clickedDate = new Date(year, month, day);
+    
+        // 하루 더하기
+        const nextDate = new Date(clickedDate);
+        nextDate.setDate(clickedDate.getDate() + 1);
+
+        const format = (date) => 
+            `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+
+        // 개체의 요소값을 추출한다.
+        console.log("클릭한 날짜:", format(clickedDate));
+        
+        console.log("클릭한 날짜 + 1:", format(nextDate));
     });
 });

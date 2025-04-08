@@ -1,6 +1,8 @@
-<form method="post">
+<form method="post" id="event-form">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">Save</button>
-</form>
-<a href="{% url 'event:event_list' %}">Back to List</a>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-primary">저장</button>
+      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+    </div>
+  </form>

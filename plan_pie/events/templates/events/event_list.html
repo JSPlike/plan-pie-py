@@ -34,8 +34,56 @@
         </div>
         <div class="right-section">
             <div class="flex justify-between items-center mb-4">
-                <h2 class="text-2xl font-bold">내 일정</h2>
-                <a href="{% url 'event:create_event' %}" class="bg-blue-500 hover:bg-blue-600 px-4 py-2 text-white rounded transition">일정 생성</a>
+                <form id="custom-event-form" class="w-full space-y-4 bg-white">
+                    <!-- 제목 -->
+                    <div>
+                        <input type="text" id="event-title" class="w-full border rounded px-3 py-2" placeholder="Title">
+                    </div>
+                
+                    <!-- 시작일 / 종료일 -->
+                    <div class="flex-1">
+                        <label class="block text-sm font-semibold mb-1">시작일</label>
+                        <input type="date" id="start-date" class="w-full border rounded px-3 py-2">
+                        <input type="time" id="start-time" class="w-full border rounded px-3 py-2 mt-2 time-input hidden">
+                    </div>
+                    <div class="flex-1">
+                        <label class="block text-sm font-semibold mb-1">종료일</label>
+                        <input type="date" id="end-date" class="w-full border rounded px-3 py-2">
+                        <input type="time" id="end-time" class="w-full border rounded px-3 py-2 mt-2 time-input hidden">
+                    </div>
+                
+                    <!-- 종일 여부 -->
+                    <div class="flex items-center space-x-2">
+                        <input type="checkbox" id="all-day" class="w-4 h-4">
+                        <label for="all-day" class="text-sm">종일</label>
+                    </div>
+                
+                    <!-- 색상 선택 -->
+                    <div>
+                        <label class="block text-sm font-semibold mb-1">색상 태그</label>
+                        <div class="flex gap-2">
+                            <input type="color" id="event-color" value="#3b82f6" class="w-10 h-10 border rounded-full p-1">
+                        </div>
+                    </div>
+                
+                    <!-- 참여자 목록 -->
+                    <div>
+                        <label class="block text-sm font-semibold mb-1">참여자</label>
+                        <div id="participant-list" class="flex flex-wrap gap-2 text-sm">
+                            <span class="bg-gray-200 rounded-full px-2 py-1">박준영</span>
+                            <span class="bg-gray-200 rounded-full px-2 py-1">이순신</span>
+                            <!-- 실제로는 동적으로 추가 -->
+                        </div>
+                    </div>
+                
+                    <!-- 저장 버튼 -->
+                    <div class="text-right pt-4">
+                        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">
+                            저장
+                        </button>
+                    </div>
+                </form>
+                <!--<a href="{% url 'event:create_event' %}" class="bg-blue-500 hover:bg-blue-600 px-4 py-2 text-white rounded transition">일정 생성</a>-->
             </div>
     
             {% if events %}

@@ -15,7 +15,7 @@ body {
     padding: 20px;
     background-color: #fff;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin-top: 20px;
+    margin-top: 10px;
 }
 
 @media (max-width: 768px) {
@@ -83,8 +83,7 @@ footer {
 
 /* 왼쪽 섹션(달력) */
 .left-section {
-    flex: 0 0 80%;; /* 왼쪽 영역을 1:1 비율로 설정 */
-    padding: 20px;
+    flex: 0 0 75%;; /* 왼쪽 영역을 1:1 비율로 설정 */
     border: 1px solid #ddd; /* 달력 주위에 테두리 */
     width: 100%;
     transition: all 0.3s ease-in-out;
@@ -92,8 +91,8 @@ footer {
 
 /* 오른쪽 섹션(일정 등록) */
 .right-section {
-    flex: 0 0 20%; /* 오른쪽 영역을 1:1 비율로 설정 */
-    padding: 20px;
+    flex: 0 0 25%; /* 오른쪽 영역을 1:1 비율로 설정 */
+
     border: 1px solid #ddd; /* 폼 주위에 테두리 */
     /*height: 95vh;  폼 영역 높이 설정 */
     transition: transform 0.3s ease-in-out;
@@ -116,8 +115,8 @@ footer {
 .calendar-header {
     justify-content: space-between; /* 왼쪽과 오른쪽 끝으로 요소를 분리 */
     align-items: center;
-    padding: 8px 50px; /* 양 옆에 더 많은 여백 추가 */
-    font-size: 20px; /* 글자 크기 키움 */
+    padding: 1px 50px; /* 양 옆에 더 많은 여백 추가 */
+    font-size: 16px; /* 글자 크기 키움 */
     /*background: linear-gradient(135deg, #4e8cf7, #3e6ab8);  그라데이션 배경 */
     color: black;
     border-radius: 5px; /* 둥근 모서리 */
@@ -151,7 +150,6 @@ footer {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     gap: 5px;
-    padding: 10px;
 }
 
 .day-header {
@@ -161,7 +159,7 @@ footer {
 }
 
 .day {
-    padding: 70px 40px;
+    padding: 80px 50px;
     background: white;
     border-bottom: 1px solid #ccc;
     border-radius: 1px;
