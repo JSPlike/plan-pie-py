@@ -1,10 +1,26 @@
 document.addEventListener("DOMContentLoaded", function () {
     lucide.createIcons();  // 아이콘 렌더링
-
+    //offEventForm();
     const calendarEl = document.getElementById("calendar");
     const calendarHd = document.getElementById("calendarHd");
     const today = new Date();
-    
+    const countryCode = 'KR';
+    let showHolidays = true;
+    let holidayDates = {}; // 공휴일 날짜 저장용
+
+     // 휴일데이터 API 요청
+     fetch(`https://date.nager.at/api/v3/publicholidays/${today.getFullYear()}/${countryCode}`)
+     .then(response => response.json())
+     .then(data => {
+         data.forEach(h=> {
+            // 동일한 날짜가 없으면
+            if(!holidayDates[h.date]) {
+                holidayDates[h.date] = [];
+            }
+            holidayDates[h.date].push(h.localName);
+         });
+     });
+
     function renderCalendar(year, month) {
         calendarEl.innerHTML = ""; // 기존 내용 지우기
         calendarHd.innerHTML = "";
@@ -30,7 +46,34 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // 날짜 채우기
         for (let day = 1; day <= daysInMonth; day++) {
-            calendarHTML += `<div class="day" data-year="${year}" data-month="${month}" data-day="${day}"><span>${day}</span></div>`;
+            const fullDateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+
+            let dayClass = 'day';
+            let holidayHTML = '';
+
+            const date = new Date(year, month, day);
+            const dayOfWeek = date.getDay();
+
+            if (dayOfWeek === 0) {
+                dayClass += ' sunday'
+            } else if (dayOfWeek === 6) {
+                dayClass += ' saturday'
+            }
+            
+            // 공휴일 체크박스에 체크되어있는경우 실행한다.
+            if (showHolidays && holidayDates[fullDateStr]) {
+                dayClass += ' holiday';
+                holidayHTML = holidayDates[fullDateStr].map(name => 
+                    `<div class="holiday-label">${name}</div>`
+                ).join('');
+
+            }
+
+            calendarHTML += `<div class="${dayClass}" data-year="${year}" data-month="${month}" data-day="${day}">
+                                <div class="day-number-container"><div class="day-number">${day}</div></div>
+                                <div class="holiday-container">${holidayHTML}</div>
+                                <div class="day-events"></div>
+                            </div>`;
         }
 
         calendarHTML += `</div>`;
@@ -44,27 +87,36 @@ document.addEventListener("DOMContentLoaded", function () {
 
     renderCalendar(today.getFullYear(), today.getMonth());
 
-    /**
-     * 일정 생성 섹션을 닫는다
-     */
-    $('#close-section-btn').on('click', function () {
+
+    function onEventForm() {
+        $('.right-section').removeClass('slide-out-right');
+        $('.left-section').removeClass('expand-main');
+    }
+
+    function offEventForm() {
         $('.right-section').addClass('slide-out-right');
         $('.left-section').addClass('expand-main');
-    });
+    }
 
     /**
      * 일정 생성 섹션을 호출한다
      */
     $('#toggleEvent').on('click', function() {
-        $('.right-section').removeClass('slide-out-right');
-        $('.left-section').removeClass('expand-main');
+        onEventForm();
+    });
+
+    /**
+     * 일정 생성 섹션을 닫는다
+     */
+    $('#close-section-btn').on('click', function () {
+        offEventForm();
     });
 
     /**
      * 캘린더에서 특정 날짜를 클릭했을때 이벤트를 발생시킨다
      */
-    $('.day').on('click', function() {
-
+    $('#calendar').on('click', '.day', function() {
+        onEventForm();
         // 클릭한 개체를 탐지한다.
         const year = $(this).data('year');
         const month = $(this).data('month');
@@ -83,6 +135,10 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log("클릭한 날짜:", format(clickedDate));
         
         console.log("클릭한 날짜 + 1:", format(nextDate));
+
+        // 초기 날짜 세팅
+        $('#start-date').val(format(clickedDate));
+        $('#end-date').val(format(nextDate));
     });
 
 

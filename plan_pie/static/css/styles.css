@@ -1,10 +1,14 @@
 /* static/styles.css */
 body {
     font-family: Arial, sans-serif;
-    background-color: #fff;
+    height: 100%;
     margin: 0;
     padding: 0;
+    overflow: hidden; /* ← 필요 시 추가 */
+    display: flex;
     flex-direction: column; /* 세로 방향으로 요소 배치 */
+    justify-content: center;
+    align-items: center;
 }
 
 .container {
@@ -80,6 +84,7 @@ footer {
 .left-section {
     flex: 0 0 75%;; /* 왼쪽 영역을 1:1 비율로 설정 */
     border: 0.5px solid #e6e6e6; /* 달력 주위에 테두리 */
+    border-top: none;
     width: 100%;
     transition: all 0.3s ease-in-out;
 }
@@ -88,6 +93,7 @@ footer {
 .right-section {
     flex: 0 0 25%; /* 오른쪽 영역을 1:1 비율로 설정 */
     border: 0.5px solid #e6e6e6; /* 폼 주위에 테두리 */
+    border-top: none;
     border-left: none;
     /*height: 95vh;  폼 영역 높이 설정 */
     transition: transform 0.3s ease-in-out;
@@ -110,12 +116,12 @@ footer {
 }
 
 .calendar-header {
+    white-space: nowrap;
     justify-content: space-between; /* 왼쪽과 오른쪽 끝으로 요소를 분리 */
     align-items: center;
     padding: 1px 50px; /* 양 옆에 더 많은 여백 추가 */
     font-size: 16px; /* 글자 크기 키움 */
     /*background: linear-gradient(135deg, #4e8cf7, #3e6ab8);  그라데이션 배경 */
-    color: black;
     border-radius: 5px; /* 둥근 모서리 */
 }
 
@@ -151,28 +157,67 @@ footer {
 .day-header {
     font-weight: bold;
     border-bottom: 0.5px solid #e6e6e6;
+    color: rgb(143, 143, 143);
     padding: 3px;
 }
 
 .day {
-    padding: 80px 50px;
+    height: 164px; /* 고정 높이 지정 */
+    padding: 10px 8px;
+
+    /* padding: 80px 50px; */
     background: white;
     border-bottom: 1px solid #e6e6e6;
     cursor: pointer;
-
     display: flex;
     flex-direction: column;
     justify-content: flex-start; /* 세로 방향으로 상단 정렬 */
     align-items: center; /* 가로 방향으로 가운데 정렬 */
     position: relative; /* 숫자를 상단으로 위치시키기 위한 상대적 위치 */
+    overflow: hidden;
 }
 
-.day span {
-    position: absolute; /* 숫자 위치 조정 */
-    top: 0; /* 상단에 배치 */
-    left: 50%; /* 가로 중앙 배치 */
-    transform: translateX(-50%); /* 정확한 가운데 정렬 */
+.day .day-number-container {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 4px;
+}
+
+.day .day-number {
     font-size: 17px; /* 숫자 크기 조정 */
+}
+
+.holiday-container {
+    width: 100%;
+    display: flex;
+    max-height: 60px;
+    flex-direction: column;
+    overflow-y: auto;
+    gap: 1px;
+}
+
+.holiday-label {
+    text-align: left;
+    font-size: 11px;
+    font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden; /* 넘칠 때 잘리게 */
+    background-color: red;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 5px;
+}
+
+.holiday {
+    color: red;
+}
+
+.sunday {
+    color: red;
+}
+
+.saturday {
+    color: blue;
 }
 
 .empty {

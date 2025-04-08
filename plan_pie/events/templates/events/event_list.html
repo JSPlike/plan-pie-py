@@ -20,11 +20,12 @@
         -->
         <!-- 오른쪽: 사용자 프로필 및 + 버튼 -->
         <div class="flex items-center space-x-4">
+            <div><button id="toggleEvent" class="px-4 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition">+</button></div>
+
             <div class="flex items-center space-x-2">
                 <img src="{% static 'image/icon-profile.png' %}" alt="프로필" class="w-10 h-10 rounded-full">
-                <span class="font-semibold">사용자명</span>
             </div>
-            <button id="toggleEvent" class="px-4 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition">+</button>
+            
         </div>
     </div>
     <div class="event-contents flex">
@@ -70,7 +71,7 @@
                                     readonly
                                     >
                                 </div>
-                                <div class="flex-1 time-input">
+                                <div class="time-input">
                                     <input type="time" id="end-time" 
                                     class="w-full border-none border-b border-gray-300 focus:border-blue-500 focus:ring-0 focus:outline-none px-3 py-2"
                                     >
