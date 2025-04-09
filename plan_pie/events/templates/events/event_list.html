@@ -48,7 +48,7 @@
                 <form id="custom-event-form" class="custom-event-form">
                     <!-- 제목 -->
                     <div>
-                        <input type="text" id="event-title" class="event-title" placeholder="Title">
+                        <input type="text" id="event-title" name="title" class="event-title" placeholder="Title">
                     </div>
                 
                     <!-- 시작일 / 종료일 -->
@@ -58,24 +58,24 @@
                             <div class="start-date">
                                 <div class="name-date">시작일</div>
                                 <div class="date-input">
-                                    <input type="text" id="start-date"
+                                    <input type="text" id="start-date" name="sdate"
                                     placeholder="날짜 선택"
                                     readonly>
                                 </div>
                                 <div class="time-input">
-                                    <input type="time" id="start-time">
+                                    <input type="time" id="start-time" name="stime">
                                 </div>
                             </div>
 
                             <div class="end-date">
                                 <div class="name-date">종료일</div>
                                 <div class="date-input"> 
-                                    <input type="text" id="end-date" 
+                                    <input type="text" id="end-date" name="edate"
                                     placeholder="날짜 선택"
                                     readonly>
                                 </div>
                                 <div class="time-input">
-                                    <input type="time" id="end-time">
+                                    <input type="time" id="end-time" name="etime">
                                 </div>
                             </div>
                         </div>
@@ -83,7 +83,7 @@
                         <!-- 종일 여부 -->
                         <div class="chekbox-group">
                             <div class="form-contents">
-                                <input type="checkbox" id="all-day" checked>
+                                <input type="checkbox" id="all-day" name="isAllday" checked>
                                 <label for="all-day">종일</label>
                             </div>
                         </div>
@@ -93,7 +93,7 @@
                         <!-- 색상 선택 -->
                         <div class="event-option">
                             <i data-lucide="tag" class="icon"></i>
-                            <select id="event-color-select" class="event-tag">
+                            <select id="event-color-select" name="color" class="event-tag">
                                 <option value="#6366f1">🟣 퍼플 블루</option>
                                 <option value="#f472b6">🌸 핑크 로즈</option>
                                 <option value="#34d399">💚 민트 그린</option>
@@ -108,8 +108,8 @@
                         <div class="event-option">
                             <i data-lucide="circle-user-round" class="icon"></i>
                             <div id="participant-list" class="participant-list">
-                                <span class="bg-gray-200 rounded-full px-2 py-1">박준영</span>
-                                <span class="bg-gray-200 rounded-full px-2 py-1">이순신</span>
+                                <span data-email="joonyoung@potato.co.kr" >박준영</span>
+                                <span data-email="Esunsin@potato.co.kr" >이순신</span>
                                 <!-- 실제로는 동적으로 추가 -->
                             </div>
                         </div>
@@ -118,10 +118,10 @@
                 <!--<a href="{% url 'event:create_event' %}" class="bg-blue-500 hover:bg-blue-600 px-4 py-2 text-white rounded transition">일정 생성</a>-->
             </div>
             <div class="form-bottom-group">
-                <button id="close-section-btn" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition">
+                <button id="close-section-btn">
                     취소
                 </button>
-                <button id="save-section-btn" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">
+                <button id="save-section-btn">
                     저장
                 </button>
             </div>
@@ -212,7 +212,8 @@
     <script src="{% static 'events/js/events.js' %}"></script>
 
     <script id="holidays-data" type="application/json">
-        {{ holidays_json|safe }}
-      </script>
+    {{ holidays_json|safe }}
+    </script>
+    <script id="eventts" type="application/json">{{ events_json|escapejs }}</script>
     {{ block.super }}  <!-- base.html에서 정의된 기본 스크립트도 호출 -->
 {% endblock %}

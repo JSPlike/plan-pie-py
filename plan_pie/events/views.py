@@ -1,26 +1,52 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 from .models import Event, EventParticipant
-from .forms import EventForm
 import redis
 import json
 from django.conf import settings
 from django.core.serializers import serialize
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth import get_user_model
 
-@login_required
+@csrf_exempt 
 def create_event(request):
-    if request.method == "POST":
-        form = EventForm(request.POST)
-        if form.is_valid():
-            event = form.save()
-            # Owner 추가
-            EventParticipant.objects.create(
-                event=event, user=request.user, role='owner', status='accepted'
-            )
-            return redirect('event:event_list')
-    else:
-        form = EventForm(user=request.user)
-    return render(request, 'events/event_form.html', {'form': form})
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        print(data)  # 디버깅용
+        
+        # 📌 기본 이벤트 저장
+        event = Event.objects.create(
+            title=data.get('title'),
+            start_date=data.get('sdate'),
+            start_time=data.get('stime'),
+            end_date=data.get('edate'),
+            end_time=data.get('etime'),
+            is_all_day=data.get('isAllday', False),
+            color=data.get('color'),
+            memo=data.get('memo')
+        )
+
+        # 📌 참여자 저장
+        participants = data.get('participants', [])
+        User = get_user_model()
+
+        for email in participants:
+            try:
+                user = User.objects.get(email=email)
+                EventParticipant.objects.create(
+                    event=event,
+                    user=user,
+                    role='participant',
+                    status='pending'
+                )
+            except User.DoesNotExist:
+                print(f"유저를 찾을 수 없음: {email}")
+                # 필요하면 로그만 남기고 무시하거나, 예외를 반환할 수도 있음
+        
+        return JsonResponse({'status': 'success'})
+
+    return JsonResponse({'error': 'Invalid request'}, status=400)
 
 @login_required
 def accept_invite(request, event_id):
@@ -40,31 +66,60 @@ def decline_invite(request, event_id):
 
 @login_required
 def event_list(request):
-    events = Event.objects.filter(eventparticipant__user=request.user, eventparticipant__status='accepted')
-    invites = Event.objects.filter(eventparticipant__user=request.user, eventparticipant__status='pending')
+    events = Event.objects.filter(participants__user=request.user, participants__status='accepted')
+    invites = Event.objects.filter(participants__user=request.user, participants__status='pending')
     
-     # 이벤트 목록을 수동으로 JSON으로 변환
+    # 이벤트 목록을 수동으로 JSON으로 변환
     events_json = []
     for event in events:
+        participants_data = []
+        for participant in event.participants.all():
+            participants_data.append({
+                'user_email': participant.user.email,  # 참가자 이메일
+                'role': participant.role,  # 참가자 역할
+                'status': participant.status,  # 참가자 상태
+            })
+        
         event_data = {
             'pk': event.pk,
             'title': event.title,
-            'start_time': event.start_time.strftime('%Y-%m-%d %H:%M:%S'),  # 날짜 형식 지정
-            'end_time': event.end_time.strftime('%Y-%m-%d %H:%M:%S'),  # 날짜 형식 지정
+            'start_date': event.start_date.strftime('%Y-%m-%d'),  # 날짜 형식 지정
+            'start_time': event.start_time.strftime('%H:%M:%S') if event.start_time else None,  # 시간 형식 지정
+            'end_date': event.end_date.strftime('%Y-%m-%d'),  # 날짜 형식 지정
+            'end_time': event.end_time.strftime('%H:%M:%S') if event.end_time else None,  # 시간 형식 지정
+            'is_all_day': event.is_all_day,  # 종일 여부 추가
+            'color': event.color,  # 색 추가
+            'memo': event.memo,  # 메모 추가
+            'participants': participants_data,  # 참가자 정보 추가
         }
         events_json.append(event_data)
     
     # 초대도 수동으로 JSON 형식으로 변환 (필요시 추가 필드 처리 가능)
     invites_json = []
     for invite in invites:
+        participants_data = []
+        for participant in invite.participants.all():
+            participants_data.append({
+                'user_email': participant.user.email,  # 참가자 이메일
+                'role': participant.role,  # 참가자 역할
+                'status': participant.status,  # 참가자 상태
+            })
+        
         invite_data = {
             'pk': invite.pk,
             'title': invite.title,
-            'start_time': invite.start_time.strftime('%Y-%m-%d %H:%M:%S'),
-            'end_time': invite.end_time.strftime('%Y-%m-%d %H:%M:%S'),
+            'start_date': invite.start_date.strftime('%Y-%m-%d'),
+            'start_time': invite.start_time.strftime('%H:%M:%S') if invite.start_time else None,
+            'end_date': invite.end_date.strftime('%Y-%m-%d'),
+            'end_time': invite.end_time.strftime('%H:%M:%S') if invite.end_time else None,
+            'is_all_day': invite.is_all_day,  # 종일 여부 추가
+            'color': invite.color,  # 색 추가
+            'memo': invite.memo,  # 메모 추가
+            'participants': participants_data,  # 참가자 정보 추가
         }
         invites_json.append(invite_data)
-
+    
+    
     # 🔥 Redis에서 휴일 가져오기
     r = redis.StrictRedis(host='127.0.0.1', port=6379, db=0, decode_responses=True)
     holiday_keys = r.keys('holiday:*') # redis key

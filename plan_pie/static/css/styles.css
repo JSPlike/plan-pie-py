@@ -376,6 +376,20 @@ footer {
     border-radius: 5px;
 }
 
+/* 오늘날짜 디자인 */
+.day.today .day-number {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 25px;
+    height: 22px;
+
+    border: 2px solid gray;
+    border-radius: 50%;
+    margin: 0 auto;
+}
+
 .holiday {
     color: red;
 }

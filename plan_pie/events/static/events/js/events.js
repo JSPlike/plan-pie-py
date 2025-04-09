@@ -7,21 +7,10 @@ document.addEventListener("DOMContentLoaded", function () {
     const countryCode = 'KR';
     let showHolidays = true;
     let holidayDates = {}; // 공휴일 날짜 저장용
+    const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+    console.log("저장되어진 이벤트");
+    console.log(JSON.parse($('#events')));
 
-     // 휴일데이터 API 요청
-     /*
-     fetch(`https://date.nager.at/api/v3/publicholidays/${today.getFullYear()}/${countryCode}`)
-     .then(response => response.json())
-     .then(data => {
-         data.forEach(h=> {
-            // 동일한 날짜가 없으면
-            if(!holidayDates[h.date]) {
-                holidayDates[h.date] = [];
-            }
-            holidayDates[h.date].push(h.localName);
-         });
-     });
-     */
     const holidaysJson = JSON.parse(document.getElementById('holidays-data').textContent); 
     holidaysJson.forEach(event => {
         const dateStr = event.start_time.split(' ')[0]; // 'YYYY-MM-DD'
@@ -68,6 +57,12 @@ document.addEventListener("DOMContentLoaded", function () {
             const date = new Date(year, month, day);
             const dayOfWeek = date.getDay();
 
+            // 달력의 날짜가 오늘날짜라면 표시해준다
+            if(fullDateStr == todayStr) {   
+                dayClass += ' today'
+            }
+
+            // 일요일과 토요일 날짜색상을 적용해준다
             if (dayOfWeek === 0) {
                 dayClass += ' sunday'
             } else if (dayOfWeek === 6) {
@@ -147,11 +142,6 @@ document.addEventListener("DOMContentLoaded", function () {
         const format = (date) => 
             `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
 
-        // 개체의 요소값을 추출한다.
-        console.log("클릭한 날짜:", format(clickedDate));
-        
-        console.log("클릭한 날짜 + 1:", format(nextDate));
-
         // 초기 날짜 세팅
         $('#start-date').val(format(clickedDate));
         $('#end-date').val(format(nextDate));
@@ -195,4 +185,91 @@ document.addEventListener("DOMContentLoaded", function () {
 
         $('.icon').css('stroke', selectedColor);
     });
+
+    /**
+     * 일정 저장 로직
+     */
+    $('#save-section-btn').on('click', function() {
+        // 유효성확인
+        if(saveValidate() == false) { return; }
+        const formData = {};
+        $('#custom-event-form').find('input, select, textarea').each(function () {
+            const name = $(this).attr('name');
+            let value;
+      
+            if ($(this).attr('type') === 'checkbox') {
+                value = $(this).is(':checked');
+            } else {
+                value = $(this).val();
+            }
+      
+            if (name) {
+                formData[name] = value;
+            }
+        });
+
+        const participants = [];
+        $('#participant-list span').each(function () {
+            const email = $(this).data('email');
+            if (email) {
+                participants.push(email);
+            }
+        });
+
+        formData['participants'] = participants;
+
+        // JSON으로 출력 확인 (디버깅용)
+        console.log(JSON.stringify(formData));
+
+
+        // post send (url, data, onSuccess, onError)
+        post (
+            '/create_event/', 
+            formData,
+            function (response) {
+                console.log('저장 성공:', response);
+            },
+            function (xhr, status, error) {
+                console.error('저장 실패:', error);
+            }
+        );
+
+    });
+
+    function saveValidate() {
+        if($('#event-title').val().trim() === "") {
+            alert("제목을 입력해주세요.");
+            $('#event-title').focus();
+            return false;
+        }
+
+        if($('#start-date').val().trim === "") {
+            alert("시작일을 입력해주세요.");
+            $('#start-date').focus();
+            return false;
+        }
+
+        if($('#end-date').val().trim === "") {
+            alert("종료을 입력해주세요.");
+            $('#end-date').focus();
+            return false;
+        }
+
+        // 종일 체크박스에 체크해제 되어있는 경우
+        if($('#all-day')) {
+            if($('#start-time').val().trim === "") {
+                alert("시작시간을 입력해주세요.");
+                $('#start-time').focus();
+                return false;
+            }
+
+            if($('#end-time').val().trim === "") {
+                alert("종료시간을 입력해주세요.");
+                $('#end-time').focus();
+                return false;
+            }
+        }
+
+        return true;
+    }
 });
