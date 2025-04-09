@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
     lucide.createIcons();  // 아이콘 렌더링
     //offEventForm();
     const calendarEl = document.getElementById("calendar");
-    const calendarHd = document.getElementById("calendarHd");
+    const calendarYm = document.querySelector(".calendar-ym");
     const today = new Date();
     const countryCode = 'KR';
     let showHolidays = true;
@@ -38,17 +38,15 @@ document.addEventListener("DOMContentLoaded", function () {
      
 
     function renderCalendar(year, month) {
+        initWindow();
+
         calendarEl.innerHTML = ""; // 기존 내용 지우기
-        calendarHd.innerHTML = "";
+        calendarYm.innerHTML = "";
 
         const firstDay = new Date(year, month, 1).getDay(); // 월의 첫째 날 요일
         const daysInMonth = new Date(year, month + 1, 0).getDate(); // 월의 총 일수
 
-        let calendarHdHTML = `<div class="calendar-header">
-                                <button id="prev">&lt;</button>
-                                <span>${year}년 ${month + 1}월</span>
-                                <button id="next">&gt;</button>
-                            </div>`
+        let calendarYmHTML = `<span>${year}년 ${month + 1}월</span>`
         let calendarHTML =  `<div class="calendar-grid">`;
 
         // 요일 헤더 추가
@@ -75,14 +73,13 @@ document.addEventListener("DOMContentLoaded", function () {
             } else if (dayOfWeek === 6) {
                 dayClass += ' saturday'
             }
-            
+
             // 공휴일 체크박스에 체크되어있는경우 실행한다.
             if (showHolidays && holidayDates[fullDateStr]) {
                 dayClass += ' holiday';
                 holidayHTML = holidayDates[fullDateStr].map(name => 
                     `<div class="holiday-label">${name}</div>`
                 ).join('');
-
             }
 
             calendarHTML += `<div class="${dayClass}" data-year="${year}" data-month="${month}" data-day="${day}">
@@ -94,7 +91,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         calendarHTML += `</div>`;
         calendarEl.innerHTML = calendarHTML;
-        calendarHd.innerHTML = calendarHdHTML;
+        calendarYm.innerHTML = calendarYmHTML;
 
         // 버튼 이벤트 추가
         document.getElementById("prev").addEventListener("click", () => renderCalendar(year, month - 1));
@@ -103,6 +100,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     renderCalendar(today.getFullYear(), today.getMonth());
 
+    function initWindow() {
+        $('.time-input').css('visibility', 'hidden');
+    }
 
     function onEventForm() {
         $('.right-section').removeClass('slide-out-right');
@@ -179,9 +179,11 @@ document.addEventListener("DOMContentLoaded", function () {
     // 종일 체크박스 toggle
     $('#all-day').on('change', function () {
         if ($(this).is(':checked')) {
-            $('.time-input').addClass('hidden');
+            console.log("종일 체크")
+            $('.time-input').css('visibility', 'hidden');
         } else {
-            $('.time-input').removeClass('hidden');
+            console.log("종일 체크해제")
+            $('.time-input').css('visibility', 'visible');
         }
     });
 
@@ -190,7 +192,6 @@ document.addEventListener("DOMContentLoaded", function () {
      */
     $('#event-color-select').on('change', function () {
         const selectedColor = $(this).val();
-        console.log(selectedColor);
 
         $('.icon').css('stroke', selectedColor);
     });

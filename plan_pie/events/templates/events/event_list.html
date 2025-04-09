@@ -3,39 +3,49 @@
 {% load static %}
 
 {% block content %}
-<div class="container-event mx-auto text-gray-900">
+<div class="container-event">
 
-    <div class="event-header flex justify-between items-center bg-white p-2 shadow rounded-lg">
-        <div id="calendarHd">
-        </div>
-        <!-- 왼쪽: 연도 및 좌우 버튼 -->
-         <!--
-        <div class="flex items-center space-x-4">
-            
+    <div class="event-header">
 
-            <button id="prevYear" class="px-3 py-1 bg-gray-300 rounded">&lt;</button>
-            <span id="currentYear" class="text-lg font-bold">2025</span>
-            <button id="nextYear" class="px-3 py-1 bg-gray-300 rounded">&gt;</button>
+        <div class="event-header-left">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300" width="200" height="63">
+                <g>
+                    <circle cx="100" cy="150" r="80" fill="#A0522D" stroke="#8B4513" stroke-width="8"/>
+                    <path d="M100,150 L180,150 A80,80 0 0,0 100,70 Z" fill="#FFDAB9" />
+                    <text x="220" y="175" font-family="'Comic Sans MS', 'Arial Rounded MT Bold', sans-serif" font-size="120" fill="#4B2E2B">
+                    plan pie
+                    </text>
+                </g>
+            </svg>
+              
+            <!-- 왼쪽: 연도 및 좌우 버튼 -->
+            <div class="calendar-header">
+                <button id="prev"><i data-lucide="chevron-left" class="icon"></i></button>
+                <button id="next"><i data-lucide="chevron-right" class="icon"></i></button>
+                <div class="calendar-ym"></div>
+            </div>
         </div>
-        -->
+        
         <!-- 오른쪽: 사용자 프로필 및 + 버튼 -->
-        <div class="flex items-center space-x-4">
-            <div><button id="toggleEvent" class="px-4 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition">+</button></div>
+        <div class="event-header-right">
+            <div>
+                <button id="toggleEvent" class="btn-blue-rounded">+</button>
+            </div>
 
-            <div class="flex items-center space-x-2">
-                <img src="{% static 'image/icon-profile.png' %}" alt="프로필" class="w-10 h-10 rounded-full">
+            <div>
+                <img src="{% static 'image/icon-profile.png' %}" alt="프로필" class="profile-rounded">
             </div>
             
         </div>
     </div>
-    <div class="event-contents flex">
+    <div class="event-contents">
         <div class="left-section">
             <!-- 달력 -->
             <div id="calendar"></div>
         </div>
         <div class="right-section">
-            <div class="flex justify-between items-center mb-4">
-                <form id="custom-event-form" class="w-full space-y-4 bg-white">
+            <div class="custom-event-form-wrap">
+                <form id="custom-event-form" class="custom-event-form">
                     <!-- 제목 -->
                     <div>
                         <input type="text" id="event-title" class="event-title" placeholder="Title">
@@ -44,53 +54,46 @@
                     <!-- 시작일 / 종료일 -->
                     <div class="date-section">
                         <div class="event-date">
+
                             <div class="start-date">
                                 <div class="name-date">시작일</div>
-                                <div>
-                                    <input 
-                                    type="text" id="start-date" 
-                                    class="w-full border-none border-b border-gray-300 focus:border-blue-500 focus:ring-0 focus:outline-none px-3 py-2"
+                                <div class="date-input">
+                                    <input type="text" id="start-date"
                                     placeholder="날짜 선택"
-                                    readonly
-                                    >
+                                    readonly>
                                 </div>
                                 <div class="time-input">
-                                    <input type="time" id="start-time" 
-                                    class="w-full border-none border-b border-gray-300 focus:border-blue-500 focus:ring-0 focus:outline-none px-3 py-2"
-                                    >
+                                    <input type="time" id="start-time">
                                 </div>
                             </div>
 
                             <div class="end-date">
                                 <div class="name-date">종료일</div>
-                                <div>
-                                    <input 
-                                    type="text" id="end-date" 
-                                    class="w-full border-none border-b border-gray-300 focus:border-blue-500 focus:ring-0 focus:outline-none px-3 py-2"
+                                <div class="date-input"> 
+                                    <input type="text" id="end-date" 
                                     placeholder="날짜 선택"
-                                    readonly
-                                    >
+                                    readonly>
                                 </div>
                                 <div class="time-input">
-                                    <input type="time" id="end-time" 
-                                    class="w-full border-none border-b border-gray-300 focus:border-blue-500 focus:ring-0 focus:outline-none px-3 py-2"
-                                    >
+                                    <input type="time" id="end-time">
                                 </div>
                             </div>
                         </div>
 
                         <!-- 종일 여부 -->
-                        <div class="flex items-center space-x-2">
-                            <input type="checkbox" id="all-day" class="w-4 h-4">
-                            <label for="all-day" class="text-sm">종일</label>
+                        <div class="chekbox-group">
+                            <div class="form-contents">
+                                <input type="checkbox" id="all-day" checked>
+                                <label for="all-day">종일</label>
+                            </div>
                         </div>
                     </div>
                     
                     <div class="option-section">
                         <!-- 색상 선택 -->
-                        <div class="event-option flex items-center gap-3">
+                        <div class="event-option">
                             <i data-lucide="tag" class="icon"></i>
-                            <select id="event-color-select" class="border rounded px-3 py-2">
+                            <select id="event-color-select" class="event-tag">
                                 <option value="#6366f1">🟣 퍼플 블루</option>
                                 <option value="#f472b6">🌸 핑크 로즈</option>
                                 <option value="#34d399">💚 민트 그린</option>
@@ -102,9 +105,9 @@
                         </div>
                     
                         <!-- 참여자 목록 -->
-                        <div class="event-option flex items-center gap-3">
+                        <div class="event-option">
                             <i data-lucide="circle-user-round" class="icon"></i>
-                            <div id="participant-list" class="flex flex-wrap gap-2 text-sm">
+                            <div id="participant-list" class="participant-list">
                                 <span class="bg-gray-200 rounded-full px-2 py-1">박준영</span>
                                 <span class="bg-gray-200 rounded-full px-2 py-1">이순신</span>
                                 <!-- 실제로는 동적으로 추가 -->
@@ -114,7 +117,7 @@
                 </form>
                 <!--<a href="{% url 'event:create_event' %}" class="bg-blue-500 hover:bg-blue-600 px-4 py-2 text-white rounded transition">일정 생성</a>-->
             </div>
-            <div class="text-right mt-6">
+            <div class="form-bottom-group">
                 <button id="close-section-btn" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition">
                     취소
                 </button>

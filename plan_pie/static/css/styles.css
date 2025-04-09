@@ -9,6 +9,7 @@ body {
     flex-direction: column; /* 세로 방향으로 요소 배치 */
     justify-content: center;
     align-items: center;
+    background-color: #f3f4f6;
 }
 
 .container {
@@ -61,13 +62,83 @@ footer {
     margin-top: auto; /* 남은 공간을 밀어내어 footer가 아래로 가게 함 */
 }
 
+/* account */
+.account-form-wrap {
+    background-color: #ffffff;
+    padding: 2rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+                0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    width: 24rem;
+}
+
+.account-form-heading {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+
+.account-form > * {
+    margin-bottom: 1rem;
+}
+
+.account-form label {
+    display: block;
+    color: #374151; /* Tailwind의 gray-700 */
+    font-size: 0.875rem; /* 선택적으로 추가 - Tailwind의 text-sm */
+    margin-bottom: 0.25rem; /* 약간의 간격 주기 */
+}
+
+.account-form input {
+    width: 100%;                  /* w-full */
+    padding: 0.5rem;              /* p-2 */
+    border: 1px solid #d1d5db;    /* border + border-gray-300 */
+    border-radius: 0.25rem;       /* rounded */
+    box-sizing: border-box;       /* 패딩이 너비에 포함되도록 */
+}
+
+.account-form button {
+    width: 100%;                      /* w-full */
+    background-color: #3b82f6;        /* bg-blue-500 */
+    color: white;                     /* text-white */
+    padding: 0.5rem;                  /* p-2 */
+    border-radius: 0.25rem;           /* rounded */
+    border: none;                     /* 기본적으로 border 없애주는 게 좋음 */
+    cursor: pointer;                  /* 마우스 포인터 */
+    transition: background-color 0.2s ease; /* hover 효과 부드럽게 */
+}
+
+.account-form button:hover {
+    background-color: #2563eb;        /* hover:bg-blues-600 */
+}
+
+.account-form-wrap p {
+    margin-top: 1rem;
+    text-align: center;
+    color: #4b5563;
+}
+
+.account-form-wrap p a {
+    color: #3b82f6;
+    text-decoration: none;
+}
+
+.account-form-wrap p a:hover {
+    text-decoration: underline;
+}
+
 .container-event {
     flex-direction: column;
     width: 100%;
     height: 100vh; /* main 영역이 화면을 꽉 채우도록 설정 */
-    
+    margin-left: auto;
+    margin-right: auto;
 }
 .event-contents {
+    background-color: white; /* 이벤트 화면 최상위 */
+    display: flex;
     overflow: hidden; /* 전체 스크롤 막기 */
     height: 100%;
     flex-direction: row; /* 좌우로 배치 */
@@ -79,7 +150,63 @@ footer {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    background-color: white;
+    padding: 0 0.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* shadow 대응 */
+    border-radius: 0.5rem;
 }
+
+.event-header-left {
+    margin-left: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.logo-title {
+    width: 80px;
+    height: 63px;
+    object-fit: contain;
+    background: transparent;
+}
+
+.event-header-right {
+    display: flex;
+    align-items: center;
+}
+
+.event-header-right > *:not(:first-child) {
+    margin-left: 1rem; /* 1rem = 16px */
+}
+
+.btn-blue-rounded {
+    width: 2.5rem;        /* 너비 */
+    height: 2.5rem;       /* 높이 (동일하게 해야 정원) */
+    background-color: #3b82f6;
+    color: #ffffff;
+    border-radius: 50%;   /* 정원 */
+    border: none;         /* 테두리 제거 */
+    display: flex;        /* 가운데 정렬 위해 flex 사용 */
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease;
+    cursor: pointer;
+}
+
+.btn-blue-rounded:hover {
+    background-color: #2563eb;
+}
+
+.profile-rounded {
+    width: 2.5rem;        /* 너비 */
+    height: 2.5rem;       /* 높이 (동일하게 해야 정원) */
+    border-radius: 50%;   /* 정원 */
+    border: none;         /* 테두리 제거 */
+    display: flex;        /* 가운데 정렬 위해 flex 사용 */
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
 
 /* 왼쪽 섹션(달력) */
 .left-section {
@@ -126,23 +253,43 @@ footer {
     border-radius: 5px; /* 둥근 모서리 */
 }
 
-.calendar-header button {
-    background: #fff;
-    border: 2px solid #4e8cf7; /* 버튼 테두리 색상 */
-    padding: 10px 12px; /* 버튼 크기 조정 */
-    font-size: 18px; /* 버튼 글자 크기 */
+.calendar-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+  }
+  
+  .calendar-header button {
+    display: flex;
+    align-items: center;
+    background: rgb(255, 255, 255);
+    padding: 2px; /* 버튼 크기 조정 */
+    font-size: 14px; /* 버튼 글자 크기 */
     border-radius: 5px; /* 둥근 버튼 */
     cursor: pointer;
-    color: #4e8cf7; /* 버튼 텍스트 색상 */
+    color: rgb(143, 143, 143); /* 버튼 텍스트 색상 */
     transition: all 0.3s ease; /* 버튼에 전환 효과 추가 */
-    margin-left: 10px; /* 버튼 간의 간격 추가 */
-    margin-right: 10px;
+    width: 32px;
+}
+  
+.calendar-ym {
+    font-weight: bold;
+    font-size: 1.2rem;
 }
 
+.calendar-header button .icon {
+    stroke: #555; /* 기본 색상 */
+    transition: stroke 0.2s ease;
+}
+
+.calendar-header button:hover .icon {
+    stroke: #808080; /* hover 시 색상 (파란색) */
+}
+
+
 .calendar-header button:hover {
-    background: #4e8cf7; /* 호버 시 배경색 변화 */
-    color: white; /* 호버 시 텍스트 색상 변경 */
-    transform: translateY(-2px); /* 마우스 올리면 약간 올라가는 효과 */
+    background: #d3d3d3; /* 호버 시 배경색 변화 */
 }
 
 .calendar-header button:active {
@@ -152,14 +299,14 @@ footer {
 .calendar-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: 3px;
+    gap: 0.5px;
 }
 
 .day-header {
     font-weight: bold;
     border-bottom: 0.5px solid #e6e6e6;
     color: rgb(143, 143, 143);
-    padding: 3px;
+    padding: 9.5px 3px;
 }
 
 .day {
@@ -183,6 +330,9 @@ footer {
       font-size: 14px;
       height: 148px;
     }
+    .holiday-label {
+        font-size: 10px;
+    }
   }
 
   @media (min-height: 1000px) {
@@ -191,14 +341,18 @@ footer {
     }
   }s
 
-.day .day-number-container {
+.day-number-container {
     width: 100%;
     text-align: center;
-    margin-bottom: 4px;
+    display: block;       /* 기본 block이지만 혹시 모르니 명시 */
+    min-height: 2rem;     /* 최소한의 높이 설정 */
+    margin-bottom: 5px;
 }
 
-.day .day-number {
-    font-size: 17px; /* 숫자 크기 조정 */
+.day-number {
+    font-size: 16px;
+    display: inline-block;
+    padding: 0 0 3px 0;
 }
 
 .holiday-container {
@@ -207,18 +361,18 @@ footer {
     max-height: 60px;
     flex-direction: column;
     overflow-y: auto;
-    gap: 1px;
+    gap: 0.6px;
 }
 
 .holiday-label {
     text-align: left;
-    font-size: 10px;
+    font-size: 11px;
     font-weight: bold;
     white-space: nowrap;
     overflow: hidden; /* 넘칠 때 잘리게 */
-    background-color: red;
+    background-color: #ef4444;
     color: white;
-    padding: 2px 6px;
+    padding: 3px 6px;
     border-radius: 5px;
 }
 
@@ -249,6 +403,22 @@ footer {
     flex: 0 0 100%;
 }
 
+.custom-event-form-wrap {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.custom-event-form {
+    width: 100%;
+    background-color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem; /* 또는 자식마다 margin-bottom: 1rem */
+}
+
+
 #custom-event-form .event-title {
     box-sizing: border-box;
     width: 100%;
@@ -264,7 +434,7 @@ footer {
     caret-color: rgb(46, 204, 135);
 }
 
-#custom-event-form .event-date {
+.event-date {
     display: flex;
     flex-direction: column;
     gap: 8px;
@@ -272,18 +442,69 @@ footer {
     margin-bottom: 20px;
 }
 
-#custom-event-form .event-date .start-date {
+.start-date {
+    width: 100%;
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center; /* 수직 가운데 정렬 */
+    gap: 2px; /* 요소 사이 간격 */
+}
+
+.date-input input,
+.time-input input {
+    width: 100%;
+    height: 32px;
+    padding: 4px 8px;
+    box-sizing: border-box;
+    font-size: 14px;
+    border: none;
+    outline: none;
+    border-bottom: 1px solid #d1d5db;
+    transition: border-color 0.2s ease;
+}
+
+.date-input:focus,
+.time-input:focus {
+    border-color: #3b82f6;
+    box-shadow: none;
+}
+
+.custom-event-form .checkbox-group {
     display: flex;
     -webkit-box-align: center;
     align-items: center;
+    -webkit-box-pack: start;
+    justify-content: flex-start;
     width: 100%;
 }
 
-#custom-event-form .event-date .end-date {
+.form-contents {
+    display: flex;
+    margin-right: 16px;
+    opacity: 1;
+    user-select: none;
+}
+
+.form-contents > * + * {
+    margin-left: 0.5rem; /* Tailwind의 space-x-2는 0.5rem (8px) 간격 */
+}  
+
+.form-contents > :first-child {
+    vertical-align: middle;
+    width: 1rem;
+    height: 1rem;
+}
+
+.form-contents > :nth-child(2) {
+    font-size: 0.875rem;
+}
+
+.end-date {
     display: flex;
     -webkit-box-align: center;
     align-items: center;
     width: 100%;
+    gap: 2px; /* 요소 사이 간격 */
 }
 
 #custom-event-form .date-section {
@@ -291,6 +512,8 @@ footer {
     border-top: 0.5px solid rgb(237, 237, 237);
     border-bottom: 0.5px solid rgb(237, 237, 237);
 }
+
+
 
 #custom-event-form .option-section {
     padding: 20px 24px;
@@ -302,13 +525,69 @@ footer {
     display: flex;
     width: 100%;
     padding: 10px 0px;
+    align-items: center;
+    gap: 0.75rem; /* 12px */
 }
 
-#custom-event-form .event-date .name-date {
+.event-tag {
+    border: 1px solid #e5e7eb; /* 연한 회색 테두리 */
+    border-radius: 4px;
+    padding: 0.5rem 0.75rem; /* 위아래 8px, 좌우 12px */
+}
+
+.participant-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+}
+
+.participant-list > * {
+    background-color: #e5e7eb;
+    border-radius: 9999px;
+    padding: 0.25rem 0.5rem;
+  }
+
+.name-date {
     margin-right: 16px;
     color: rgb(33, 33, 33);
     font-size: 14px;
+    font-weight: bold;
+    min-width: 60px;
     white-space: nowrap;
+}
+
+.form-bottom-group {
+    text-align: right;
+    margin-top: 1.5rem;
+    padding: 20px 24px;
+}
+
+.form-bottom-group > :first-child {
+    background-color: #f59e0b;
+    color: #ffffff;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    transition: all 0.15s ease-out;
+}
+  
+.form-bottom-group > :first-child:hover {
+    background-color: #d97706;
+}
+
+.form-bottom-group > :nth-child(2) {
+    background-color: #3b82f6;
+    color: #ffffff;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    transition: all 0.15s ease-out;
+}
+  
+.form-bottom-group > :first-child:hover {
+    background-color: #2563eb;
 }
 
 /* 아이콘 스타일 정의*/

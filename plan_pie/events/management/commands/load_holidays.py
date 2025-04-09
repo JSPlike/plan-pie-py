@@ -24,11 +24,11 @@ class Command(BaseCommand):
                     # 정상적으로 응답을 받았다면 실행한다
                     if response.status_code == 200:
                         holidays = self.parse_response(response.text)
-
+                        
                         if not holidays:
                             self.stdout.write(f"⛔ {year}-{str(month).zfill(2)} 휴일 정보 없음. 루프 중단.")
-                            break  # 이 달부터는 더 이상 데이터 없다고 판단
-
+                            continue  # 이 달부터는 더 이상 데이터 없다고 판단
+                        
                         for holiday in holidays:
                             date_key = holiday['locdate']
                             r.set(f'holiday:{date_key}', holiday['dateName'])
