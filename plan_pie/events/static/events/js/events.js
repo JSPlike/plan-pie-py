@@ -24,8 +24,6 @@ document.addEventListener("DOMContentLoaded", function () {
         holidayDates[dateStr].push(event.title);
     });
 
-     
-
     function renderCalendar(year, month) {
         initWindow();
 
