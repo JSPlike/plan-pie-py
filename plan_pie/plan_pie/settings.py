@@ -137,6 +137,9 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# 로그인후 리다이렉트 url
+LOGIN_REDIRECT_URL = '/event'
+
 # redis & docker
 # 1. 휴일데이터 (공공데이터포탈)
 CACHES = {

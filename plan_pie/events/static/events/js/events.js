@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let holidayDates = {}; // 공휴일 날짜 저장용
     const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
     console.log("저장되어진 이벤트");
-    console.log(JSON.parse($('#events')));
+    console.log(JSON.parse($('#events_json').text));
 
     const holidaysJson = JSON.parse(document.getElementById('holidays-data').textContent); 
     holidaysJson.forEach(event => {
