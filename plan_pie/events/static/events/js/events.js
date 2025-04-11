@@ -8,7 +8,8 @@ document.addEventListener("DOMContentLoaded", function () {
     let showHolidays = true;
     let holidayDates = {}; // 공휴일 날짜 저장용
     const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
-    console.log("저장되어진 이벤트");
+    
+
     // 저장된 이벤트 처리
 
     const holidaysJson = JSON.parse(document.getElementById('holidays-data').textContent); 
@@ -78,7 +79,7 @@ document.addEventListener("DOMContentLoaded", function () {
             calendarHTML += `<div class="${dayClass}" data-year="${year}" data-month="${month}" data-day="${day}">
                                 <div class="day-number-container"><div class="day-number">${day}</div></div>
                                 <div class="holiday-container">${holidayHTML}</div>
-                                <div class="day-events"></div>
+                                <div class="day-events-container"></div>
                             </div>`;
         }
 
@@ -190,49 +191,86 @@ document.addEventListener("DOMContentLoaded", function () {
     $('#save-section-btn').on('click', function() {
         // 유효성확인
         if(saveValidate() == false) { return; }
-        const formData = {};
-        $('#custom-event-form').find('input, select, textarea').each(function () {
-            const name = $(this).attr('name');
-            let value;
-      
-            if ($(this).attr('type') === 'checkbox') {
-                value = $(this).is(':checked');
-            } else {
-                value = $(this).val();
-            }
-      
-            if (name) {
-                formData[name] = value;
-            }
-        });
 
-        const participants = [];
-        $('#participant-list span').each(function () {
-            const email = $(this).data('email');
-            if (email) {
-                participants.push(email);
-            }
-        });
+        if (confirm("저장하시겠습니까?")) {
+            const formData = {};
+            $('#custom-event-form').find('input, select, textarea').each(function () {
+                const name = $(this).attr('name');
+                let value;
+        
+                if ($(this).attr('type') === 'checkbox') {
+                    value = $(this).is(':checked');
+                } else {
+                    value = $(this).val();
+                }
+        
+                if (name) {
+                    formData[name] = value;
+                }
+            });
 
-        formData['participants'] = participants;
+            const participants = [];
+            $('#participant-list span').each(function () {
+                const email = $(this).data('email');
+                if (email) {
+                    participants.push(email);
+                }
+            });
 
-        // JSON으로 출력 확인 (디버깅용)
-        console.log(JSON.stringify(formData));
+            formData['participants'] = participants;
+
+            // JSON으로 출력 확인 (디버깅용)
+            console.log(JSON.stringify(formData));
 
 
-        // post send (url, data, onSuccess, onError)
-        post (
-            '/new/', 
-            formData,
-            function (response) {
-                console.log('저장 성공:', response);
-            },
-            function (xhr, status, error) {
-                console.error('저장 실패:', error);
-            }
-        );
+            // post send (url, data, onSuccess, onError)
+            post (
+                '/event/new/', 
+                formData,
+                function (res) {
+                    // 성공했으면 화면에 그려주는 로직
+                    drawEvent(res.title, res.color, res.start_date, res.end_date)
 
+                    console.log('저장 성공:', res);
+                },
+                function (xhr, status, error) {
+                    console.error('저장 실패:', error);
+                }
+            );
+        }
     });
+
+    /**
+     * 달력화면에 해당 이벤트를 그려준다.
+     */
+    function drawEvent(title, color, startDateStr, endDateStr) {
+        const startDate = new Date(startDateStr);
+        const endDate = new Date(endDateStr);
+        console.log(startDateStr + ' ' + endDateStr);
+        for(let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
+            const year = d.getFullYear();
+            const month = d.getMonth() + 1; // 월은 0부터 시작
+            const day = d.getDate();
+
+            console.log(year + ' ' + month + ' ' + day);
+
+            const container = document.querySelector(
+                `[data-year="${year}"][data-month="${month}"][data-day="${day}"] .day-events-container`
+            );
+
+            if (container) {
+                const eventDiv = document.createElement('div');
+                eventDiv.classList.add('event-item');
+                eventDiv.style.backgroundColor = color;
+
+                // 시작일만 시간 표시
+                const label = `${title}`
+
+                eventDiv.innerHTML = label;
+                container.appendChild(eventDiv);
+            }
+        }
+    }
 
     function saveValidate() {
         if($('#event-title').val().trim() === "") {

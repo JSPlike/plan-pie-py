@@ -8,6 +8,7 @@ from django.conf import settings
 from django.core.serializers import serialize
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import get_user_model
+from datetime import time
 
 @csrf_exempt 
 def create_event(request):
@@ -19,9 +20,9 @@ def create_event(request):
         event = Event.objects.create(
             title=data.get('title'),
             start_date=data.get('sdate'),
-            start_time=data.get('stime'),
+            start_time=parse_time(data.get('stime')),
             end_date=data.get('edate'),
-            end_time=data.get('etime'),
+            end_time=parse_time(data.get('etime')),
             is_all_day=data.get('isAllday', False),
             color=data.get('color'),
             memo=data.get('memo')
@@ -54,9 +55,27 @@ def create_event(request):
             except User.DoesNotExist:
                 print(f"[!] 유저를 찾을 수 없음: {email}")
         
-        return JsonResponse({'status': 'success'})
+        return JsonResponse({
+            'status': 'success',
+            'title' : data.get('title'),
+            'start_data' : data.get('sdate'),
+            'end_data' : data.get('edate'),
+            'start_tiem' : parse_time(data.get('stime')),
+            'end_time' : parse_time(data.get('etime')),
+            'color' : data.get('color'),
+            'memo' : data.get('memo')
+        })
 
     return JsonResponse({'error': 'Invalid request'}, status=400)
+
+# time 데이터를 파싱한다.
+def parse_time(value):
+    if value:
+        try:
+            return time.fromisoformat(value)
+        except ValueError:
+            pass
+    return None
 
 @login_required
 def accept_invite(request, event_id):

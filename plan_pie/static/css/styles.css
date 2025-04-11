@@ -376,6 +376,27 @@ footer {
     border-radius: 5px;
 }
 
+/* 추가 등록한 이벤트 모음 */
+.day-events-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    gap: 0.6px;
+}
+
+.event-item {
+    text-align: left;
+    font-size: 11px;
+    font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden; /* 넘칠 때 잘리게 */
+    color: white;
+    padding: 3px 6px;
+    border-radius: 5px;
+}
+
+
 /* 오늘날짜 디자인 */
 .day.today .day-number {
     display: flex;
