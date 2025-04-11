@@ -15,7 +15,7 @@ def create_event(request):
         data = json.loads(request.body)
         print(data)  # 디버깅용
         
-        # 📌 기본 이벤트 저장
+        # 📌 기본 이벤트 생성
         event = Event.objects.create(
             title=data.get('title'),
             start_date=data.get('sdate'),
@@ -27,22 +27,32 @@ def create_event(request):
             memo=data.get('memo')
         )
 
+        print(event);
+
+        # 현재 로그인한 유저가 있다면 작성자로 등록 (필요한 경우)
+        if request.user.is_authenticated:
+            EventParticipant.objects.get_or_create(
+                event=event,
+                user=request.user,
+                defaults={'role': 'owner', 'status': 'accepted'}
+            )
+ 
         # 📌 참여자 저장
         participants = data.get('participants', [])
         User = get_user_model()
 
         for email in participants:
+            if not isinstance(email, str):  # 예외처리
+                continue
             try:
                 user = User.objects.get(email=email)
-                EventParticipant.objects.create(
+                EventParticipant.objects.get_or_create(
                     event=event,
                     user=user,
-                    role='participant',
-                    status='pending'
+                    defaults={'role': 'participant', 'status': 'pending'}
                 )
             except User.DoesNotExist:
-                print(f"유저를 찾을 수 없음: {email}")
-                # 필요하면 로그만 남기고 무시하거나, 예외를 반환할 수도 있음
+                print(f"[!] 유저를 찾을 수 없음: {email}")
         
         return JsonResponse({'status': 'success'})
 

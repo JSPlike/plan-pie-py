@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let holidayDates = {}; // 공휴일 날짜 저장용
     const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
     console.log("저장되어진 이벤트");
-    console.log(JSON.parse($('#events_json').text));
+    // 저장된 이벤트 처리
 
     const holidaysJson = JSON.parse(document.getElementById('holidays-data').textContent); 
     holidaysJson.forEach(event => {
@@ -134,15 +134,15 @@ document.addEventListener("DOMContentLoaded", function () {
         const clickedDate = new Date(year, month, day);
     
         // 하루 더하기
-        const nextDate = new Date(clickedDate);
-        nextDate.setDate(clickedDate.getDate() + 1);
+        //const nextDate = new Date(clickedDate);
+        //nextDate.setDate(clickedDate.getDate() + 1);
 
         const format = (date) => 
             `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
 
-        // 초기 날짜 세팅
+        // 초기 날짜 세팅 (둘다 오늘날짜)
         $('#start-date').val(format(clickedDate));
-        $('#end-date').val(format(nextDate));
+        $('#end-date').val(format(clickedDate));
     });
 
 
@@ -222,7 +222,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // post send (url, data, onSuccess, onError)
         post (
-            '/create_event/', 
+            '/new/', 
             formData,
             function (response) {
                 console.log('저장 성공:', response);
