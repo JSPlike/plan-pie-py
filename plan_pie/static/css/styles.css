@@ -378,6 +378,7 @@ footer {
 
 /* 추가 등록한 이벤트 모음 */
 .day-events-container {
+    margin-top: 0.6px;
     width: 100%;
     display: flex;
     flex-direction: column;

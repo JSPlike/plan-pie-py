@@ -8,9 +8,13 @@ document.addEventListener("DOMContentLoaded", function () {
     let showHolidays = true;
     let holidayDates = {}; // 공휴일 날짜 저장용
     const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
-    
-
+  
     // 저장된 이벤트 처리
+
+    // 해당 유저에 저장되어진 이벤트를 가져온다.
+    console.log(events_json);
+
+
 
     const holidaysJson = JSON.parse(document.getElementById('holidays-data').textContent); 
     holidaysJson.forEach(event => {
@@ -244,26 +248,39 @@ document.addEventListener("DOMContentLoaded", function () {
     function drawEvent(title, color, startDateStr, endDateStr) {
         const startDate = new Date(startDateStr);
         const endDate = new Date(endDateStr);
-
+        
+        // 시작일 데이터 부터 종료일 데이터 까지 읽어서 해당 이벤트를 그려준다.
         for(let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
             const year = d.getFullYear();
             const month = d.getMonth() + 1; // 월은 0부터 시작
             const day = d.getDate();
 
             const container = document.querySelector(
-                `[data-year="${year}"][data-month="${month}"][data-day="${day}"] .day-events-container`
+                `[data-year="${year}"][data-month="${month}"][data-day="${day}"]`
             );
+            
+            const eventContainer = container.querySelector('.day-events-container');
 
-            if (container) {
+            
+            // 만약 추가해야할 이벤트 해당 날짜에 대해 위에 휴일이 있거나 첫번째 이벤트가 아닐경우에는 상단마진 2px 설정
+            const hasHoliday = container.querySelector('.holiday-container')?.innerHTML.trim() !== ''; // 휴일 요소
+            const existingEvents = container.querySelectorAll('.event-item').length > 0; // 이벤트 요소
+
+
+            if (eventContainer) {
                 const eventDiv = document.createElement('div');
                 eventDiv.classList.add('event-item');
                 eventDiv.style.backgroundColor = color;
+
+                if(hasHoliday || existingEvents) {
+                    eventDiv.style.marginTop = '2px';
+                }
 
                 // 시작일만 시간 표시
                 const label = `${title}`
 
                 eventDiv.innerHTML = label;
-                container.appendChild(eventDiv);
+                eventContainer.appendChild(eventDiv);
             }
         }
     }
