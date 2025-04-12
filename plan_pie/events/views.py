@@ -58,9 +58,9 @@ def create_event(request):
         return JsonResponse({
             'status': 'success',
             'title' : data.get('title'),
-            'start_data' : data.get('sdate'),
-            'end_data' : data.get('edate'),
-            'start_tiem' : parse_time(data.get('stime')),
+            'start_date' : data.get('sdate'),
+            'end_date' : data.get('edate'),
+            'start_time' : parse_time(data.get('stime')),
             'end_time' : parse_time(data.get('etime')),
             'color' : data.get('color'),
             'memo' : data.get('memo')

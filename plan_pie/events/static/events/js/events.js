@@ -76,7 +76,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 ).join('');
             }
 
-            calendarHTML += `<div class="${dayClass}" data-year="${year}" data-month="${month}" data-day="${day}">
+            calendarHTML += `<div class="${dayClass}" data-year="${year}" data-month="${month + 1}" data-day="${day}">
                                 <div class="day-number-container"><div class="day-number">${day}</div></div>
                                 <div class="holiday-container">${holidayHTML}</div>
                                 <div class="day-events-container"></div>
@@ -139,7 +139,7 @@ document.addEventListener("DOMContentLoaded", function () {
         //nextDate.setDate(clickedDate.getDate() + 1);
 
         const format = (date) => 
-            `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+            `${date.getFullYear()}-${String(date.getMonth()).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
 
         // 초기 날짜 세팅 (둘다 오늘날짜)
         $('#start-date').val(format(clickedDate));
@@ -230,8 +230,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 function (res) {
                     // 성공했으면 화면에 그려주는 로직
                     drawEvent(res.title, res.color, res.start_date, res.end_date)
-
-                    console.log('저장 성공:', res);
                 },
                 function (xhr, status, error) {
                     console.error('저장 실패:', error);
@@ -246,13 +244,11 @@ document.addEventListener("DOMContentLoaded", function () {
     function drawEvent(title, color, startDateStr, endDateStr) {
         const startDate = new Date(startDateStr);
         const endDate = new Date(endDateStr);
-        console.log(startDateStr + ' ' + endDateStr);
+
         for(let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
             const year = d.getFullYear();
             const month = d.getMonth() + 1; // 월은 0부터 시작
             const day = d.getDate();
-
-            console.log(year + ' ' + month + ' ' + day);
 
             const container = document.querySelector(
                 `[data-year="${year}"][data-month="${month}"][data-day="${day}"] .day-events-container`
