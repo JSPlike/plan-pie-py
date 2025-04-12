@@ -168,7 +168,7 @@ def event_list(request):
     return render(request, 'events/event_list.html', {
         'events': events, 
         'invites': invites, 
-        'events_json': json.dumps(events_json, ensure_ascii=False),
+        'events_json': json.dumps(events_json, indent=4, ensure_ascii=False),
         'invites_json': invites_json,
         'holidays_json': json.dumps(holidays_json, ensure_ascii=False),
     })

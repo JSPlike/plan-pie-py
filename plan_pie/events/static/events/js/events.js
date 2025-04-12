@@ -8,15 +8,15 @@ document.addEventListener("DOMContentLoaded", function () {
     let showHolidays = true;
     let holidayDates = {}; // 공휴일 날짜 저장용
     const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
-  
+    const eventsJson = JSON.parse(document.getElementById('events_json').textContent);
+    const holidaysJson = JSON.parse(document.getElementById('holidays-data').textContent); 
+
     // 저장된 이벤트 처리
 
     // 해당 유저에 저장되어진 이벤트를 가져온다.
-    console.log(events_json);
+    
+    console.log(eventsJson);
 
-
-
-    const holidaysJson = JSON.parse(document.getElementById('holidays-data').textContent); 
     holidaysJson.forEach(event => {
         const dateStr = event.start_time.split(' ')[0]; // 'YYYY-MM-DD'
         
