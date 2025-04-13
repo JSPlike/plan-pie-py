@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     function renderCalendar(year, month) {
-        initWindow();
+        
 
         calendarEl.innerHTML = ""; // 기존 내용 지우기
         calendarYm.innerHTML = "";
@@ -50,6 +50,9 @@ document.addEventListener("DOMContentLoaded", function () {
             calendarHTML += `<div class="empty"></div>`;
         }
 
+        // 달력의 이벤트 및 요소들 초기 세팅
+        initWindow();
+        
         // 날짜 채우기
         for (let day = 1; day <= daysInMonth; day++) {
             const fullDateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
@@ -99,7 +102,15 @@ document.addEventListener("DOMContentLoaded", function () {
     renderCalendar(today.getFullYear(), today.getMonth());
 
     function initWindow() {
+        // 시간 요소를 숨긴다.
         $('.time-input').css('visibility', 'hidden');
+
+        // 렌더링시 해당 년월을 달력 인풋창의 기본으로 사용한다.
+
+        // 렌더링시 해당 년월에 존재하는 이벤트를 달력에 그려준다.
+
+
+
     }
 
     function onEventForm() {
@@ -136,11 +147,16 @@ document.addEventListener("DOMContentLoaded", function () {
         const month = $(this).data('month');
         const day = $(this).data('day');
 
+        // 현재 클릭한 날짜데이터
         const clickedDate = new Date(year, month, day);
-    
-        // 하루 더하기
-        //const nextDate = new Date(clickedDate);
-        //nextDate.setDate(clickedDate.getDate() + 1);
+
+        if (!clickedDate) return;
+
+        // 1. 모든 날짜 포커스 해제
+        document.querySelectorAll('.day').forEach(d => d.classList.remove('focused'));
+
+        // 2. 클릭된 날짜 포커스 스타일 추가
+        clickedDate.classList.add('focused');
 
         const format = (date) => 
             `${date.getFullYear()}-${String(date.getMonth()).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
