@@ -1,7 +1,6 @@
 /* static/styles.css */
 body {
     font-family: Arial, sans-serif;
-    height: 100%;
     margin: 0;
     padding: 0;
     overflow: hidden; /* ← 필요 시 추가 */
@@ -30,6 +29,7 @@ body {
 main {
     flex-grow: 1; /* main 영역은 남은 공간을 차지 */
     width: 100%;
+    height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center; /* 세로로 가운데 정렬 */
@@ -646,4 +646,14 @@ footer {
     height: 24px;
     stroke: #4f46e5; /* 색상 바꾸기 (indigo-600 같은 느낌) */
     stroke-width: 2;
+}
+
+
+
+
+
+
+
+html, body {
+    height: 100%;
 }

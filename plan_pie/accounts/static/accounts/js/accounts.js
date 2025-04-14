@@ -1,7 +1,7 @@
 // static/js/signup.js
 $(document).ready(function () {
-    $("#signup-form").submit(function (event) {
-        event.preventDefault();  // 폼 제출 기본 동작을 막음
+    $("#signup-form").on('submit', function (e) {
+        e.preventDefault();  // 폼 제출 기본 동작을 막음
 
         // FormData 객체 생성
         let formData = new FormData(this);
@@ -26,6 +26,29 @@ $(document).ready(function () {
             },
             error: function (error) {
                 console.error("Error:", error);  // 에러 처리
+            }
+        });
+    });
+
+    $('#login-form').on('submit', function(e) {
+        e.preventDefault();
+
+        $.ajax({
+            url: "/accounts/login/",
+            method: "POST",
+            data: $(this).serialize(),
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            success: function(response) {
+                if (response.success) {
+                    window.location.href = response.redirect_url;
+                } else {
+                    $('#message').html('<p style="color:red;">' + response.message + '</p>');
+                }
+            },
+            error: function() {
+                $('#message').html('<p style="color:red;">서버 오류</p>');
             }
         });
     });

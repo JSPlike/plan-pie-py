@@ -5,13 +5,13 @@
 {% block content %}
 <div class="account-form-wrap">
     <h2 class="account-form-heading">로그인</h2>
-    <form method="POST" class="account-form">
+    <form method="POST" id="login-form" class="account-form">
         {% csrf_token %}
         <div>
             <label>이메일</label>
-            <input type="email" name="username">
+            <input type="email" name="email">
         </div>
-        <div class="mb-4">
+        <div>
             <label>비밀번호</label>
             <input type="password" name="password">
         </div>
