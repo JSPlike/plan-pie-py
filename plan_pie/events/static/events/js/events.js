@@ -142,7 +142,7 @@ document.addEventListener("DOMContentLoaded", function () {
      */
     $('#calendar').on('click', '.day', function() {
         onEventForm();
-        // 클릭한 개체를 탐지한다.
+        // 클릭한 개체를 탐지한다. 날짜 값을 받는다.
         const year = $(this).data('year');
         const month = $(this).data('month');
         const day = $(this).data('day');
