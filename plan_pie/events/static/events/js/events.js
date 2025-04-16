@@ -14,8 +14,6 @@ document.addEventListener("DOMContentLoaded", function () {
     // 저장된 이벤트 처리
 
     // 해당 유저에 저장되어진 이벤트를 가져온다.
-    
-    console.log(eventsJson);
 
     holidaysJson.forEach(event => {
         const dateStr = event.start_time.split(' ')[0]; // 'YYYY-MM-DD'
@@ -150,13 +148,23 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
 
+    /**
+     * 사이드 섹션을 호출한다
+     */
     function onEventForm() {
         $('.right-section').removeClass('slide-out-right');
+        $('.right-section').removeClass('hidden-slide');
         $('.left-section').removeClass('expand-main');
+        $('.left-section').addClass('shirink-main');
     }
 
+    /**
+     * 사이드섹션을 닫는다.
+     */
     function offEventForm() {
         $('.right-section').addClass('slide-out-right');
+        $('.right-section').addClass('hidden-slide');
+        $('.left-section').removeClass('shirink-main');
         $('.left-section').addClass('expand-main');
     }
 
