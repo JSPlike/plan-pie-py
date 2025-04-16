@@ -338,7 +338,7 @@ footer {
       height: 129px;
       font-size: 14px;
     }
-    .holiday-label {
+    .holiday-event-item {
         font-size: 10px;
     }
   }
@@ -348,7 +348,7 @@ footer {
       height: 147px;
       font-size: 15px;
     }
-    .holiday-label {
+    .holiday-event-item {
         font-size: 11px;
     }
   }
@@ -379,7 +379,7 @@ footer {
     gap: 0.6px;
 }
 
-.holiday-label {
+.holiday-event-item {
     text-align: left;
     font-size: 11px;
     font-weight: bold;
@@ -400,6 +400,7 @@ footer {
     display: flex;
     flex-direction: column;
     overflow-y: auto;
+    gap: 0.6px;
 }
 
 .new-event-item {
@@ -411,7 +412,8 @@ footer {
     color: white;
     padding: 3px 6px;
     border-radius: 5px;
-
+    margin-left: 1px;
+    margin-right: 1px;
     /* 일정 이벤트 폰트 */
     font-family: 'Pretendard', sans-serif;
 }
@@ -425,7 +427,7 @@ footer {
     color: white;
     padding: 3px 6px;
     border-radius: 5px;
-
+    
     /* 일정 이벤트 폰트 */
     font-family: 'Pretendard', sans-serif;
 }

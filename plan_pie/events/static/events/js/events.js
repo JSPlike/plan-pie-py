@@ -79,7 +79,7 @@ document.addEventListener("DOMContentLoaded", function () {
             if (showHolidays && holidayDates[fullDateStr]) {
                 dayClass += ' holiday';
                 holidayHTML = holidayDates[fullDateStr].map(name => 
-                    `<div class="holiday-label">${name}</div>`
+                    `<div class="holiday-event-item">${name}</div>`
                 ).join('');
             }
 
@@ -300,7 +300,7 @@ document.addEventListener("DOMContentLoaded", function () {
     $('#event-color-select').on('change', function () {
         const selectedColor = $(this).val();
 
-        $('.icon').css('stroke', selectedColor);
+        $('.option-section .icon').css('stroke', selectedColor);
         $('.new-event-item').css('background', selectedColor);
     });
 
