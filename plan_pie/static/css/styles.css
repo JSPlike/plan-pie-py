@@ -4,7 +4,6 @@ body {
     margin: 0;
     padding: 0;
     overflow: hidden; /* ← 필요 시 추가 */
-    display: flex;
     flex-direction: column; /* 세로 방향으로 요소 배치 */
     justify-content: center;
     align-items: center;
@@ -333,21 +332,25 @@ footer {
 /**
  * 화면 사이즈별로 달력크기를 조정한다
  */
-@media (max-height: 1000px) {
+@media (max-height: 900px) {
     .day {
-      font-size: 14px;
       height: 129px;
+      font-size: 14px;
     }
     .holiday-label {
         font-size: 10px;
     }
   }
 
-  @media (min-height: 1000px) {
+  @media (min-height: 900px) {
     .day {
-      height: 168px;
+      height: 147px;
+      font-size: 15px;
     }
-  }s
+    .holiday-label {
+        font-size: 11px;
+    }
+  }
 
 .day-number-container {
     width: 100%;

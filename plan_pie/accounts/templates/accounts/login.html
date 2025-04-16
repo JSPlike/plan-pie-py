@@ -9,7 +9,7 @@
         {% csrf_token %}
         <div>
             <label>이메일</label>
-            <input type="email" name="email">
+            <input type="email" name="username">
         </div>
         <div>
             <label>비밀번호</label>
@@ -17,6 +17,7 @@
         </div>
         <button type="submit">로그인</button>
     </form>
+    <div id="message"></div>
     <p>
         계정이 없으신가요? <a href="{% url 'signup' %}">회원가입</a>
     </p>

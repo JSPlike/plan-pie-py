@@ -5,7 +5,6 @@ $(document).ready(function () {
 
         // FormData 객체 생성
         let formData = new FormData(this);
-
         // AJAX 요청 보내기
         $.ajax({
             url: "/accounts/signup/",  // 요청 URL (뷰로 변경 필요)
@@ -33,18 +32,21 @@ $(document).ready(function () {
     $('#login-form').on('submit', function(e) {
         e.preventDefault();
 
+        let formData = new FormData(this);
         $.ajax({
             url: "/accounts/login/",
             method: "POST",
-            data: $(this).serialize(),
+            data: formData,
+            processData: false,  // FormData는 자동으로 처리되지 않으므로 false로 설정
+            contentType: false,  // 파일 업로드 시 content-type을 자동으로 설정하지 않도록 설정
             headers: {
                 'X-CSRFToken': '{{ csrf_token }}'
             },
-            success: function(response) {
-                if (response.success) {
-                    window.location.href = response.redirect_url;
+            success: function(res) {
+                if (res.success) {
+                    window.location.href = res.redirect_url;
                 } else {
-                    $('#message').html('<p style="color:red;">' + response.message + '</p>');
+                    $('#message').html('<p style="color:red;">' + res.message + '</p>');
                 }
             },
             error: function() {
