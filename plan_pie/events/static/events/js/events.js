@@ -108,8 +108,45 @@ document.addEventListener("DOMContentLoaded", function () {
         // 렌더링시 해당 년월을 달력 인풋창의 기본으로 사용한다.
 
         // 렌더링시 해당 년월에 존재하는 이벤트를 달력에 그려준다.
+        /*
+        const startDate = new Date(startDateStr);
+        const endDate = new Date(endDateStr);
+        
+        // 시작일 데이터 부터 종료일 데이터 까지 읽어서 해당 이벤트를 그려준다.
+        for(let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
+            const year = d.getFullYear();
+            const month = d.getMonth() + 1; // 월은 0부터 시작
+            const day = d.getDate();
+
+            const container = document.querySelector(
+                `[data-year="${year}"][data-month="${month}"][data-day="${day}"]`
+            );
+            
+            const eventContainer = container.querySelector('.day-events-container');
+
+            
+            // 만약 추가해야할 이벤트 해당 날짜에 대해 위에 휴일이 있거나 첫번째 이벤트가 아닐경우에는 상단마진 2px 설정
+            const hasHoliday = container.querySelector('.holiday-container')?.innerHTML.trim() !== ''; // 휴일 요소
+            const existingEvents = container.querySelectorAll('.event-item').length > 0; // 이벤트 요소
 
 
+            if (eventContainer) {
+                const eventDiv = document.createElement('div');
+                eventDiv.classList.add('event-item');
+                eventDiv.style.backgroundColor = color;
+
+                if(hasHoliday || existingEvents) {
+                    eventDiv.style.marginTop = '2px';
+                }
+
+                // 시작일만 시간 표시
+                const label = `${title}`
+
+                eventDiv.innerHTML = label;
+                eventContainer.appendChild(eventDiv);
+            }
+        }
+        */
 
     }
 
@@ -148,31 +185,89 @@ document.addEventListener("DOMContentLoaded", function () {
         const day = $(this).data('day');
 
         // 현재 클릭한 날짜데이터
-        const clickedDate = new Date(year, month, day);
+        // javascript에서 0은 1월로 표현된다.
+        const clickedDate = new Date(year, month - 1, day);
 
-        if (!clickedDate) return;
+        const format = (date) => `${date.getFullYear()}-${String(date.getMonth()).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
 
         // 1. 모든 날짜 포커스 해제
         document.querySelectorAll('.day').forEach(d => d.classList.remove('focused'));
 
-        // 2. 클릭된 날짜 포커스 스타일 추가
-        clickedDate.classList.add('focused');
+        // ✅ 1. 기존 포커스 해제
+        $('#calendar .day.focused').removeClass('focused');
 
-        const format = (date) => 
-            `${date.getFullYear()}-${String(date.getMonth()).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+        // ✅ 2. 현재 클릭된 요소에 포커스 클래스 추가
+        $(this).addClass('focused');
 
         // 초기 날짜 세팅 (둘다 오늘날짜)
         $('#start-date').val(format(clickedDate));
         $('#end-date').val(format(clickedDate));
+
+        // 3. flatpickr 인스턴스에 날짜 반영
+        $('#start-date')[0]._flatpickr.setDate(clickedDate, true);  // true는 onChange 트리거 포함
+        $('#end-date')[0]._flatpickr.setDate(clickedDate, true);
+
+        /* 선택된 날짜에 New Event 박스 생성 */
+
+        drawEvent("New Event", clickedDate)
     });
 
+    /**
+     * 달력화면에 해당 이벤트를 그려준다.
+     */
+    function drawEvent(title, clickedDate) {
+        const d = new Date(clickedDate);
+
+        // 기존에 이미 새 이벤트 아이템이 있으면 지워준다.
+        const existingEventItems = document.querySelectorAll('.new-event-item');
+        existingEventItems.forEach(item => item.remove());
+        
+        // 클릭한 날짜에 대한 정보
+        const year = d.getFullYear();
+        const month = d.getMonth() + 1; // 월은 0부터 시작
+        const day = d.getDate();
+
+        const container = document.querySelector(
+            `[data-year="${year}"][data-month="${month}"][data-day="${day}"]`
+        );
+        
+        const eventContainer = container.querySelector('.day-events-container');
+
+        
+        // 만약 추가해야할 이벤트 해당 날짜에 대해 위에 휴일이 있거나 첫번째 이벤트가 아닐경우에는 상단마진 2px 설정
+        const hasHoliday = container.querySelector('.holiday-container')?.innerHTML.trim() !== ''; // 휴일 요소
+        const existingEvents = container.querySelectorAll('.new-event-item').length > 0; // 이벤트 요소
+
+
+        if (eventContainer) {
+            const eventDiv = document.createElement('div');
+            eventDiv.classList.add('new-event-item');
+            const color = $('#event-color-select').val();
+            eventDiv.style.backgroundColor = color;
+
+            if(hasHoliday || existingEvents) {
+                eventDiv.style.marginTop = '2px';
+            }
+
+            // 시작일만 시간 표시
+            const label = `${title}`
+
+            eventDiv.innerHTML = label;
+            eventContainer.appendChild(eventDiv);
+        }
+    }
 
     flatpickr("#start-date", {
         dateFormat: "Y-m-d",
         defaultDate: new Date(),
         allowInput: false,
         onChange: function (selectedDates, dateStr, instance) {
-            console.log("선택된 날짜:", dateStr);
+            // 만약 선택된 날짜가 종료일보다 뒤라면 종료일도 같은 날짜로 맞춰준다.
+            if( $('#start-date').val() > $('#end-date').val() ) {
+                $('#end-date').val(dateStr);
+                $('#end-date')[0]._flatpickr.setDate(dateStr, true);
+                $('#end-date').removeClass('invalid-data');
+            }
         }
     });
 
@@ -181,7 +276,10 @@ document.addEventListener("DOMContentLoaded", function () {
         defaultDate: new Date(),
         allowInput: false,
         onChange: function (selectedDates, dateStr, instance) {
-            console.log("선택된 날짜:", dateStr);
+            // 만약 선택된 날짜가 시작일보다 앞이라면 불가능 하다는 표시가 필요
+            if( $('#start-date').val() > $('#end-date').val() ){
+                $('#end-date').addClass('invalid-data');
+            }
         }
     });
 
@@ -203,6 +301,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const selectedColor = $(this).val();
 
         $('.icon').css('stroke', selectedColor);
+        $('.new-event-item').css('background', selectedColor);
     });
 
     /**
@@ -249,7 +348,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 formData,
                 function (res) {
                     // 성공했으면 화면에 그려주는 로직
-                    drawEvent(res.title, res.color, res.start_date, res.end_date)
+                    //drawEvent(res.title, res.color, res.start_date, res.end_date)
+
+                    // 화면에 반영해주는 로직필요
                 },
                 function (xhr, status, error) {
                     console.error('저장 실패:', error);
@@ -257,49 +358,6 @@ document.addEventListener("DOMContentLoaded", function () {
             );
         }
     });
-
-    /**
-     * 달력화면에 해당 이벤트를 그려준다.
-     */
-    function drawEvent(title, color, startDateStr, endDateStr) {
-        const startDate = new Date(startDateStr);
-        const endDate = new Date(endDateStr);
-        
-        // 시작일 데이터 부터 종료일 데이터 까지 읽어서 해당 이벤트를 그려준다.
-        for(let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
-            const year = d.getFullYear();
-            const month = d.getMonth() + 1; // 월은 0부터 시작
-            const day = d.getDate();
-
-            const container = document.querySelector(
-                `[data-year="${year}"][data-month="${month}"][data-day="${day}"]`
-            );
-            
-            const eventContainer = container.querySelector('.day-events-container');
-
-            
-            // 만약 추가해야할 이벤트 해당 날짜에 대해 위에 휴일이 있거나 첫번째 이벤트가 아닐경우에는 상단마진 2px 설정
-            const hasHoliday = container.querySelector('.holiday-container')?.innerHTML.trim() !== ''; // 휴일 요소
-            const existingEvents = container.querySelectorAll('.event-item').length > 0; // 이벤트 요소
-
-
-            if (eventContainer) {
-                const eventDiv = document.createElement('div');
-                eventDiv.classList.add('event-item');
-                eventDiv.style.backgroundColor = color;
-
-                if(hasHoliday || existingEvents) {
-                    eventDiv.style.marginTop = '2px';
-                }
-
-                // 시작일만 시간 표시
-                const label = `${title}`
-
-                eventDiv.innerHTML = label;
-                eventContainer.appendChild(eventDiv);
-            }
-        }
-    }
 
     function saveValidate() {
         if($('#event-title').val().trim() === "") {
