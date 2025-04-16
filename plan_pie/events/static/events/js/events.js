@@ -179,7 +179,12 @@ document.addEventListener("DOMContentLoaded", function () {
      * 일정 생성 섹션을 닫는다
      */
     $('#close-section-btn').on('click', function () {
-        offEventForm();
+        showConfirmPopup("정말 취소하시겠습니까?", function () {
+            const existingEventItems = document.querySelectorAll('.new-event-item');
+            existingEventItems.forEach(item => item.remove());
+            offEventForm();
+        });
+        
     });
 
     /**

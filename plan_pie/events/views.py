@@ -9,6 +9,7 @@ from django.core.serializers import serialize
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import get_user_model
 from datetime import time
+from django.shortcuts import render
 
 @csrf_exempt 
 def create_event(request):
@@ -172,3 +173,6 @@ def event_list(request):
         'invites_json': invites_json,
         'holidays_json': json.dumps(holidays_json, ensure_ascii=False),
     })
+
+#def some_view(request):
+ #   return render(request, 'common/confirm_popup.html', {'some_context': 'value'})
