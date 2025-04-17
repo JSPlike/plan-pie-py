@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load static %}
+
+<div class="event-header">
+    <div class="event-header-left">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300" width="200" height="63">
+            <g>
+                <circle cx="100" cy="150" r="80" fill="#A0522D" stroke="#8B4513" stroke-width="8"/>
+                <path d="M100,150 L180,150 A80,80 0 0,0 100,70 Z" fill="#FFDAB9" />
+                <text x="220" y="175" font-family="'Comic Sans MS', 'Arial Rounded MT Bold', sans-serif" font-size="120" fill="#4B2E2B">
+                plan pie
+                </text>
+            </g>
+        </svg>
+          
+        <!-- 왼쪽: 연도 및 좌우 버튼 -->
+        <div class="calendar-header">
+            <button id="prev"><i data-lucide="chevron-left" class="icon"></i></button>
+            <button id="next"><i data-lucide="chevron-right" class="icon"></i></button>
+            <div class="calendar-ym"></div>
+        </div>
+    </div>
+
+    <!-- 가운데 -->
+    <div class="event-header-center">
+        <div class="calendar-tab">
+            <a href="{% url 'monthly_calendar' %}" class="{% if calendar_title == 'Monthly' %}active-tab{% endif %}">Monthly</a>
+            <a href="{% url 'weekly_calendar' %}" class="{% if calendar_title == 'Weekly' %}active-tab{% endif %}">Weekly</a>
+            <a href="{% url 'daily_calendar' %}" class="{% if calendar_title == 'Daily' %}active-tab{% endif %}">Daily</a>
+        </div>
+    </div>
+
+    
+    <!-- 오른쪽: 사용자 프로필 및 + 버튼 -->
+    <div class="event-header-right">
+        <div>
+            <button id="toggleEvent" class="btn-blue-rounded">+</button>
+        </div>
+
+        <div>
+            <img src="{% static 'image/icon-profile.png' %}" alt="프로필" class="profile-rounded">
+        </div>
+        
+    </div>
+</div>
+
+{% block scripts %}
+    <script src="{% static 'events/js/events.js' %}"></script>
+
+    <script id="holidays-data" type="application/json">{{ holidays_json|safe }}</script>
+
+    <script id="events_json"   type="application/json">{{ events_json|safe }}</script>
+    {{ block.super }}  <!-- base.html에서 정의된 기본 스크립트도 호출 -->
+{% endblock %}

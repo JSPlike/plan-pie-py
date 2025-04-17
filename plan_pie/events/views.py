@@ -84,7 +84,7 @@ def accept_invite(request, event_id):
     participant = get_object_or_404(EventParticipant, event=event, user=request.user, status='pending')
     participant.status = 'accepted'
     participant.save()
-    return redirect('events:event_list')
+    return redirect('events:event_monthly')
 
 @login_required
 def decline_invite(request, event_id):
@@ -92,10 +92,10 @@ def decline_invite(request, event_id):
     participant = get_object_or_404(EventParticipant, event=event, user=request.user, status='pending')
     participant.status = 'declined'
     participant.save()
-    return redirect('events:event_list') 
+    return redirect('events:event_monthly') 
 
 @login_required
-def event_list(request):
+def monthly(request):
     events = Event.objects.filter(participants__user=request.user, participants__status='accepted')
     invites = Event.objects.filter(participants__user=request.user, participants__status='pending')
     
@@ -166,13 +166,10 @@ def event_list(request):
             'type': 'holiday',
         })    
 
-    return render(request, 'events/event_list.html', {
+    return render(request, 'events/monthly.html', {
         'events': events, 
         'invites': invites, 
         'events_json': json.dumps(events_json, indent=4, ensure_ascii=False),
         'invites_json': invites_json,
         'holidays_json': json.dumps(holidays_json, ensure_ascii=False),
     })
-
-#def some_view(request):
- #   return render(request, 'common/confirm_popup.html', {'some_context': 'value'})

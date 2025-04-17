@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container-event">
+    <!-- 공통 헤더 포함 -->
+    <div class="event-header">
+        <div class="event-header-left">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300" width="200" height="63">
+                <g>
+                    <circle cx="100" cy="150" r="80" fill="#A0522D" stroke="#8B4513" stroke-width="8"/>
+                    <path d="M100,150 L180,150 A80,80 0 0,0 100,70 Z" fill="#FFDAB9" />
+                    <text x="220" y="175" font-family="'Comic Sans MS', 'Arial Rounded MT Bold', sans-serif" font-size="120" fill="#4B2E2B">
+                    plan pie
+                    </text>
+                </g>
+            </svg>
+              
+            <!-- 왼쪽: 연도 및 좌우 버튼 -->
+            <div class="calendar-header">
+                <button id="prev"><i data-lucide="chevron-left" class="icon"></i></button>
+                <button id="next"><i data-lucide="chevron-right" class="icon"></i></button>
+                <div class="calendar-ym"></div>
+            </div>
+        </div>
+    
+        <!-- 가운데 -->
+        <div class="event-header-center">
+            <div class="calendar-tab">
+                <a href="#" class="tab-link active-tab" data-url="/event/monthly" data-title="Monthly">Monthly</a>
+                <a href="#" class="tab-link" data-url="/event/weekly" data-title="Weekly">Weekly</a>
+                <a href="#" class="tab-link" data-url="/event/daily" data-title="Daily">Daily</a>
+            </div>
+        </div>
+        
+    
+        
+        <!-- 오른쪽: 사용자 프로필 및 + 버튼 -->
+        <div class="event-header-right">
+            <div>
+                <button id="toggleEvent" class="btn-blue-rounded">+</button>
+            </div>
+    
+            <div>
+                <img src="{% static 'image/icon-profile.png' %}" alt="프로필" class="profile-rounded">
+            </div>
+            
+        </div>
+    </div>
+
+
+    <div class="event-contents">
+        <div class="left-section expand-main">
+            <!-- 달력 -->
+            <div id="calendar"></div>
+        </div>
+        <div class="right-section hidden-slide">
+            <div class="custom-event-form-wrap">
+                <form id="custom-event-form" class="custom-event-form">
+                    <!-- 제목 -->
+                    <div>
+                        <input type="text" id="event-title" name="title" class="event-title" placeholder="Title">
+                    </div>
+                
+                    <!-- 시작일 / 종료일 -->
+                    <div class="date-section">
+                        <div class="event-date">
+
+                            <div class="start-date">
+                                <div class="name-date">시작일</div>
+                                <div class="date-input">
+                                    <input type="text" id="start-date" name="sdate"
+                                    placeholder="날짜 선택"
+                                    readonly>
+                                </div>
+                                <div class="time-input">
+                                    <input type="time" id="start-time" name="stime">
+                                </div>
+                            </div>
+
+                            <div class="end-date">
+                                <div class="name-date">종료일</div>
+                                <div class="date-input"> 
+                                    <input type="text" id="end-date" name="edate"
+                                    placeholder="날짜 선택"
+                                    readonly>
+                                </div>
+                                <div class="time-input">
+                                    <input type="time" id="end-time" name="etime">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 종일 여부 -->
+                        <div class="chekbox-group">
+                            <div class="form-contents">
+                                <input type="checkbox" id="all-day" name="isAllday" checked>
+                                <label for="all-day">종일</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="option-section">
+                        <!-- 색상 선택 -->
+                        <div class="event-option">
+                            <i data-lucide="tag" class="icon"></i>
+                            <select id="event-color-select" name="color" class="event-tag">
+                                <option value="#000000">🖤 제트 블랙</option>
+                                <option value="#6366f1">🟣 퍼플 블루</option>
+                                <option value="#f472b6">🌸 핑크 로즈</option>
+                                <option value="#34d399">💚 민트 그린</option>
+                                <option value="#facc15">💛 레몬 옐로우</option>
+                                <option value="#60a5fa">💙 스카이 블루</option>
+                                <option value="#fb923c">🧡 코랄 오렌지</option>
+                                <option value="#a78bfa">💜 라벤더</option>
+                              </select>
+                        </div>
+                    
+                        <!-- 참여자 목록 -->
+                        <div class="event-option">
+                            <i data-lucide="circle-user-round" class="icon"></i>
+                            <div id="participant-list" class="participant-list">
+                                <span data-email="joonyoung@potato.co.kr" >박준영</span>
+                                <span data-email="Esunsin@potato.co.kr" >이순신</span>
+                                <!-- 실제로는 동적으로 추가 -->
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <!--<a href="{% url 'event:create_event' %}" class="bg-blue-500 hover:bg-blue-600 px-4 py-2 text-white rounded transition">일정 생성</a>-->
+            </div>
+            <div class="form-bottom-group">
+                <button id="close-section-btn">
+                    취소
+                </button>
+                <button id="save-section-btn">
+                    저장
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'events/js/events.js' %}"></script>
+
+    <script id="holidays-data" type="application/json">{{ holidays_json|safe }}</script>
+
+    <script id="events_json"   type="application/json">{{ events_json|safe }}</script>
+    {{ block.super }}  <!-- base.html에서 정의된 기본 스크립트도 호출 -->
+{% endblock %}
