@@ -300,16 +300,18 @@ footer {
 .calList {
     display: none; /* 기본은 숨김 */
     position: absolute;
-    top: 80px;
-    left: 20px;
-    width: 250px;
+    top: 70px;
+    left: 1px;
+    width: 300px;
     background: white;
-    border: 1px solid #ccc;
+    border: 0.5px solid #ccc;
     z-index: 1000;
     padding: 0;
     margin: 0;
     list-style: none;
-    border-radius: 8px;
+    /*border-radius: 8px;*/
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     gap: 3px;
 }
