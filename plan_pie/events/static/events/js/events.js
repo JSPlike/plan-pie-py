@@ -25,6 +25,50 @@ document.addEventListener("DOMContentLoaded", function () {
     let initialColor = '#000000';
     let initialInvite = null;
 
+
+    // TEST 달력 테마를 위한 테스트 데이터
+    const calendars = ['개인 캘린더', '회사 일정', '프로젝트 공유', '휴가 관리']; // 예시 데이터
+    const calList = document.querySelector('.calList');
+    const calButton = document.getElementById('calThem');
+    const calAddButton = document.getElementById('btnAddCal');
+
+    // TEST 리스트 동적 생성
+    calendars.forEach(name => {
+        const li = document.createElement('li');
+        li.classList.add('calItem');
+        // 저장된 이미지가 있으면 그 이미지 사용 없으면 default
+        let imgSrc = "/static/image/default-calendar.png";
+
+        li.innerHTML = `
+            <div class="calImage">
+                <img src="${imgSrc}" alt="달력" />
+            </div>
+            <div class="calTitle">${name}</div>
+        `.trim();;
+
+        li.addEventListener('click', () => {
+            console.log(`선택한 달력: ${name}`);
+            //calList.style.display = 'none'; // 선택 후 닫기
+        });
+
+        calList.insertBefore(li, calAddButton);
+    });
+    
+    // TEST 햄버거 버튼 클릭 시 열기/닫기 토글
+    calButton.addEventListener('click', function (e) {
+        e.stopPropagation(); // 다른 이벤트 방지
+        console.log("toggle btn click");
+        calList.style.display = calList.style.display === 'block' ? 'none' : 'block';
+    });
+    
+    // TEST 외부 클릭 시 닫기
+    document.addEventListener('click', function (e) {
+        if (!calList.contains(e.target)) {
+            calList.style.display = 'none';
+        }
+    });
+
+
     // 저장된 이벤트 처리
 
     // 해당 유저에 저장되어진 이벤트를 가져온다.
@@ -185,8 +229,8 @@ document.addEventListener("DOMContentLoaded", function () {
     function onEventForm() {
         $('.right-section').removeClass('slide-out-right');
         $('.right-section').removeClass('hidden-slide');
-        $('.left-section').removeClass('expand-main');
-        $('.left-section').addClass('shirink-main');
+        $('.centerSection').removeClass('expand-main');
+        $('.centerSection').addClass('shirink-main');
     }
 
     /**
@@ -195,8 +239,8 @@ document.addEventListener("DOMContentLoaded", function () {
     function offEventForm() {
         $('.right-section').addClass('slide-out-right');
         $('.right-section').addClass('hidden-slide');
-        $('.left-section').removeClass('shirink-main');
-        $('.left-section').addClass('expand-main');
+        $('.centerSection').removeClass('shirink-main');
+        $('.centerSection').addClass('expand-main');
     }
 
     /**
@@ -465,4 +509,61 @@ document.addEventListener("DOMContentLoaded", function () {
                d1.getMonth() === d2.getMonth() &&
                d1.getDate() === d2.getDate();
     };
+
+
+
+
+
+    // 참여자 검색
+    $('#search-input').on('input', function () {
+        const searchQuery = $(this).val().trim();
+        const searchResults = $('#search-results');
+        
+        if (searchQuery) {
+            // 가상 사용자 목록 (서버에서 데이터 가져오는 경우 해당 부분 수정)
+            const users = [
+                { id: 'joonyoung', email: 'joonyoung@potato.co.kr', name: '박준영', profileImg: 'https://example.com/profile/joonyoung.jpg' },
+                { id: 'Esunsin', email: 'Esunsin@potato.co.kr', name: '이순신', profileImg: 'https://example.com/profile/Esunsin.jpg' },
+                { id: 'newUser', email: 'newuser@potato.co.kr', name: '김유신', profileImg: 'https://example.com/profile/newUser.jpg' }
+            ];
+
+            // 사용자 목록에서 검색어와 일치하는 아이디를 가진 사용자 찾기
+            const filteredUsers = users.filter(user => user.id.includes(searchQuery));
+
+            searchResults.empty(); // 검색 결과 초기화
+
+            if (filteredUsers.length > 0) {
+                filteredUsers.forEach(user => {
+                    const resultItem = $(`<div class="search-result-item" data-email="${user.email}">
+                        <img src="${user.profileImg}" alt="${user.name}" class="participant-img">
+                        <span>${user.name}</span>
+                    </div>`);
+                    searchResults.append(resultItem);
+                });
+                searchResults.show(); // 검색 결과 표시
+            } else {
+                searchResults.append('<p>검색 결과가 없습니다.</p>');
+                searchResults.show();
+            }
+        } else {
+            searchResults.empty();
+            searchResults.hide(); // 검색어가 비었을 때는 결과 숨기기
+        }
+    });
+
+    // 검색 결과 항목을 클릭하면 참여자 목록에 추가
+    $(document).on('click', '.search-result-item', function () {
+        const email = $(this).data('email');
+        const name = $(this).find('span').text();
+        const profileImg = $(this).find('img').attr('src');
+
+        const newParticipant = $(`<div class="participant" data-email="${email}">
+            <img src="${profileImg}" alt="${name}" class="participant-img">
+            <span>${name}</span>
+        </div>`);
+
+        $('#participant-list').append(newParticipant); // 참여자 목록에 추가
+        $('#search-input').val(''); // 검색 입력창 초기화
+        $('#search-results').empty().hide(); // 검색 결과 숨기기
+    });
 });

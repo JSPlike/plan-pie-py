@@ -153,12 +153,16 @@ footer {
     padding: 0 0.5rem;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* shadow 대응 */
     border-radius: 0.5rem;
+    
+    min-height: 63px; /* svg 높이와 동일하게 */
 }
 
 .event-header-left {
     margin-left: 20px;
     display: flex;
     align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
 }
 
 .event-header-center {
@@ -167,13 +171,6 @@ footer {
     left: 50%;
     transform: translateX(-50%);
     align-items: center;
-}
-
-.logo-title {
-    width: 80px;
-    height: 63px;
-    object-fit: contain;
-    background: transparent;
 }
 
 .event-header-right {
@@ -216,7 +213,7 @@ footer {
 
 
 /* 왼쪽 섹션(달력) */
-.left-section {
+.centerSection{
     /*flex: 0 0 100%;  왼쪽 영역을 1:1 비율로 설정 */
     border: 0.5px solid #e6e6e6; /* 달력 주위에 테두리 */
     border-top: none;
@@ -251,6 +248,30 @@ footer {
     font-family: Arial, sans-serif;
 }
 
+@media (max-width: 1224px) {
+    .event-header-center {
+        display: none;
+    }
+}
+
+.calThemContainer {
+    padding: auto;
+    display: flex;
+    flex-grow: 1; /* 너비를 유동적으로 확장 */
+}
+
+.logoTitle {
+    white-space: nowrap;
+    padding: 1px 30px 1px 50px; /* 양 옆에 더 많은 여백 추가 */
+    align-items: center;
+}
+
+@media (max-width: 868px) {
+    .logoTitle {
+        display: none;
+    }
+}
+
 .calendar-header {
     white-space: nowrap;
     display: flex;
@@ -263,6 +284,108 @@ footer {
     font-family: 'Gmarket Sans', sans-serif;
   }
   
+  /* calendar theme */
+.calThem {
+    position: fixed;
+    top: 15px;
+    left: 20px;
+    font-size: 30px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #808080;
+    z-index: 1001;
+}
+
+.calList {
+    display: none; /* 기본은 숨김 */
+    position: absolute;
+    top: 80px;
+    left: 20px;
+    width: 250px;
+    background: white;
+    border: 1px solid #ccc;
+    z-index: 1000;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    gap: 3px;
+}
+.calItem, .calAddItem {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0px 10px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.calItem:hover .calImage{
+    background-color: #555;
+    opacity: 0.5;
+}
+
+.calImage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 8px;
+    background-color: gainsboro;
+    border-radius: 4px;
+    width: 80px;
+    height: 60px;
+}
+
+.calImage img {
+    width: 80px;
+    height: 60px;
+    object-fit: contain;
+}
+
+.calTitle {
+    font-size: 18px;
+    font-weight: 300;
+    font-family: 'Pretendard', sans-serif;
+    display: flex;
+    align-items: center;
+}
+
+#btnAddCal .calImage {
+    width: 80px;
+    height: 60px;
+    border: 1px dashed #ccc;
+    background-color: white;
+}
+
+#btnAddCal .plus {
+    color: #ccc;
+    font-size: 40px;
+}
+
+#btnAddCal .calTitle {
+    color: #ccc;
+    font-size: 18px;
+    font-weight: 300;
+    font-family: 'Pretendard', sans-serif;
+    display: flex;
+    align-items: center;
+}
+
+#btnAddCal:hover .calImage {
+    border: 1px dashed #000000;
+}
+
+#btnAddCal:hover .plus,
+#btnAddCal:hover .calTitle {
+    color: #000000;
+}
+
+
 .calendar-header button {
     display: flex;
     align-items: center;
@@ -350,17 +473,17 @@ footer {
     .holiday-event-item {
         font-size: 10px;
     }
-  }
+}
 
-  @media (min-height: 900px) {
+@media (min-height: 900px) {
     .day {
-      height: 147px;
-      font-size: 15px;
+        height: 147px;
+        font-size: 15px;
     }
     .holiday-event-item {
         font-size: 11px;
     }
-  }
+}
 
 .day-number-container {
     width: 100%;
@@ -741,6 +864,72 @@ html, body {
 }
 
 
+
+
+/* 이벤트 참가자 */
+.participant-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.participant {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.participant-img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.participant-search {
+    position: relative;
+    margin-top: 10px;
+}
+
+#search-input {
+    padding: 5px;
+    width: 200px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+#search-results {
+    position: absolute;
+    top: 35px;
+    left: 0;
+    right: 0;
+    background-color: white;
+    border: 1px solid #ccc;
+    max-height: 150px;
+    overflow-y: auto;
+    display: none;
+}
+
+.search-result-item {
+    padding: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.search-result-item:hover {
+    background-color: #f1f1f1;
+}
+
+.search-result-item img {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+}
+
+
+
 /* common - popup */
 .confirm-popup {
     position: relative;  /* 버튼을 상대적으로 위치시킬 수 있게 팝업을 relative로 설정 */
@@ -819,3 +1008,5 @@ html, body {
     from { opacity: 0; transform: scale(0.95); }
     to { opacity: 1; transform: scale(1); }
   }
+
+

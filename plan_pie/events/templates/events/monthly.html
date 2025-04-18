@@ -6,15 +6,40 @@
     <!-- 공통 헤더 포함 -->
     <div class="event-header">
         <div class="event-header-left">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300" width="200" height="63">
-                <g>
-                    <circle cx="100" cy="150" r="80" fill="#A0522D" stroke="#8B4513" stroke-width="8"/>
-                    <path d="M100,150 L180,150 A80,80 0 0,0 100,70 Z" fill="#FFDAB9" />
-                    <text x="220" y="175" font-family="'Comic Sans MS', 'Arial Rounded MT Bold', sans-serif" font-size="120" fill="#4B2E2B">
-                    plan pie
-                    </text>
-                </g>
-            </svg>
+            <div id="calThemContainer" class="calThemContainer">
+                <!-- 햄버거 버튼 -->
+                <div class="dropdown">
+                    <button id="calThem" class="calThem">
+                        ☰
+                    </button>
+                    <ul class="calList">
+                        <!-- 항목은 JS로 생성됨 -->
+
+                        <!-- 마지막: 달력 추가 버튼 -->
+                        <li id="btnAddCal" class="calAddItem">
+                            <div class="calImage">
+                                <span class="plus">+</span>
+                            </div>
+                            <div class="calTitle">Add Calendar</div>
+                        </li>
+                    </ul>
+                    
+                </div>
+            </div>
+            <div class="logoTitle">
+                <!--
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300" width="200" height="63">
+                    <g>
+                        <circle cx="100" cy="150" r="80" fill="#A0522D" stroke="#8B4513" stroke-width="8"/>
+                        <path d="M100,150 L180,150 A80,80 0 0,0 100,70 Z" fill="#FFDAB9" />
+                        <text x="220" y="175" font-family="'Comic Sans MS', 'Arial Rounded MT Bold', sans-serif" font-size="120" fill="#4B2E2B">
+                        plan pie
+                        </text>
+                    </g>
+                </svg>
+                -->
+                <img src="/static/image/pie-log-con.png" alt="Plan Pie 로고" style="max-width: 80px; height: auto;" >
+            </div>
               
             <!-- 왼쪽: 연도 및 좌우 버튼 -->
             <div class="calendar-header">
@@ -50,7 +75,7 @@
 
 
     <div class="event-contents">
-        <div class="left-section expand-main">
+        <div class="centerSection expand-main">
             <!-- 달력 -->
             <div id="calendar"></div>
         </div>
@@ -117,14 +142,36 @@
                         </div>
                     
                         <!-- 참여자 목록 -->
+                         <!--
                         <div class="event-option">
                             <i data-lucide="circle-user-round" class="icon"></i>
                             <div id="participant-list" class="participant-list">
                                 <span data-email="joonyoung@potato.co.kr" >박준영</span>
                                 <span data-email="Esunsin@potato.co.kr" >이순신</span>
-                                <!-- 실제로는 동적으로 추가 -->
+                            </div>
+                        </div>-->
+
+                        <div class="event-option">
+                            <i data-lucide="circle-user-round" class="icon"></i>
+                            <div id="participant-list" class="participant-list">
+                                <!-- 기본 참여자 목록 -->
+                                <div class="participant" data-email="joonyoung@potato.co.kr">
+                                    <img src="https://example.com/profile/joonyoung.jpg" alt="박준영" class="participant-img">
+                                    <span>박준영</span>
+                                </div>
+                                <div class="participant" data-email="Esunsin@potato.co.kr">
+                                    <img src="https://example.com/profile/Esunsin.jpg" alt="이순신" class="participant-img">
+                                    <span>이순신</span>
+                                </div>
+                            </div>
+                        
+                            <!-- 검색창과 드롭다운 형태로 추가 참여자 검색 -->
+                            <div class="participant-search">
+                                <input type="text" id="search-input" placeholder="아이디로 검색" autocomplete="off">
+                                <div id="search-results" class="search-results"></div>
                             </div>
                         </div>
+
                     </div>
                 </form>
                 <!--<a href="{% url 'event:create_event' %}" class="bg-blue-500 hover:bg-blue-600 px-4 py-2 text-white rounded transition">일정 생성</a>-->
