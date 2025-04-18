@@ -702,6 +702,7 @@ html, body {
 /* event-tab */
 .calendar-tab {
     display: flex;
+    overflow: hidden;
 }
 
 .calendar-tab a {
