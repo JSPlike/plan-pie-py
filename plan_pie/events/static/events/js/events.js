@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const li = document.createElement('li');
         li.classList.add('calItem');
         // 저장된 이미지가 있으면 그 이미지 사용 없으면 default
-        let imgSrc = "/static/image/default-calendar.png";
+        let imgSrc = "/static/image/no-image.png";
 
         li.innerHTML = `
             <div class="calImage">
