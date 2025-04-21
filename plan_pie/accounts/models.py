@@ -35,8 +35,13 @@ class CustomUser(AbstractUser):
     username = None  # 기본 username 필드를 제거
     email = models.EmailField(unique=True)
     
+    nickname = models.CharField(max_length=100, blank=True, null=True)
+    birthdate = models.DateField(blank=True, null=True)
+    profileimage = models.ImageField(upload_to='editImage/', blank=True, null=True, default='editImage/icon-profile.png')
+    
     USERNAME_FIELD = 'email'  # 로그인 필드를 이메일로 설정
     REQUIRED_FIELDS = []  # 필수 필드에서 username을 제외
+    
 
     # CustomUser 모델이 어떤 방식으로 사용자(User)를 생성할지 정의하는 "매니저"를 지정하는 것
     objects = CustomUserManager() 
