@@ -65,13 +65,13 @@ document.addEventListener("DOMContentLoaded", function () {
     calButton.addEventListener('click', function (e) {
         e.stopPropagation(); // 다른 이벤트 방지
         console.log("toggle btn click");
-        calList.style.display = calList.style.display === 'block' ? 'none' : 'block';
+        calList.classList.toggle('show');
     });
     
     // TEST 외부 클릭 시 닫기
     document.addEventListener('click', function (e) {
         if (!calList.contains(e.target)) {
-            calList.style.display = 'none';
+            calList.classList.remove('show');
         }
     });
 

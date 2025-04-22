@@ -298,7 +298,6 @@ footer {
 }
 
 .calList {
-    display: none; /* 기본은 숨김 */
     position: absolute;
     top: 70px;
     left: 1px;
@@ -309,12 +308,25 @@ footer {
     padding: 0;
     margin: 0;
     list-style: none;
-    /*border-radius: 8px;*/
+
     border-top-right-radius: 8px;
     border-bottom-right-radius: 8px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     gap: 3px;
+
+    overflow: hidden;
+    opacity: 0;
+    max-height: 0px;
+    pointer-events: none;
+    transition: max-height 0.3s ease, opacity 0.3s ease;
 }
+
+.calList.show {
+    opacity: 1;
+    max-height: 400px;
+    pointer-events: auto;
+}
+
 .calItem, .calAddItem {
     display: flex;
     align-items: center;
