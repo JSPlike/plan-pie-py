@@ -37,14 +37,21 @@ document.addEventListener("DOMContentLoaded", function () {
         const li = document.createElement('li');
         li.classList.add('calItem');
         // 저장된 이미지가 있으면 그 이미지 사용 없으면 default
-        let imgSrc = "/static/image/no-image.png";
+        let imgSrc = "/static/image/no-image-wh.png";
+        let check = "/static/image/check.png";
 
         li.innerHTML = `
             <div class="calImage">
                 <img src="${imgSrc}" alt="달력" />
+                <div class="overlay">
+                    <span>
+                        <img class="checkImg" src="${check}"/>
+                    </span>
+                </div>
             </div>
+            
             <div class="calTitle">${name}</div>
-        `.trim();;
+        `.trim();
 
         li.addEventListener('click', () => {
             console.log(`선택한 달력: ${name}`);
