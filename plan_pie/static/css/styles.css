@@ -1,4 +1,15 @@
 /* static/styles.css */
+
+/*
+갈색 : 4B2E2B
+
+
+
+*/
+
+
+
+
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -182,7 +193,7 @@ footer {
     margin-left: 1rem; /* 1rem = 16px */
 }
 
-.btn-blue-rounded {
+.btnBlueRound {
     width: 2.5rem;        /* 너비 */
     height: 2.5rem;       /* 높이 (동일하게 해야 정원) */
     background-color: #3b82f6;
@@ -196,8 +207,28 @@ footer {
     cursor: pointer;
 }
 
-.btn-blue-rounded:hover {
+.btnBlueRound:hover {
     background-color: #2563eb;
+}
+
+.btnDefaultQuad {
+    display: flex;        /* 가운데 정렬 위해 flex 사용 */
+    width: 2rem;        /* 너비 */
+    height: 2rem;       /* 높이 (동일하게 해야 정원) */
+    font-size: 24px;
+    color: rgb(143, 143, 143);
+    border-radius: 5px;   /* 정원 */
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    background-color: white;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease;
+    cursor: pointer;
+}
+
+.btnDefaultQuad:hover {
+    color: #4B2E2B;
+    background-color: #d3d3d3;
 }
 
 .profile-rounded {
@@ -464,7 +495,8 @@ footer {
 }
 
 .calendar-header button:hover .icon {
-    stroke: #808080; /* hover 시 색상 (파란색) */
+    stroke: #4B2E2B; /* hover 시 색상 (갈색) */
+    /*stroke: #808080; hover 시 색상 (옅은 회색) */
 }
 
 
@@ -557,22 +589,42 @@ footer {
     max-height: 60px;
     flex-direction: column;
     overflow-y: auto;
-    gap: 0.6px;
+    padding: 1px 2px;
+    position: relative;
 }
 
 .holiday-event-item {
-    text-align: left;
-    font-size: 11px;
-    font-weight: bold;
     white-space: nowrap;
     overflow: hidden; /* 넘칠 때 잘리게 */
     background-color: #ef4444;
     color: white;
-    padding: 3px 6px;
-    border-radius: 5px;
+    
+    border-radius: 4px;
+}
 
+.dayEventBtn {
+    text-align: left;
+    display: flex;
+    background-color: #e73b3b;
+    color: white;
+    height: 20px;
     /* 휴일 이벤트 폰트 */
     font-family: 'Pretendard', sans-serif;
+    font-weight: 700;
+    align-items: center;
+    width: 100%;
+    margin: 0;
+    padding: 0 6px;
+    font-size: 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: default;
+}
+
+.dayEventSpan {
+    flex: 1;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 /* 추가 등록한 이벤트 모음 */
@@ -581,7 +633,6 @@ footer {
     display: flex;
     flex-direction: column;
     overflow-y: auto;
-    gap: 0.6px;
 }
 
 .new-event-item {
@@ -591,10 +642,9 @@ footer {
     white-space: nowrap;
     overflow: hidden; /* 넘칠 때 잘리게 */
     color: white;
-    padding: 3px 6px;
+    padding: 1px 2px;
     border-radius: 5px;
-    margin-left: 1px;
-    margin-right: 1px;
+    pointer-events: auto;
     /* 일정 이벤트 폰트 */
     font-family: 'Pretendard', sans-serif;
 }

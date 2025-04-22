@@ -154,9 +154,11 @@ document.addEventListener("DOMContentLoaded", function () {
             if (showHolidays && holidayDates[fullDateStr]) {
                 dayClass += ' holiday';
                 holidayHTML = holidayDates[fullDateStr].map(name => 
-                    `<div class="holiday-event-item">${name}</div>`
+                    `<button class="dayEventBtn"><span class="dayEventSpan">${name}</span></button>`
                 ).join('');
             }
+
+
 
             calendarHTML += `<div class="${dayClass}" data-year="${year}" data-month="${month}" data-day="${day}">
                                 <div class="day-number-container"><div class="day-number">${day}</div></div>
@@ -341,9 +343,13 @@ document.addEventListener("DOMContentLoaded", function () {
         const existingEvents = container.querySelectorAll('.new-event-item').length > 0; // 이벤트 요소
 
         if (eventContainer) {
-            const eventDiv = document.createElement('div');
+            const eventDiv = document.createElement('button');
+            const eventSpan = document.createElement('span');
             eventDiv.classList.add('new-event-item');
+
+            // 선택중인 색상
             const color = $('#event-color-select').val();
+
             eventDiv.style.backgroundColor = color;
 
             if(hasHoliday || existingEvents) {
@@ -352,8 +358,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
             // 시작일만 시간 표시
             const label = `${title}`
+            eventSpan.innerHTML = label;
 
-            eventDiv.innerHTML = label;
+            eventDiv.innerHTML = eventSpan;
             eventContainer.appendChild(eventDiv);
         }
     }
