@@ -273,10 +273,54 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
+    function getClickedDate(el) {
+        const year = $(el).data('year');
+        const month = $(el).data('month');
+        const day = $(el).data('day');
+        return new Date(year, month, day);
+    }
+    
+    function formatDate(date) {
+        return `${date.getFullYear()}-${padMonth(date.getMonth())}-${padDay(date.getDate())}`;
+    }
+    
+    function setFocusOnDay(el) {
+        $('.day').removeClass('focused');
+        $(el).addClass('focused');
+    }
+    
+    function updateFlatpickr(date) {
+        const formatted = formatDate(date);
+        $('#start-date').val(formatted);
+        $('#end-date').val(formatted);
+        $('#start-date')[0]._flatpickr.setDate(date, true);
+        $('#end-date')[0]._flatpickr.setDate(date, true);
+    }
+
+    function handleDayClick() {
+        const clickedDate = getClickedDate(this);
+        selectedDate = clickedDate;
+    
+        setFocusOnDay(this);
+    }
+    
+    function handleDayDblclick() {
+        onEventForm();
+    
+        const clickedDate = getClickedDate(this);
+        selectedDate = clickedDate;
+    
+        updateFlatpickr(clickedDate);
+    
+        drawEvent("New Event", clickedDate);
+    }
+
+
     /**
      * 캘린더에서 특정 날짜를 클릭했을때 이벤트를 발생시킨다
      */
-    function handleDayClick () {
+    
+    function handleDayClick1 () {
         onEventForm();
 
         // 클릭한 개체를 탐지한다. 날짜 값을 받는다.
@@ -299,6 +343,32 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // ✅ 2. 현재 클릭된 요소에 포커스 클래스 추가
         $(this).addClass('focused');
+    }
+
+
+    function handleDayDblclick1 () {
+        onEventForm();
+
+        // 클릭한 개체를 탐지한다. 날짜 값을 받는다.
+        const year = $(this).data('year');
+        const month = $(this).data('month');
+        const day = $(this).data('day');
+
+        // 현재 클릭한 날짜데이터
+        // javascript에서 0은 1월로 표현된다.
+        const clickedDate = new Date(year, month, day);
+
+        selectedDate = clickedDate;
+        const format = (date) => `${date.getFullYear()}-${padMonth(date.getMonth())}-${padDay(date.getDate())}`;
+
+        // 1. 모든 날짜 포커스 해제
+        document.querySelectorAll('.day').forEach(d => d.classList.remove('focused'));
+
+        // ✅ 1. 기존 포커스 해제
+        //$('#calendar .day.focused').removeClass('focused');
+
+        // ✅ 2. 현재 클릭된 요소에 포커스 클래스 추가
+        //$(this).addClass('focused');
 
         // 초기 날짜 세팅 (둘다 오늘날짜)
         $('#start-date').val(format(clickedDate));
@@ -316,7 +386,7 @@ document.addEventListener("DOMContentLoaded", function () {
      * 캘린더 내부에서 날짜를 클릭시 해당 이벤트가 실행된다.
      */
     $('#calendar').on('click', '.day', handleDayClick);
-
+    $('#calendar').on('dblclick', '.day', handleDayDblclick);
     /**
      * 달력화면에 해당 이벤트를 그려준다.
      */
@@ -345,6 +415,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (eventContainer) {
             const eventDiv = document.createElement('button');
             const eventSpan = document.createElement('span');
+            eventSpan.classList.add('dayEventSpan');
             eventDiv.classList.add('new-event-item');
 
             // 선택중인 색상
@@ -353,14 +424,15 @@ document.addEventListener("DOMContentLoaded", function () {
             eventDiv.style.backgroundColor = color;
 
             if(hasHoliday || existingEvents) {
+                console.log("margin 2px 발생")
                 eventDiv.style.marginTop = '2px';
             }
 
             // 시작일만 시간 표시
             const label = `${title}`
             eventSpan.innerHTML = label;
-
-            eventDiv.innerHTML = eventSpan;
+            // 구조 조립
+            eventDiv.appendChild(eventSpan);
             eventContainer.appendChild(eventDiv);
         }
     }
