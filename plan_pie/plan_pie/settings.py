@@ -39,7 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'accounts',
-    'customers',
     'events',
     'notifications',
 ]
@@ -81,12 +80,13 @@ WSGI_APPLICATION = 'plan_pie.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'pp_db',
+        'NAME': 'plan_pie_db',
         'USER': 'postgres',
         'PASSWORD': 'postgres',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'HOST': '127.0.0.1',
+        'PORT': '5432'
     }
+    
 }
 
 

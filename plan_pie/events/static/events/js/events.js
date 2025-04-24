@@ -522,7 +522,7 @@ document.addEventListener("DOMContentLoaded", function () {
             // JSON으로 출력 확인 (디버깅용)
             console.log(JSON.stringify(formData));
 
-
+            console.log("이벤트 저장로직 실행 =======>");
             // post send (url, data, onSuccess, onError)
             post (
                 '/event/new/', 

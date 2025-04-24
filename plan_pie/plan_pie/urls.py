@@ -22,7 +22,6 @@ from accounts.views import home_view
 urlpatterns = [
     path('', home_view, name='home'),
     path('admin/', admin.site.urls),
-    path('customer/', include('customers.urls')), # test user path
     path('accounts/', include('accounts.urls')), # Add accounts path
     path('event/', include('events.urls')), # Add events path
 ]

@@ -9,6 +9,6 @@ services:
     volumes:
       - redis_data:/data
     restart: always
-
+    
 volumes:
-  redis_data:
+  redis_data:  # Redis 데이터 볼륨

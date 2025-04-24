@@ -1,8 +1,22 @@
 from django.db import models
 from django.conf import settings
 from django.utils import timezone
+from accounts.models import CustomUser
+
+class Calendar(models.Model):
+    calendar_id = models.AutoField(primary_key=True)
+    calendar_name = models.CharField(max_length=100)
+    owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='owned_calendars')
+    # 초대된 사용자들을 관리하기 위한 ManyToMany 관계
+    invited_users = models.ManyToManyField(CustomUser, related_name='invited_calendars', blank=True)
+    created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.cal_name} (Owner: {self.owner.username})"
 
 class Event(models.Model):
+    calendar = models.ForeignKey(Calendar, on_delete=models.CASCADE, related_name='events', default=0)
     title = models.CharField(max_length=200)
     start_date = models.DateField(default=timezone.now)
     start_time = models.TimeField(null=True, blank=True)
@@ -31,9 +45,9 @@ class EventParticipant(models.Model):
     ]
 
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='participants')
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='participant')
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
-
+    
     def __str__(self):
         return f"{self.user.email} - {self.event.title} ({self.role}, {self.status})"
