@@ -7,9 +7,6 @@
 
 */
 
-
-
-
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -610,7 +607,7 @@ footer {
     font-family: 'Pretendard', sans-serif;
     font-weight: 700;
     align-items: center;
-    width: 100%;
+    width: calc(100% - 6px);
     margin: 0;
     padding: 0 6px;
     font-size: 12px;
@@ -646,7 +643,7 @@ footer {
     height: 20px;
     font-weight: 700;
     align-items: center;
-    width: 100%;
+    width: calc(100% - 6px);
     margin: 0;
     padding: 0 6px;
     font-size: 12px;
