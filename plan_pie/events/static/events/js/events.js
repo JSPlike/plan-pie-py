@@ -177,7 +177,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if(isActiveEvent) {
             let title = $('#event-title').val()?.trim() || 'New Event';
 
-            drawEvent(title, selectedDate)
+            drawEvent(title, selectedDate);
         }
     }
 
