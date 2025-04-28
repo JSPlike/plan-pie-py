@@ -39,6 +39,7 @@ main {
     flex-direction: column;
     justify-content: center; /* 세로로 가운데 정렬 */
     align-items: center; /* 가로로 가운데 정렬 */
+    user-select: none; /* 텍스트 선택 방지 */
 }
 
 .header {
@@ -258,6 +259,7 @@ footer {
     flex-shrink: 0;
     background-color: white;
     box-sizing: border-box;
+    user-select: none; /* 텍스트 선택 방지 */
 }
 
 /* 오른쪽으로 숨김 */
@@ -290,6 +292,7 @@ footer {
     white-space: nowrap;
     padding: 1px 30px 1px 50px; /* 양 옆에 더 많은 여백 추가 */
     align-items: center;
+    user-select: none; /* 텍스트 선택 방지 */
 }
 
 @media (max-width: 868px) {
