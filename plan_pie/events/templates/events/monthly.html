@@ -82,6 +82,7 @@
         <div class="right-section hidden-slide">
             <div class="custom-event-form-wrap">
                 <form id="custom-event-form" class="custom-event-form">
+                    {% csrf_token %}
                     <!-- 제목 -->
                     <div>
                         <input type="text" id="event-title" name="title" class="event-title" placeholder="Title">
@@ -159,6 +160,16 @@
                                     <img src="{% static 'image/icon-profile.png' %}" alt="박준영" class="participant-img">
                                 </div>
                             </div>
+                        </div>
+
+                        <div>
+                            <i data-lucide="calendar" class="icon"></i>
+                            <select name="calendar_id">
+                                <option value="">None</option>
+                                {% for calendar in calendars %}
+                                    <option value="{{ calendar.id }}">{{ calendar.calendar_name }}</option>
+                                {% endfor %}
+                            </select>
                         </div>
 
                     </div>

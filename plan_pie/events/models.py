@@ -13,10 +13,10 @@ class Calendar(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.cal_name} (Owner: {self.owner.username})"
+        return f"{self.calendar_name} (Owner: {self.owner.username})"
 
 class Event(models.Model):
-    calendar = models.ForeignKey(Calendar, on_delete=models.CASCADE, related_name='events', default=0)
+    calendar = models.ForeignKey(Calendar, on_delete=models.CASCADE, related_name='events', null=True, blank=True)
     title = models.CharField(max_length=200)
     start_date = models.DateField(default=timezone.now)
     start_time = models.TimeField(null=True, blank=True)

@@ -528,6 +528,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 '/event/new/', 
                 formData,
                 function (res) {
+
+                    console.log(res);
                     // 성공했으면 화면에 그려주는 로직
                     //drawEvent(res.title, res.color, res.start_date, res.end_date)
 

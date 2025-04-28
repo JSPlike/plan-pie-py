@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
-from .models import Event, EventParticipant
+from .models import Calendar, Event, EventParticipant
 import redis
 import json
 from django.conf import settings
@@ -96,6 +96,14 @@ def decline_invite(request, event_id):
 
 @login_required
 def monthly(request):
+    
+     # 현재 로그인한 유저
+    user = request.user
+
+    print(user);
+    # 로그인한 유저가 소유한 캘린더와 참여한 캘린더를 가져옵니다.
+    calendars = Calendar.objects.filter(owner=user) | Calendar.objects.filter(invited_users=user)
+    print(calendars);
     events = Event.objects.filter(participants__user=request.user, participants__status='accepted')
     invites = Event.objects.filter(participants__user=request.user, participants__status='pending')
     
@@ -172,4 +180,5 @@ def monthly(request):
         'events_json': json.dumps(events_json, indent=4, ensure_ascii=False),
         'invites_json': invites_json,
         'holidays_json': json.dumps(holidays_json, ensure_ascii=False),
+        'calendars': calendars, # 현재유저가 참여중인 달력 목록
     })
