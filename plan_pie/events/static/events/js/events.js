@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     // TEST 달력 테마를 위한 테스트 데이터
-    const calendars = ['개인 캘린더', '회사 일정', '프로젝트 공유', '휴가 관리']; // 예시 데이터
+    const calendars = ['개인 일정']; // 예시 데이터
     const calList = document.querySelector('.calList');
     const calButton = document.getElementById('calThem');
     const calAddButton = document.getElementById('btnAddCal');
