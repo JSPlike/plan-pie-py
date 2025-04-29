@@ -162,12 +162,13 @@
                             </div>
                         </div>
 
-                        <div>
+                        <div class="calSelectContainer">
                             <i data-lucide="calendar" class="icon"></i>
                             <select name="calendar_id">
-                                <option value="">None</option>
                                 {% for calendar in calendars %}
-                                    <option value="{{ calendar.id }}">{{ calendar.calendar_name }}</option>
+                                    <option value="{{ calendar.id }}" {% if forloop.first %}selected{% endif %}>
+                                        {{ calendar.calendar_name }}
+                                    </option>
                                 {% endfor %}
                             </select>
                         </div>
