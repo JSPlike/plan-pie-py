@@ -182,3 +182,8 @@ def monthly(request):
         'holidays_json': json.dumps(holidays_json, ensure_ascii=False),
         'calendars': calendars, # 현재유저가 참여중인 달력 목록
     })
+    
+@login_required
+def event_new(request):
+    
+    return '';
