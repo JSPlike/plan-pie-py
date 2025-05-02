@@ -27,17 +27,6 @@
                 </div>
             </div>
             <div class="logoTitle">
-                <!--
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300" width="200" height="63">
-                    <g>
-                        <circle cx="100" cy="150" r="80" fill="#A0522D" stroke="#8B4513" stroke-width="8"/>
-                        <path d="M100,150 L180,150 A80,80 0 0,0 100,70 Z" fill="#FFDAB9" />
-                        <text x="220" y="175" font-family="'Comic Sans MS', 'Arial Rounded MT Bold', sans-serif" font-size="120" fill="#4B2E2B">
-                        plan pie
-                        </text>
-                    </g>
-                </svg>
-                -->
                 <img src="/static/image/pie-log-con.png" alt="Plan Pie 로고" style="max-width: 80px; height: auto;" >
             </div>
               
@@ -67,9 +56,23 @@
             </div>
     
             <div>
-                <img src="{% static 'image/icon-profile.png' %}" alt="프로필" class="profile-rounded">
+                <img id="profile" src="{% static 'image/icon-profile.png' %}" alt="프로필" class="profile-rounded">
+
+                <div class="profile-card" id="profileCard">
+                    <div class="profile-card-header">
+                      <div class="settings-icon" title="설정">⚙️</div>
+                    </div>
+                    <div class="profile-card-body">
+                        <img src="{% static 'image/icon-profile.png' %}" alt="Profile">
+                        <div class="email">{{ user.email }}</div>
+                    </div>
+                    <hr class="divider">
+                    <div class="profile-card-footer">
+                        <a href="/privacy-policy/" class="footer-link">개인정보처리방침</a>
+                        <a href="/terms-of-service/" class="footer-link">이용약관</a>
+                    </div>
+                  </div>
             </div>
-            
         </div>
     </div>
 

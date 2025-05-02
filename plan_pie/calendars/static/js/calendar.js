@@ -654,4 +654,19 @@ document.addEventListener("DOMContentLoaded", function () {
         $('#search-input').val(''); // 검색 입력창 초기화
         $('#search-results').empty().hide(); // 검색 결과 숨기기
     });
+
+    /**
+     * 사용자 프로필을 클릭시 이벤트가 발생한다.
+     */
+    const profile = document.getElementById("profile");
+    const card = document.getElementById("profileCard");
+    $(document).on('click', '#profile', function() {
+        card.classList.toggle("active");
+    });
+
+    $(document).on('click', function (e) {
+        if (!profile.contains(e.target) &&!card.contains(e.target)) {
+            card.classList.remove("active");
+        }
+    });
 });
