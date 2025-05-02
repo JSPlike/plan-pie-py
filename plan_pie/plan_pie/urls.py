@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls.static import static
 from accounts.views import home_view
+from django.conf import settings
 
 urlpatterns = [
     path('', home_view, name='home'),
@@ -25,3 +26,7 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')), # Add accounts path
     path('calendar/', include('calendars.urls')), # Add calendars path
 ]
+
+# 미디어 경로에 접근하기 위해 설정이 필요하다.
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

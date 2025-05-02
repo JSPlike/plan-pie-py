@@ -234,6 +234,7 @@ footer {
     border: none;         /* 테두리 제거 */
     display: flex;        /* 가운데 정렬 위해 flex 사용 */
     align-items: center;
+    object-fit: contain; /* 👈 비율 유지하며 컨테이너에 맞춤 */
     justify-content: center;
     cursor: pointer;
 }
@@ -1223,7 +1224,7 @@ html, body {
     width: 100px;
     height: 100px;
     border-radius: 50%;
-    object-fit: cover;
+    object-fit: contain; /* 👈 비율 유지하며 컨테이너에 맞춤 */
   }
 
   .profile-card-body .nickname {
@@ -1356,7 +1357,8 @@ html, body {
     width: 200px;
     height: 200px;
     border-radius: 50%;
-    object-fit: cover;
+    object-fit: contain; /* 👈 비율 유지하며 컨테이너에 맞춤 */
+    object-position: center;
     border: 2px solid #ccc;
 }
 

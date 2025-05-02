@@ -5,6 +5,23 @@ function getCSRFToken() {
         ?.split('=')[1];
 }
 
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let cookie of cookies) {
+            cookie = cookie.trim();
+            // 쿠키 이름이 일치하면 값 반환
+            if (cookie.startsWith(name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+
 // 공통 AJAX 전송 함수
 function post(url, data, onSuccess, onError) {
     $.ajax({

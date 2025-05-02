@@ -16,3 +16,8 @@ class SignUpForm(UserCreationForm):
         if password1 and password2 and password1 != password2:
             raise forms.ValidationError("비밀번호가 일치하지 않습니다.")
         return password2
+    
+class CustomUserForm(forms.ModelForm):
+    class Meta:
+        model = CustomUser
+        fields = ['email', 'nickname', 'birthdate', 'profileimage']

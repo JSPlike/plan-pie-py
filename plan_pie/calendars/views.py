@@ -99,7 +99,9 @@ def monthly(request):
     
      # 현재 로그인한 유저
     user = request.user
-
+    print("===========================================")
+    print(user.profileimage)
+    print("========================================")
     print(user);
     # 로그인한 유저가 소유한 캘린더와 참여한 캘린더를 가져옵니다.
     calendars = Calendar.objects.filter(owner=user) | Calendar.objects.filter(invited_users=user)

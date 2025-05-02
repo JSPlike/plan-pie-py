@@ -153,3 +153,8 @@ CACHES = {
 }
 
 HOLIDAY_API_KEY = 'NBU363lwCRjoUYzYX8jo83%2Bn%2FLxNbymJhfxrEtEaHI7bJiMLOaJ3SU9sBuP%2Fs64i5d75Gu5ZuuD0TJFJ2s4mWQ%3D%3D'
+
+
+# 유저사진등의 정보관리
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # 프로젝트 루트에 'media' 폴더 생성

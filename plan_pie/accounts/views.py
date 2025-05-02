@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login as auth_login
 from django.http import JsonResponse
 from .forms import SignUpForm
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.decorators import login_required
 
 # '/' url 진입시 세션체크후 화면 분기
 def home_view(request):
@@ -54,3 +55,33 @@ def login(request):
     else:
         form = AuthenticationForm()
     return render(request, 'accounts/login.html', {'form': form})
+
+# 유저 프로필 수정
+@login_required
+def update_profile(request):
+    if request.method == 'POST':
+        
+        print(request);
+        nickname = request.POST.get('nickname')
+        birth_date = request.POST.get('birthDate')
+        profile_image = request.FILES.get('profilePhoto')  # 프로필 사진 파일
+
+        
+        # 확인용 출력 (디버깅)
+        print(f"Nickname: {nickname}")
+        print(f"Birth Date: {birth_date}")
+        print(f"Profile Image: {profile_image}")
+        
+        # 유저의 프로필을 업데이트하는 로직
+        user = request.user
+        user.nickname = nickname
+        user.birth_date = birth_date
+        
+        if profile_image:
+            user.profileimage = profile_image  # 사진 업데이트
+        
+        user.save()
+
+        return JsonResponse({'message': 'Profile updated successfully.'})
+    
+    return JsonResponse({'message': 'Invalid request.'}, status=400)
