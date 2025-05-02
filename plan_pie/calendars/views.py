@@ -184,6 +184,6 @@ def monthly(request):
     })
     
 @login_required
-def event_new(request):
+def calendar_new(request):
     
     return '';

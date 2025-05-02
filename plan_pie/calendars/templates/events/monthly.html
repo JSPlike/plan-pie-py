@@ -175,7 +175,6 @@
 
                     </div>
                 </form>
-                <!--<a href="{% url 'event:create_event' %}" class="bg-blue-500 hover:bg-blue-600 px-4 py-2 text-white rounded transition">일정 생성</a>-->
             </div>
             <div class="form-bottom-group">
                 <button id="close-section-btn">
@@ -191,7 +190,7 @@
 {% endblock %}
 
 {% block scripts %}
-    <script src="{% static 'events/js/events.js' %}"></script>
+    <script src="{% static 'js/calendar.js' %}"></script>
 
     <script id="holidays-data" type="application/json">{{ holidays_json|safe }}</script>
 

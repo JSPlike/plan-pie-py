@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'accounts',
-    'events',
+    'calendars',
     'notifications',
 ]
 
@@ -138,7 +138,7 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # 로그인후 리다이렉트 url
-LOGIN_REDIRECT_URL = '/event'
+LOGIN_REDIRECT_URL = '/calendar'
 
 # redis & docker
 # 1. 휴일데이터 (공공데이터포탈)
