@@ -463,6 +463,15 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
+    flatpickr("#birthDate", {
+        dateFormat: "Y-m-d",
+        altInput: true,
+        altFormat: "Ymd",
+        defaultDate: null,
+        allowInput: true,
+        maxDate: "today",  // 오늘 날짜 이후는 선택할 수 없도록 제한
+    });
+
     // 종일 체크박스 toggle
     $('#all-day').on('change', function () {
         if ($(this).is(':checked')) {
@@ -660,13 +669,54 @@ document.addEventListener("DOMContentLoaded", function () {
      */
     const profile = document.getElementById("profile");
     const card = document.getElementById("profileCard");
+    const settingsBtn = document.getElementById('settingsBtn');
+    const dropdown = document.getElementById('settingsDropdown');
+    const modalContent = document.getElementById('modalProfileEdit');
+
     $(document).on('click', '#profile', function() {
         card.classList.toggle("active");
+    });
+
+    $(document).on('click', '#settingsBtn', function() {
+        dropdown.classList.toggle("active");
     });
 
     $(document).on('click', function (e) {
         if (!profile.contains(e.target) &&!card.contains(e.target)) {
             card.classList.remove("active");
         }
+
+        if (!settingsBtn.contains(e.target) && !dropdown.contains(e.target)) {
+            dropdown.classList.remove("active");
+        }
+        /*
+        if(!modalContent.contains(e.target)) {
+            $('#modalProfileEdit').hide();
+            $('#nickname').val('');  // Clear the value of the nickname input
+            $('#email').val('');     // If you have an email field, clear it too
+        }
+            */
+    });
+
+    // 모달
+    $('.settings-dropdown a[data-modal]').on('click', function (e) {
+        e.preventDefault();
+        const targetModalId = $(this).data('modal');
+        card.classList.toggle("active");
+        dropdown.classList.toggle("active");
+        console.log(targetModalId);
+        // 모든 모달 닫고
+        $('#modalProfileEdit').hide();
+
+        // 타겟 모달만 열기
+        $('#' + targetModalId).css('display', 'flex');
+    });
+
+    // 취소버튼 클릭
+    $('#close-modal-btn').on('click', function () {
+        console.log('clicked cancle button')
+        $('#modalProfileEdit').hide();
+        $('#nickname').val('');  // Clear the value of the nickname input
+        $('#email').val('');     // If you have an email field, clear it too
     });
 });

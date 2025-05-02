@@ -56,14 +56,23 @@
             </div>
     
             <div>
-                <img id="profile" src="{% static 'image/icon-profile.png' %}" alt="프로필" class="profile-rounded">
+                <img id="profile" src="{% static 'image/user.png' %}" alt="프로필" class="profile-rounded">
 
                 <div class="profile-card" id="profileCard">
                     <div class="profile-card-header">
-                      <div class="settings-icon" title="설정">⚙️</div>
+                      <div class="settings-icon" title="설정" id="settingsBtn">⚙️</div>
+                      <div class="settings-dropdown" id="settingsDropdown">
+                        <ul>
+                          <li><a href="#" data-modal="modalProfileEdit">프로필 수정</a></li>
+                          <li><a href="#">알림 설정</a></li>
+                          <li><a href="#">개인정보 설정</a></li>
+                          <li><a href="/logout">로그아웃</a></li>
+                        </ul>
+                      </div>
                     </div>
                     <div class="profile-card-body">
-                        <img src="{% static 'image/icon-profile.png' %}" alt="Profile">
+                        <img src="{% static 'image/user.png' %}" alt="Profile">
+                        <div class="nickname"> {{ user.nickname|default:"미설정" }}</div>
                         <div class="email">{{ user.email }}</div>
                     </div>
                     <hr class="divider">
@@ -187,6 +196,68 @@
                     저장
                 </button>
             </div>
+        </div>
+    </div>
+
+    <!-- 프로필 수정 모달 -->
+    <div id="modalProfileEdit" class="modal">
+        <div class="modal-content">
+            <!--<span class="close">&times;</span>-->
+            <h3>프로필 수정</h3>
+            <!-- 여기에 프로필 수정 폼 -->
+            <form class="profile-form" id="profileForm" enctype="multipart/form-data">
+                <!-- 프로필 이미지 -->
+                <div class="profile-photo-container">
+
+                    <img src="{% static 'image/user.png' %}" alt="프로필 사진" class="profile-photo" id="currentProfilePhoto">
+                    <label for="profilePhotoInput" class="edit-photo-btn" title="사진 변경">
+                        ✏️
+                    </label>
+                    <input type="file" id="profilePhotoInput" accept="image/*" style="display: none;">
+                </div>
+        
+                <!-- 닉네임 -->
+                <div>
+                    <label for="nickname">닉네임</label><br>
+                    <input type="text" id="nickname" name="nickname" placeholder="필수 입력값입니다.">
+                </div>
+        
+                <!-- 생년월일 -->
+                <div>
+                    <label for="birthDate">생년월일</label><br>
+                    <input type="text" id="birthDate" name="birthDate"
+                    placeholder="날짜 선택"
+                    >
+                </div>
+        
+                <!-- 제출 버튼 -->
+                <div class="modal-bottom-group">
+                    <button id="close-modal-btn">
+                        취소
+                    </button>
+                    <button id="save-modal-btn">
+                        저장
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 알림 설정 모달 -->
+    <div id="modalNotification" class="modal">
+        <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        <h2>알림 설정</h2>
+        <!-- 알림 설정 내용 -->
+        </div>
+    </div>
+    
+    <!-- 개인정보 설정 모달 -->
+    <div id="modalPrivacy" class="modal">
+        <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        <h2>개인정보 설정</h2>
+        <!-- 개인정보 내용 -->
         </div>
     </div>
 </div>
