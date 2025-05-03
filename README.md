@@ -5,6 +5,27 @@ plan pie app with django
 
 ## 달력페이지
 
+#### 설명
+캘린더(Calendar)
+→ owner 필드: 캘린더를 소유한 사용자
+→ participants: CalendarParticipant 모델을 통해 참여자 관리
+
+이벤트(Event)
+→ 특정 캘린더에 소속됨
+→ 참여자 정보는 없음 (정확히 Event 자체에는 participants 필드가 없음)
+
+캘린더 참여자(CalendarParticipant)
+→ 특정 유저가 어떤 Calendar에 대해 어떤 role, status를 가지는지를 관리
+→ 즉, 참여자 정보는 캘린더 단위에 있음!
+
+
+#### 사용자 플로우
+1. 로그인
+2-1. 해당 유저에 저장된 달력이 있으면 달력화면(/calendar)
+
+2-2. 해당유저에 저장된 달력이 없으면 달력생성화면(/caledar/new)
+2-2
+
 #### 해야하는일  
 
 1. 공휴일데이터

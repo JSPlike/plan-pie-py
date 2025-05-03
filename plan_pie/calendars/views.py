@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
-from .models import Calendar, Event, EventParticipant
+from .models import Calendar, Event, CalendarParticipant
+from django.db.models import Q
 import redis
 import json
 from django.conf import settings
@@ -33,7 +34,7 @@ def create_event(request):
 
         # 현재 로그인한 유저가 있다면 작성자로 등록 (필요한 경우)
         if request.user.is_authenticated:
-            EventParticipant.objects.get_or_create(
+            CalendarParticipant.objects.get_or_create(
                 event=event,
                 user=request.user,
                 defaults={'role': 'owner', 'status': 'accepted'}
@@ -48,7 +49,7 @@ def create_event(request):
                 continue
             try:
                 user = User.objects.get(email=email)
-                EventParticipant.objects.get_or_create(
+                CalendarParticipant.objects.get_or_create(
                     event=event,
                     user=user,
                     defaults={'role': 'participant', 'status': 'pending'}
@@ -81,7 +82,7 @@ def parse_time(value):
 @login_required
 def accept_invite(request, event_id):
     event = get_object_or_404(Event, id=event_id)
-    participant = get_object_or_404(EventParticipant, event=event, user=request.user, status='pending')
+    participant = get_object_or_404(CalendarParticipant, event=event, user=request.user, status='pending')
     participant.status = 'accepted'
     participant.save()
     return redirect('events:event_monthly')
@@ -89,7 +90,7 @@ def accept_invite(request, event_id):
 @login_required
 def decline_invite(request, event_id):
     event = get_object_or_404(Event, id=event_id)
-    participant = get_object_or_404(EventParticipant, event=event, user=request.user, status='pending')
+    participant = get_object_or_404(CalendarParticipant, event=event, user=request.user, status='pending')
     participant.status = 'declined'
     participant.save()
     return redirect('events:event_monthly') 
@@ -103,23 +104,35 @@ def monthly(request):
     print(user.profileimage)
     print("========================================")
     print(user);
+
     # 로그인한 유저가 소유한 캘린더와 참여한 캘린더를 가져옵니다.
-    calendars = Calendar.objects.filter(owner=user) | Calendar.objects.filter(invited_users=user)
-    print(calendars);
-    events = Event.objects.filter(participants__user=request.user, participants__status='accepted')
-    invites = Event.objects.filter(participants__user=request.user, participants__status='pending')
+    calendars = Calendar.objects.filter(
+                    Q(owner=user) | Q(participants__user=user, participants__status='accepted')
+                ).distinct()
+
+    # 수락하지 않은 상태(pending)의 캘린더
+    pending_calendars = Calendar.objects.filter(
+        participants__user=user, participants__status='pending'
+    ).distinct()
+
+    events = Event.objects.filter(calendar__in=calendars)
+    invites = Event.objects.filter(calendar__in=pending_calendars)
     
+    participants_json = {}
+
+    for calendar in calendars:
+        participants_json[calendar.id] = [
+            {
+                'user_email': p.user.email,
+                'role': p.role,
+                'status': p.status,
+            }
+            for p in calendar.participants.all()
+        ]
+
     # 이벤트 목록을 수동으로 JSON으로 변환
     events_json = []
     for event in events:
-        participants_data = []
-        for participant in event.participants.all():
-            participants_data.append({
-                'user_email': participant.user.email,  # 참가자 이메일
-                'role': participant.role,  # 참가자 역할
-                'status': participant.status,  # 참가자 상태
-            })
-        
         event_data = {
             'pk': event.pk,
             'title': event.title,
@@ -130,21 +143,12 @@ def monthly(request):
             'is_all_day': event.is_all_day,  # 종일 여부 추가
             'color': event.color,  # 색 추가
             'memo': event.memo,  # 메모 추가
-            'participants': participants_data,  # 참가자 정보 추가
         }
         events_json.append(event_data)
     
     # 초대도 수동으로 JSON 형식으로 변환 (필요시 추가 필드 처리 가능)
     invites_json = []
     for invite in invites:
-        participants_data = []
-        for participant in invite.participants.all():
-            participants_data.append({
-                'user_email': participant.user.email,  # 참가자 이메일
-                'role': participant.role,  # 참가자 역할
-                'status': participant.status,  # 참가자 상태
-            })
-        
         invite_data = {
             'pk': invite.pk,
             'title': invite.title,
@@ -155,7 +159,6 @@ def monthly(request):
             'is_all_day': invite.is_all_day,  # 종일 여부 추가
             'color': invite.color,  # 색 추가
             'memo': invite.memo,  # 메모 추가
-            'participants': participants_data,  # 참가자 정보 추가
         }
         invites_json.append(invite_data)
     
@@ -183,6 +186,7 @@ def monthly(request):
         'invites_json': invites_json,
         'holidays_json': json.dumps(holidays_json, ensure_ascii=False),
         'calendars': calendars, # 현재유저가 참여중인 달력 목록
+        'participants_json': json.dumps(participants_json, ensure_ascii=False),
     })
     
 @login_required
