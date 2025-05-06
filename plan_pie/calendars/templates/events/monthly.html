@@ -31,11 +31,17 @@
             </div>
               
             <!-- 왼쪽: 연도 및 좌우 버튼 -->
-            <div class="calendar-header">
-                <button id="prev"><i data-lucide="chevron-left" class="icon"></i></button>
-                <button id="next"><i data-lucide="chevron-right" class="icon"></i></button>
-                <div class="calendar-ym"></div>
-            </div>
+
+            {% if calendars %}
+                <!-- 달력 데이터가 있을 경우 -->
+                <div class="calendar-header">
+                    <button id="prev"><i data-lucide="chevron-left" class="icon"></i></button>
+                    <button id="next"><i data-lucide="chevron-right" class="icon"></i></button>
+                    <div class="calendar-ym"></div>
+                </div>
+            {% endif %}
+
+            
         </div>
     
         <!-- 가운데 -->
