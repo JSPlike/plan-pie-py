@@ -194,11 +194,35 @@ def monthly(request):
 def calendar_new(request):
     # 캘린더 생성화면으로 이동한다.
     print(request);
-
-    return '';
+    return render(request, 'calendars/calendar_new.html')
 
 # 데이터베이스에 새로운 캘린더를 저장한다.
 @login_required
 def calendar_create(request):
-    
-    return '';
+    if request.method == 'POST':
+        form = CalendarForm(request.POST, request.FILES)
+        theme = request.POST.get('theme', 'personal')  # theme 필드
+        if form.is_valid():
+            calendar = form.save(commit=False)
+            calendar.owner = request.user
+            calendar.save()
+
+            # 참가자(자기자신) 추가
+            CalendarParticipant.objects.create(
+                calendar=calendar,
+                user=request.user,
+                role='owner',
+                status='accepted'
+            )
+
+            # 성공 후 메인 페이지로 이동
+            return redirect('monthly')  # 또는 'calendar_detail', calendar.id 등
+
+    else:
+        theme = request.GET.get('theme', 'personal')
+        form = CalendarForm()
+
+    return render(request, 'calendars/calendar_create_modal.html', {
+        'form': form,
+        'theme': theme,
+    })
