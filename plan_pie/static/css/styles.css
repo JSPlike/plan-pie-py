@@ -465,14 +465,58 @@ footer {
 }
 
 .no-calendar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;    /* 수평 가운데 정렬 */
+    justify-content: center; /* 수직 가운데 정렬 */
+    padding: 100px 20px;     /* 위아래 넉넉하게 패딩 */
     text-align: center;
-    margin-top: 50px;
+    min-height: 400px;       /* 충분한 높이로 공간 확보 */
+}
+
+.no-calendar p {
     color: #666;
 }
 .no-calendar .btn {
     margin-top: 20px;
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s;
 }
 
+.no-calendar .btn:hover {
+    background-color: #45a049;
+}
+
+.calendar-theme-select {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.calendar-options {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-top: 40px;
+}
+
+.calendar-option {
+    padding: 30px;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    width: 240px;
+    cursor: pointer;
+    transition: box-shadow 0.2s ease;
+}
+
+.calendar-option:hover {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
 
 .calendar-header button {
     display: flex;

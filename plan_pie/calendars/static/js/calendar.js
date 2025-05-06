@@ -93,15 +93,25 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     // 이전달 다음달로 날짜를 변경한다.
-    document.getElementById("prev").addEventListener("click", () => renderCalendar(currentYear, currentMonth - 1));
-    document.getElementById("next").addEventListener("click", () => renderCalendar(currentYear, currentMonth + 1));
 
+    if(document.getElementById("prev")) {
+        document.getElementById("prev").addEventListener("click", () => renderCalendar(currentYear, currentMonth - 1));
+    }
+
+    if(document.getElementById("next")) {
+        document.getElementById("next").addEventListener("click", () => renderCalendar(currentYear, currentMonth + 1));
+    }
+    
     /**
      * 달력데이터를 갱신및 생성한다.
      * @param {*} year 
      * @param {*} month 
      */
     function renderCalendar(year, month) {
+        if(!calendarEl) {
+            return;
+        }
+
         calendarEl.innerHTML = ""; // 기존 내용 지우기
         calendarYm.innerHTML = "";
         currentYear = year;
@@ -186,50 +196,6 @@ document.addEventListener("DOMContentLoaded", function () {
     function initWindow() {
         // 시간 요소를 숨긴다.
         $('.time-input').css('visibility', 'hidden');
-
-        // 렌더링시 해당 년월을 달력 인풋창의 기본으로 사용한다.
-
-        // 렌더링시 해당 년월에 존재하는 이벤트를 달력에 그려준다.
-        /*
-        const startDate = new Date(startDateStr);
-        const endDate = new Date(endDateStr);
-        
-        // 시작일 데이터 부터 종료일 데이터 까지 읽어서 해당 이벤트를 그려준다.
-        for(let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
-            const year = d.getFullYear();
-            const month = d.getMonth() + 1; // 월은 0부터 시작
-            const day = d.getDate();
-
-            const container = document.querySelector(
-                `[data-year="${year}"][data-month="${month}"][data-day="${day}"]`
-            );
-            
-            const eventContainer = container.querySelector('.day-events-container');
-
-            
-            // 만약 추가해야할 이벤트 해당 날짜에 대해 위에 휴일이 있거나 첫번째 이벤트가 아닐경우에는 상단마진 2px 설정
-            const hasHoliday = container.querySelector('.holiday-container')?.innerHTML.trim() !== ''; // 휴일 요소
-            const existingEvents = container.querySelectorAll('.event-item').length > 0; // 이벤트 요소
-
-
-            if (eventContainer) {
-                const eventDiv = document.createElement('div');
-                eventDiv.classList.add('event-item');
-                eventDiv.style.backgroundColor = color;
-
-                if(hasHoliday || existingEvents) {
-                    eventDiv.style.marginTop = '2px';
-                }
-
-                // 시작일만 시간 표시
-                const label = `${title}`
-
-                eventDiv.innerHTML = label;
-                eventContainer.appendChild(eventDiv);
-            }
-        }
-        */
-
     }
 
     /**

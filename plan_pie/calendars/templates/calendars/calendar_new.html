@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="calendar-theme-select">
+    <h2>캘린더 테마를 선택하세요</h2>
+    <div class="calendar-options">
+        <div class="calendar-option" data-theme="personal" onclick="openModal('personal')">
+            <h3>📅 개인 캘린더</h3>
+            <p>개인 일정 관리에 최적화된 테마입니다.</p>
+        </div>
+        <div class="calendar-option" data-theme="team" onclick="openModal('team')">
+            <h3>👥 팀 캘린더</h3>
+            <p>여러 사용자가 함께 사용하는 협업용 테마입니다.</p>
+        </div>
+    </div>
+</div>
+
+<div id="calendar-modal" class="modal hidden">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeModal()">&times;</span>
+        <div id="modal-theme-image"></div>
+        <h2 id="modal-title">캘린더 만들기</h2>
+        <form method="post" action="/calendar/create/">
+            {% csrf_token %}
+            <input type="hidden" name="theme" id="modal-theme">
+            <label>캘린더 이름</label>
+            <input type="text" name="calendar_name" required>
+            <button type="submit">생성</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

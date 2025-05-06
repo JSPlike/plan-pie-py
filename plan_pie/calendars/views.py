@@ -179,7 +179,7 @@ def monthly(request):
             'type': 'holiday',
         })    
 
-    return render(request, 'events/monthly.html', {
+    return render(request, 'calendars/monthly.html', {
         'events': events, 
         'invites': invites, 
         'events_json': json.dumps(events_json, indent=4, ensure_ascii=False),
@@ -189,7 +189,16 @@ def monthly(request):
         'participants_json': json.dumps(participants_json, ensure_ascii=False),
     })
     
+# 새로운 캘린더를 생성할 프로세스를 실행한다.    
 @login_required
 def calendar_new(request):
+    # 캘린더 생성화면으로 이동한다.
+    print(request);
+
+    return '';
+
+# 데이터베이스에 새로운 캘린더를 저장한다.
+@login_required
+def calendar_create(request):
     
     return '';

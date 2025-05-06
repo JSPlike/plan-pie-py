@@ -61,3 +61,29 @@ function showConfirmPopup(message, onConfirm) {
     $('#confirm-yes').off('click').on('click', handleYes);
     $('#confirm-no').off('click').on('click', handleNo);
 }
+
+/**
+ * Modal화면을 호출한다.
+ */
+function openModal(theme) {
+    const modal = document.getElementById("calendar-modal");
+    const modalTheme = document.getElementById("modal-theme");
+    const modalTitle = document.getElementById("modal-title");
+    const imageContainer = document.getElementById("modal-theme-image");
+
+    // 모달 설정
+    modal.classList.remove("hidden");
+    modalTheme.value = theme;
+
+    if (theme === "personal") {
+        modalTitle.textContent = "📅 개인 캘린더 만들기";
+        imageContainer.innerHTML = '<img src="/static/images/personal.png" alt="개인 캘린더">';
+    } else {
+        modalTitle.textContent = "👥 팀 캘린더 만들기";
+        imageContainer.innerHTML = '<img src="/static/images/team.png" alt="팀 캘린더">';
+    }
+}
+
+function closeModal() {
+    document.getElementById("calendar-modal").classList.add("hidden");
+}
