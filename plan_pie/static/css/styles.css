@@ -464,6 +464,15 @@ footer {
     color: #000000;
 }
 
+.no-calendar {
+    text-align: center;
+    margin-top: 50px;
+    color: #666;
+}
+.no-calendar .btn {
+    margin-top: 20px;
+}
+
 
 .calendar-header button {
     display: flex;
