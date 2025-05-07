@@ -21,12 +21,12 @@
         <h3 id="modal-title">캘린더 생성</h3>
         <div id="modal-theme"></div>
         <div class="calendarModalForm" >
-            <form method="post" action="/calendar/create/">
+            <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
 
                 <div class="calendarImageContainer">
                     <label for="calendarName">이미지</label>
-                    <img src="{% static 'image/no-image-wh.png' %}"" class="calendarDefaultImage" id="calendarDefaultImage">
+                    <img src="{% static 'image/no-image-wh.png' %}"" class="calendarDefaultImage" id="currentCalendarImage">
                     <button for="calendarImageInput" class="btnEditCalendarImage" title="사진 변경">파일선택</button>
                     <input type="file" id="calendarImageInput" accept="image/*" style="display: none;">
                 </div>

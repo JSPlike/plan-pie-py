@@ -122,6 +122,27 @@ function handleModalSave(modalId) {
     }
 }
 
+/**
+ * 유저 프로필 사진을 변경한다.
+ */
+$('#calendarImageInput').on('change', function (e) {
+
+    console.log('파일선택버튼');
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            $('#currentCalendarImage').attr('src', e.target.result); // 미리보기만
+        };
+        reader.readAsDataURL(file);
+
+        // 파일은 FormData에 저장만 해둠 (저장 버튼 누를 때 전송)
+        $('#calendarImageInput')[0].dataset.fileSelected = 'true';
+    }
+});
+
+
+
 function saveCalendarData() {
     const calendarName = $('#calendar-modal input[name="calendarName"]').val();
 
