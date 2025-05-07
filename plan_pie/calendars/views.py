@@ -222,7 +222,7 @@ def calendar_create(request):
         theme = request.GET.get('theme', 'personal')
         form = CalendarForm()
 
-    return render(request, 'calendars/calendar_create_modal.html', {
+    return render(request, 'calendars/monthly.html', {
         'form': form,
         'theme': theme,
     })

@@ -10,24 +10,43 @@
             <p>개인 일정 관리에 최적화된 테마입니다.</p>
         </div>
         <div class="calendar-option" data-theme="team" onclick="openModal('team')">
-            <h3>👥 팀 캘린더</h3>
+            <h3>👥 공유 캘린더</h3>
             <p>여러 사용자가 함께 사용하는 협업용 테마입니다.</p>
         </div>
     </div>
 </div>
 
-<div id="calendar-modal" class="modal hidden">
+<div id="calendar-modal" class="modal">
     <div class="modal-content">
-        <span class="close-btn" onclick="closeModal()">&times;</span>
-        <div id="modal-theme-image"></div>
-        <h2 id="modal-title">캘린더 만들기</h2>
-        <form method="post" action="/calendar/create/">
-            {% csrf_token %}
-            <input type="hidden" name="theme" id="modal-theme">
-            <label>캘린더 이름</label>
-            <input type="text" name="calendar_name" required>
-            <button type="submit">생성</button>
-        </form>
+        <h3 id="modal-title">캘린더 생성</h3>
+        <div id="modal-theme"></div>
+        <div class="calendarModalForm" >
+            <form method="post" action="/calendar/create/">
+                {% csrf_token %}
+
+                <div class="calendarImageContainer">
+                    <label for="calendarName">이미지</label>
+                    <img src="{% static 'image/no-image-wh.png' %}"" class="calendarDefaultImage" id="calendarDefaultImage">
+                    <button for="calendarImageInput" class="btnEditCalendarImage" title="사진 변경">파일선택</button>
+                    <input type="file" id="calendarImageInput" accept="image/*" style="display: none;">
+                </div>
+        
+                <!-- 닉네임 -->
+                <div class="calendarNameContainer">
+                    <label for="calendarName">이름</label>
+                    <input type="text" id="calendarName" name="calendarName" placeholder="캘린더 이름">
+                </div>
+            </form>
+
+            <div class="modal-bottom-group">
+                <button id="btnModalClose">
+                    취소
+                </button>
+                <button id="btnModalSave">
+                    저장
+                </button>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}

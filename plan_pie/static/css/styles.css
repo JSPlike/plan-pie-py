@@ -1390,7 +1390,7 @@ html, body {
     border-bottom: 2px solid #f4e1c1; /* 아래 라인만 보이도록 설정 */
 }
 
-
+/*
  .modal-content button {
     margin-top: 1rem;
     padding: 0.6rem 1.2rem;
@@ -1400,6 +1400,7 @@ html, body {
     border-radius: 6px;
     cursor: pointer;
  }
+ */
 
  .profile-form {
     padding: 2rem;
@@ -1428,6 +1429,54 @@ html, body {
   
 .edit-photo-btn:hover {
     background-color: rgba(235, 235, 235, 1);
+}
+
+.calendarModalForm {
+    padding: 40px 20px;
+    gap: 10px;
+}
+
+.calendarImageContainer {
+    display: flex;
+    align-items: center;
+}
+
+.calendarModalForm label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #000000;
+    min-width: 100px;
+}
+
+.calendarImageContainer img {
+    width: 160px;
+    height: auto;
+    object-fit: contain; /* 👈 비율 유지하며 컨테이너에 맞춤 */
+    object-position: center;
+    border: none;
+    border-radius: 8px;
+}
+
+.btnEditCalendarImage {
+    width: 140px;
+    height: 45px;
+    color: black;
+    background-color: white;
+    border: 0.5px solid #f5f5f5;
+    border-radius: 6px;
+    margin-left: auto;
+    cursor: pointer;
+}
+
+.btnEditCalendarImage:hover {
+    background-color: #f5f5f5;
+    font-weight: 600;
+}
+
+.calendarNameContainer {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
 }
 
 .modal-bottom-group {
