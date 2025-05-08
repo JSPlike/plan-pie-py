@@ -31,11 +31,17 @@
             </div>
               
             <!-- 왼쪽: 연도 및 좌우 버튼 -->
-            <div class="calendar-header">
-                <button id="prev"><i data-lucide="chevron-left" class="icon"></i></button>
-                <button id="next"><i data-lucide="chevron-right" class="icon"></i></button>
-                <div class="calendar-ym"></div>
-            </div>
+
+            {% if calendars %}
+                <!-- 달력 데이터가 있을 경우 -->
+                <div class="calendar-header">
+                    <button id="prev"><i data-lucide="chevron-left" class="icon"></i></button>
+                    <button id="next"><i data-lucide="chevron-right" class="icon"></i></button>
+                    <div class="calendar-ym"></div>
+                </div>
+            {% endif %}
+
+            
         </div>
     
         <!-- 가운데 -->
@@ -87,8 +93,16 @@
 
     <div class="event-contents">
         <div class="centerSection expand-main">
-            <!-- 달력 -->
-            <div id="calendar"></div>
+            {% if calendars %}
+                <!-- 달력 데이터가 있을 경우 -->
+                <div id="calendar"></div>
+            {% else %}
+                <!-- 달력 데이터가 없을 경우 -->
+                <div class="no-calendar">
+                    <p>현재 참여 중인 캘린더가 없습니다.</p>
+                    <a href="new/" class="btn">새 캘린더 만들기</a>
+                </div>
+            {% endif %}
         </div>
         <div class="right-section hidden-slide">
             <div class="custom-event-form-wrap">
@@ -152,16 +166,6 @@
                                 <option value="#a78bfa">💜 라벤더</option>
                               </select>
                         </div>
-                    
-                        <!-- 참여자 목록 -->
-                         <!--
-                        <div class="event-option">
-                            <i data-lucide="circle-user-round" class="icon"></i>
-                            <div id="participant-list" class="participant-list">
-                                <span data-email="joonyoung@potato.co.kr" >박준영</span>
-                                <span data-email="Esunsin@potato.co.kr" >이순신</span>
-                            </div>
-                        </div>-->
 
                         <div class="event-option">
                             <i data-lucide="circle-user-round" class="icon"></i>

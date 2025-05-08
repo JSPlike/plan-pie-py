@@ -4,17 +4,36 @@ from django.utils import timezone
 from accounts.models import CustomUser
 
 class Calendar(models.Model):
-    calendar_id = models.AutoField(primary_key=True)
     calendar_name = models.CharField(max_length=100)
     owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='owned_calendars')
     # 초대된 사용자들을 관리하기 위한 ManyToMany 관계
-    invited_users = models.ManyToManyField(CustomUser, related_name='invited_calendars', blank=True)
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"{self.calendar_name} (Owner: {self.owner.username})"
 
+class CalendarParticipant(models.Model):
+    ROLE_CHOICES = [
+        ('owner', 'Owner'),
+        ('participant', 'Participant'),
+        ('invited', 'Invited'),
+    ]
+
+    STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('accepted', 'Accepted'),
+        ('declined', 'Declined'),
+    ]
+
+    calendar = models.ForeignKey(Calendar, on_delete=models.CASCADE, related_name='participants')
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='participant')
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    
+    def __str__(self):
+        return f"{self.user.email} - {self.calendar.title} ({self.role}, {self.status})"
+        
 class Event(models.Model):
     calendar = models.ForeignKey(Calendar, on_delete=models.CASCADE, related_name='events', null=True, blank=True)
     title = models.CharField(max_length=200)
@@ -31,23 +50,4 @@ class Event(models.Model):
     def __str__(self):
         return self.title
     
-class EventParticipant(models.Model):
-    ROLE_CHOICES = [
-        ('owner', 'Owner'),
-        ('participant', 'Participant'),
-        ('invited', 'Invited'),
-    ]
 
-    STATUS_CHOICES = [
-        ('pending', 'Pending'),
-        ('accepted', 'Accepted'),
-        ('declined', 'Declined'),
-    ]
-
-    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='participants')
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='participant')
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
-    
-    def __str__(self):
-        return f"{self.user.email} - {self.event.title} ({self.role}, {self.status})"
