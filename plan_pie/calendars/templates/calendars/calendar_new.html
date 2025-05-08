@@ -27,7 +27,7 @@
                 <div class="calendarImageContainer">
                     <label for="calendarName">이미지</label>
                     <img src="{% static 'image/no-image-wh.png' %}"" class="calendarDefaultImage" id="currentCalendarImage">
-                    <button for="calendarImageInput" class="btnEditCalendarImage" title="사진 변경">파일선택</button>
+                    <button type="button" for="calendarImageInput" id="btnEditCalendarImage" class="btnEditCalendarImage" title="사진 변경" onclick="document.getElementById('calendarImageInput').click();">파일선택</button>
                     <input type="file" id="calendarImageInput" accept="image/*" style="display: none;">
                 </div>
         

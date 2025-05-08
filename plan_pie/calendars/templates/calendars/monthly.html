@@ -46,11 +46,13 @@
     
         <!-- 가운데 -->
         <div class="event-header-center">
+            {% if calendars %}
             <div class="calendar-tab">
                 <a href="#" class="tab-link active-tab" data-url="/event/monthly" data-title="Monthly">Monthly</a>
                 <a href="#" class="tab-link" data-url="/event/weekly" data-title="Weekly">Weekly</a>
                 <a href="#" class="tab-link" data-url="/event/daily" data-title="Daily">Daily</a>
             </div>
+            {% endif %}
         </div>
         
     
@@ -58,7 +60,9 @@
         <!-- 오른쪽: 사용자 프로필 및 + 버튼 -->
         <div class="event-header-right">
             <div>
+                {% if calendars %}
                 <button id="toggleEvent" class="btnDefaultQuad">+</button>
+                {% endif %}
             </div>
     
             <div>
@@ -271,7 +275,10 @@
 {% block scripts %}
     <script src="{% static 'js/calendar.js' %}"></script>
 
-    <script id="holidays-data" type="application/json">{{ holidays_json|safe }}</script>
+    <script id="calendars_json" type="application/json">{{ calendars_json|safe }}</script>
+    <script id="pendingcalendars_json" type="application/json">{{ pending_calendars_json|safe }}</script>
+
+    <script id="holidays_json" type="application/json">{{ holidays_json|safe }}</script>
 
     <script id="events_json"   type="application/json">{{ events_json|safe }}</script>
     {{ block.super }}  <!-- base.html에서 정의된 기본 스크립트도 호출 -->

@@ -100,21 +100,37 @@ def monthly(request):
     
      # 현재 로그인한 유저
     user = request.user
-    print("===========================================")
-    print(user.profileimage)
-    print("========================================")
-    print(user);
 
     # 로그인한 유저가 소유한 캘린더와 참여한 캘린더를 가져옵니다.
-    calendars = Calendar.objects.filter(
-                    Q(owner=user) | Q(participants__user=user, participants__status='accepted')
-                ).distinct()
+    
+    calendars = Calendar.objects.filter(Q(owner=user) | Q(participants__user=user, participants__status='accepted')).distinct()
 
     # 수락하지 않은 상태(pending)의 캘린더
-    pending_calendars = Calendar.objects.filter(
-        participants__user=user, participants__status='pending'
-    ).distinct()
+    pending_calendars = Calendar.objects.filter(participants__user=user, participants__status='pending').distinct()
 
+    
+    calendars_json = [
+        {
+            'id': cal.id,
+            'name': cal.name,
+            'color': cal.color,
+            'is_owner': cal.owner == user,
+            'image': cal.image.url if cal.image else '/static/image/no-image-wh.png',
+        }
+        for cal in calendars
+    ]
+    
+    pendingcalendars_json = [
+        {
+            'id': cal.id,
+            'name': cal.name,
+            'color': cal.color,
+            'is_owner': cal.owner == user,
+            'image': cal.image.url if cal.image else '/static/image/no-image-wh.png',
+        }
+        for cal in pending_calendars
+    ]
+    
     events = Event.objects.filter(calendar__in=calendars)
     invites = Event.objects.filter(calendar__in=pending_calendars)
     
@@ -185,7 +201,8 @@ def monthly(request):
         'events_json': json.dumps(events_json, indent=4, ensure_ascii=False),
         'invites_json': invites_json,
         'holidays_json': json.dumps(holidays_json, ensure_ascii=False),
-        'calendars': calendars, # 현재유저가 참여중인 달력 목록
+        'calendars_json': json.dumps(calendars_json, ensure_ascii=False), # 현재유저가 참여중인 달력 목록
+        'pendingcalendars_json': json.dumps(pendingcalendars_json, ensure_ascii=False), # 현재유저가 참여중인 달력 목록
         'participants_json': json.dumps(participants_json, ensure_ascii=False),
     })
     

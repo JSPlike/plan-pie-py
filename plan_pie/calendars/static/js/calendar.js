@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let holidayDates = {}; // 공휴일 날짜 저장용
     const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
     const eventsJson = JSON.parse(document.getElementById('events_json').textContent);
-    const holidaysJson = JSON.parse(document.getElementById('holidays-data').textContent); 
+    const holidaysJson = JSON.parse(document.getElementById('holidays_json').textContent); 
 
     // 초기 날짜 선택시 데이터를 임시로 가지고 있는다.
     let initialTitle = 'New Event'; // 초기 값 저장
@@ -27,39 +27,46 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     // TEST 달력 테마를 위한 테스트 데이터
-    const calendars = ['개인 일정']; // 예시 데이터
+    const calendars = JSON.parse(document.getElementById('calendars_json').textContent); 
+
+    console.log(calendars);
     const calList = document.querySelector('.calList');
     const calButton = document.getElementById('calThem');
     const calAddButton = document.getElementById('btnAddCal');
 
-    // TEST 리스트 동적 생성
-    calendars.forEach(name => {
-        const li = document.createElement('li');
-        li.classList.add('calItem');
-        // 저장된 이미지가 있으면 그 이미지 사용 없으면 default
-        let imgSrc = "/static/image/no-image-wh.png";
-        let check = "/static/image/check.png";
+    if(calendars !== null) {
+        // TEST 리스트 동적 생성
+        calendars.forEach(name => {
+            const li = document.createElement('li');
+            li.classList.add('calItem');
+            // 저장된 이미지가 있으면 그 이미지 사용 없으면 default
+            let imgSrc = "/static/image/no-image-wh.png";
+            let check = "/static/image/check.png";
 
-        li.innerHTML = `
-            <div class="calImage">
-                <img src="${imgSrc}" alt="달력" />
-                <div class="overlay">
-                    <span>
-                        <img class="checkImg" src="${check}"/>
-                    </span>
+            li.innerHTML = `
+                <div class="calImage">
+                    <img src="${imgSrc}" alt="달력" />
+                    <div class="overlay">
+                        <span>
+                            <img class="checkImg" src="${check}"/>
+                        </span>
+                    </div>
                 </div>
-            </div>
-            
-            <div class="calTitle">${name}</div>
-        `.trim();
+                
+                <div class="calTitle">${name}</div>
+            `.trim();
 
-        li.addEventListener('click', () => {
-            console.log(`선택한 달력: ${name}`);
-            //calList.style.display = 'none'; // 선택 후 닫기
+            li.addEventListener('click', () => {
+                console.log(`선택한 달력: ${name}`);
+                //calList.style.display = 'none'; // 선택 후 닫기
+            });
+
+            calList.insertBefore(li, calAddButton);
         });
+    } else {
 
-        calList.insertBefore(li, calAddButton);
-    });
+    }
+    
     
     // TEST 햄버거 버튼 클릭 시 열기/닫기 토글
     calButton.addEventListener('click', function (e) {

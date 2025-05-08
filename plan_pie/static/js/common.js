@@ -98,6 +98,9 @@ $(document).on('click', '#btnModalClose', function() {
     modal.hide();
 });
 
+/**
+ * 모달 내용을 저장한다.
+ */
 $(document).on('click', '#btnModalSave', function() {
 
     // 모달 ID 가져오기
