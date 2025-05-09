@@ -115,7 +115,7 @@ def monthly(request):
             'name': cal.name,
             'color': cal.color,
             'is_owner': cal.owner == user,
-            'image': cal.image.url if cal.image else '/static/image/no-image-wh.png',
+            'image': cal.image.url if cal.image else '/static/image/bg-calendar.png',
         }
         for cal in calendars
     ]
@@ -126,7 +126,7 @@ def monthly(request):
             'name': cal.name,
             'color': cal.color,
             'is_owner': cal.owner == user,
-            'image': cal.image.url if cal.image else '/static/image/no-image-wh.png',
+            'image': cal.image.url if cal.image else '/static/image/bg-calendar.png',
         }
         for cal in pending_calendars
     ]
