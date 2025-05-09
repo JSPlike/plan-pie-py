@@ -72,10 +72,15 @@
                       <div class="settings-icon" title="설정" id="settingsBtn">⚙️</div>
                       <div class="settings-dropdown" id="settingsDropdown">
                         <ul>
-                          <li><a href="#" data-modal="modalProfileEdit">프로필 수정</a></li>
-                          <li><a href="#">알림 설정</a></li>
-                          <li><a href="#">개인정보 설정</a></li>
-                          <li><a href="/accounts/logout/">로그아웃</a></li>
+                            <li><a href="#" data-modal="modalProfileEdit">프로필 수정</a></li>
+                            <li><a href="#">알림 설정</a></li>
+                            <li><a href="#">개인정보 설정</a></li>
+                            <li><a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">로그아웃</a></li>
+
+                            <!-- 숨겨진 로그아웃 폼 -->
+                            <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">
+                                {% csrf_token %}
+                            </form>
                         </ul>
                       </div>
                     </div>

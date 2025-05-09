@@ -66,10 +66,9 @@ function showConfirmPopup(message, onConfirm) {
  * Modal화면을 호출한다.
  */
 function openModal(theme) {
-    const modal = document.getElementById("calendar-modal");
     const modalTheme = document.getElementById("modal-theme");
     const modalTitle = document.getElementById("modal-title");
-    const imageContainer = document.getElementById("modal-theme-image");
+    const calendarTheme = document.getElementById("calendarTheme");
 
     // 모달 설정
     //modal.classList.remove("hidden");
@@ -80,9 +79,11 @@ function openModal(theme) {
     if (theme === "personal") {
         console.log("개인 캘린더 생성화면 오픈");
         modalTitle.textContent = "📅 개인 캘린더 생성";
+        calendarTheme.value = 'personal';
     } else {
         console.log("공유 캘린더 생성화면 오픈");
         modalTitle.textContent = "👥 공유 캘린더 생성";
+        calendarTheme.value = 'team';
     }
 }
 
@@ -157,6 +158,8 @@ function saveCalendarData() {
     if (fileInput.files[0]) {
         formData.append('image', fileInput.files[0]);
     }
+
+    console.log(formData);
 
     // Ajax 요청 예시
     $.ajax({

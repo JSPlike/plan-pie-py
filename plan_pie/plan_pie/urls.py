@@ -30,3 +30,4 @@ urlpatterns = [
 # 미디어 경로에 접근하기 위해 설정이 필요하다.
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    

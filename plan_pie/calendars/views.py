@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from .models import Calendar, Event, CalendarParticipant
+from .forms import CalendarForm
 from django.db.models import Q
 import redis
 import json
@@ -218,13 +219,11 @@ def calendar_new(request):
 def calendar_create(request):
     if request.method == 'POST':
         form = CalendarForm(request.POST, request.FILES)
-        theme = request.POST.get('theme', 'personal')  # theme 필드
         if form.is_valid():
             calendar = form.save(commit=False)
             calendar.owner = request.user
             calendar.save()
 
-            # 참가자(자기자신) 추가
             CalendarParticipant.objects.create(
                 calendar=calendar,
                 user=request.user,
@@ -232,14 +231,10 @@ def calendar_create(request):
                 status='accepted'
             )
 
-            # 성공 후 메인 페이지로 이동
-            return redirect('monthly')  # 또는 'calendar_detail', calendar.id 등
-
+            return redirect('monthly')
     else:
-        theme = request.GET.get('theme', 'personal')
         form = CalendarForm()
 
     return render(request, 'calendars/monthly.html', {
         'form': form,
-        'theme': theme,
     })

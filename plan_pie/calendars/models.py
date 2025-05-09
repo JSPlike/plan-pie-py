@@ -5,7 +5,9 @@ from accounts.models import CustomUser
 
 class Calendar(models.Model):
     calendar_name = models.CharField(max_length=100)
+    theme = models.CharField(max_length=50, default='personal')
     owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='owned_calendars')
+    calendar_image = models.ImageField(upload_to='calendarimage/', blank=True, null=True)  # 이미지 필드 추가
     # 초대된 사용자들을 관리하기 위한 ManyToMany 관계
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)

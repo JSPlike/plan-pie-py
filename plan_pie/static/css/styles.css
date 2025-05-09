@@ -1511,3 +1511,15 @@ html, body {
 .modal-bottom-group > :nth-child(2):hover {
     background-color: #8B4513;
 }
+
+.logout-link {
+    all: unset; /* 기본 버튼 스타일 제거 */
+    color: #007bff; /* 링크 색상 */
+    cursor: pointer;
+    text-decoration: underline;
+    font: inherit;
+}
+
+.logout-link:hover {
+    text-decoration: none;
+}

@@ -37,6 +37,7 @@ $(document).ready(function () {
             url: "/accounts/login/",
             method: "POST",
             data: formData,
+            credentials: "include",  // 중요!
             processData: false,  // FormData는 자동으로 처리되지 않으므로 false로 설정
             contentType: false,  // 파일 업로드 시 content-type을 자동으로 설정하지 않도록 설정
             headers: {
