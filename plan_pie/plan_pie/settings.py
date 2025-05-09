@@ -158,3 +158,14 @@ HOLIDAY_API_KEY = 'NBU363lwCRjoUYzYX8jo83%2Bn%2FLxNbymJhfxrEtEaHI7bJiMLOaJ3SU9sB
 # 유저사진등의 정보관리
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # 프로젝트 루트에 'media' 폴더 생성
+
+
+# 세션이 브라우저에서 유지되도록
+SESSION_COOKIE_AGE = 60 * 60 * 24  # 하루
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+
+# HTTPS 환경에서만 True
+SESSION_COOKIE_SECURE = False
+
+# 크로스 사이트 쿠키 설정 필요시
+SESSION_COOKIE_SAMESITE = 'Lax'  # 또는 'None' (쿠키 전송 안 되는 이슈 있으면)
