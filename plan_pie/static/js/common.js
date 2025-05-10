@@ -149,15 +149,18 @@ $('#calendarImageInput').on('change', function (e) {
 
 function saveCalendarData() {
     const calendarName = $('#calendar-modal input[name="calendarName"]').val();
+    const fileInput = $('#calendarImageInput')[0]; // 캘린더 사진
+    const calendarTheme = $('#calendarTheme').val();
 
     const formData = new FormData();
-    formData.append('calendarName', calendarName); // 캘린더 명
 
-    const fileInput = $('#calendarImageInput')[0]; // 캘린더 사진
+    formData.append('calendar_name', calendarName); // 캘린더 명
 
     if (fileInput.files[0]) {
-        formData.append('image', fileInput.files[0]);
+        formData.append('calendar_image', fileInput.files[0]);
     }
+
+    formData.append('theme', calendarTheme);
 
     console.log(formData);
 
@@ -170,8 +173,13 @@ function saveCalendarData() {
         contentType: false,  // 파일 업로드 시 content-type을 자동으로 설정하지 않도록 설정
         headers: { 'X-CSRFToken': getCookie('csrftoken') },
         success: function(response) {
-            alert('캘린더 저장 성공!');
+            console.log('캘린더 저장 성공!');
+
             var modal = $(this).closest('.modal');
+
+            console.log(modal);
+
+            console.log(response);
             // 모달 내의 폼 초기화
             resetModalForm(modal);
             // 모달 닫기

@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const li = document.createElement('li');
             li.classList.add('calItem');
             // 저장된 이미지가 있으면 그 이미지 사용 없으면 default
-            let imgSrc = "/static/image/bg-calendar.png";
+            let imgSrc = calendars.calendar_image.url || "/static/image/bg-calendar.png";
             let check = "/static/image/check.png";
 
             li.innerHTML = `
@@ -63,10 +63,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             calList.insertBefore(li, calAddButton);
         });
-    } else {
-
     }
-    
     
     // TEST 햄버거 버튼 클릭 시 열기/닫기 토글
     calButton.addEventListener('click', function (e) {
@@ -118,6 +115,8 @@ document.addEventListener("DOMContentLoaded", function () {
         if(!calendarEl) {
             return;
         }
+
+        if(calendars !== null) {
 
         calendarEl.innerHTML = ""; // 기존 내용 지우기
         calendarYm.innerHTML = "";

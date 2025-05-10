@@ -109,14 +109,14 @@ def monthly(request):
     # 수락하지 않은 상태(pending)의 캘린더
     pending_calendars = Calendar.objects.filter(participants__user=user, participants__status='pending').distinct()
 
-    
+    print(calendars);
+
     calendars_json = [
         {
             'id': cal.id,
-            'name': cal.name,
-            'color': cal.color,
+            'name': cal.calendar_name,
             'is_owner': cal.owner == user,
-            'image': cal.image.url if cal.image else '/static/image/bg-calendar.png',
+            'image': cal.calendar_image.url if cal.calendar_image else '/static/image/bg-calendar.png',
         }
         for cal in calendars
     ]
@@ -124,10 +124,9 @@ def monthly(request):
     pendingcalendars_json = [
         {
             'id': cal.id,
-            'name': cal.name,
-            'color': cal.color,
+            'name': cal.calendar_name,
             'is_owner': cal.owner == user,
-            'image': cal.image.url if cal.image else '/static/image/bg-calendar.png',
+            'image': cal.calendar_image.url if cal.calendar_image else '/static/image/bg-calendar.png',
         }
         for cal in pending_calendars
     ]
@@ -231,7 +230,7 @@ def calendar_create(request):
                 status='accepted'
             )
 
-            return redirect('monthly')
+            return redirect('calendar:monthly')
     else:
         form = CalendarForm()
 

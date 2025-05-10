@@ -1451,6 +1451,7 @@ html, body {
 .calendarImageContainer img {
     width: 160px;
     height: auto;
+    max-height: 120px;
     object-fit: contain; /* 👈 비율 유지하며 컨테이너에 맞춤 */
     object-position: center;
     border: none;
