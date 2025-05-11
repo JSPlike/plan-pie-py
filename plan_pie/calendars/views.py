@@ -194,7 +194,7 @@ def monthly(request):
             'allDay': True,
             'type': 'holiday',
         })    
-
+    """
     return render(request, 'calendars/monthly.html', {
         'events': events, 
         'invites': invites, 
@@ -205,6 +205,29 @@ def monthly(request):
         'pendingcalendars_json': json.dumps(pendingcalendars_json, ensure_ascii=False), # 현재유저가 참여중인 달력 목록
         'participants_json': json.dumps(participants_json, ensure_ascii=False),
     })
+    """
+
+
+    context = {
+        #'events': events,
+        #'invites': invites,
+        #'events_json': json.dumps(events_json, indent=4, ensure_ascii=False),
+        'holidays_json': json.dumps(holidays_json, ensure_ascii=False),
+    }
+
+    if calendars_json:
+        context['calendars_json'] = json.dumps(calendars_json, ensure_ascii=False)
+
+    if pendingcalendars_json:
+        context['pendingcalendars_json'] = json.dumps(pendingcalendars_json, ensure_ascii=False)
+
+    if participants_json:
+        context['participants_json'] = json.dumps(participants_json, ensure_ascii=False)
+
+    if invites_json:
+        context['invites_json'] = invites_json  # 이미 JSON인 경우
+
+    return render(request, 'calendars/monthly.html', context)
     
 # 새로운 캘린더를 생성할 프로세스를 실행한다.    
 @login_required

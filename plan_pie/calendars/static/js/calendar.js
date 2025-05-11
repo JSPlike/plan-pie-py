@@ -9,12 +9,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const calendarEl = document.getElementById("calendar");
     const calendarYm = document.querySelector(".calendar-ym");
-    
+    const leftSection = document.querySelector(".left-section");
     const countryCode = 'KR';
     let showHolidays = true;
     let holidayDates = {}; // 공휴일 날짜 저장용
     const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
-    const eventsJson = JSON.parse(document.getElementById('events_json').textContent);
+    //const eventsJson = JSON.parse(document.getElementById('events_json').textContent);
     const holidaysJson = JSON.parse(document.getElementById('holidays_json').textContent); 
 
     // 초기 날짜 선택시 데이터를 임시로 가지고 있는다.
@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     // TEST 달력 테마를 위한 테스트 데이터
-    const calendars = JSON.parse(document.getElementById('calendars_json').textContent); 
+    const calendars = document.getElementById('calendars_json') ? JSON.parse(document.getElementById('calendars_json').textContent) : null; 
 
     console.log(calendars);
     const calList = document.querySelector('.calList');
@@ -36,19 +36,25 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if(calendars !== null) {
         // TEST 리스트 동적 생성
-        calendars.forEach(name => {
+        calendars.forEach((calendar, index) => {
             const li = document.createElement('li');
             li.classList.add('calItem');
+            
+            
+            console.log(calendar);
             // 저장된 이미지가 있으면 그 이미지 사용 없으면 default
-            let imgSrc = calendars.calendar_image.url || "/static/image/bg-calendar.png";
+            let imgSrc = calendar.image || "/static/image/bg-calendar.png";
             let check = "/static/image/check.png";
+            let name = calendar.name || "";
+
+            const checkStyle = index === 0 ? 'style="opacity: 1;"' : 'style="opacity: 0;"'
 
             li.innerHTML = `
                 <div class="calImage">
                     <img src="${imgSrc}" alt="달력" />
-                    <div class="overlay">
+                    <div class="overlay" ${checkStyle}>
                         <span>
-                            <img class="checkImg" src="${check}"/>
+                            <img class="checkImg" src="${check}" />
                         </span>
                     </div>
                 </div>
@@ -63,7 +69,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
             calList.insertBefore(li, calAddButton);
         });
+
+        leftSection.append(calList);
     }
+
+
     
     // TEST 햄버거 버튼 클릭 시 열기/닫기 토글
     calButton.addEventListener('click', function (e) {
@@ -116,7 +126,7 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        if(calendars !== null) {
+        
 
         calendarEl.innerHTML = ""; // 기존 내용 지우기
         calendarYm.innerHTML = "";

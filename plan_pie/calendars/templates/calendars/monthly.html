@@ -55,8 +55,6 @@
             {% endif %}
         </div>
         
-    
-        
         <!-- 오른쪽: 사용자 프로필 및 + 버튼 -->
         <div class="event-header-right">
             <div>
@@ -101,6 +99,9 @@
 
 
     <div class="event-contents">
+        <div class="left-section">
+
+        </div>
         <div class="centerSection expand-main">
             {% if calendars_json %}
                 <!-- 달력 데이터가 있을 경우 -->
@@ -279,10 +280,14 @@
 
 {% block scripts %}
     <script src="{% static 'js/calendar.js' %}"></script>
+    {% if calendars_json %}
+        <script id="calendars_json" type="application/json">{{ calendars_json|safe }}</script>
+    {% endif %}
 
-    <script id="calendars_json" type="application/json">{{ calendars_json|safe }}</script>
-    <script id="pending_calendars_json" type="application/json">{{ pending_calendars_json|safe }}</script>
-
+    {% if pending_calendars_json %}
+        <script id="pending_calendars_json" type="application/json">{{ pending_calendars_json|safe }}</script>
+    {% endif %}
+    
     <script id="holidays_json" type="application/json">{{ holidays_json|safe }}</script>
 
     <script id="events_json"   type="application/json">{{ events_json|safe }}</script>
