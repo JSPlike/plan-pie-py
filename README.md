@@ -9,7 +9,7 @@ plan pie app with django
 캘린더(Calendar)
 → owner 필드: 캘린더를 소유한 사용자
 → participants: CalendarParticipant 모델을 통해 참여자 관리
-
+ 
 
 이벤트(Event)
 → 특정 캘린더에 소속됨
