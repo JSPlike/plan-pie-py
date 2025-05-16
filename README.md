@@ -59,3 +59,5 @@ plan pie app with django
 7. Gunicorn + Nginx 세팅 (운영처럼 돌리고 싶을 때)
 
 8. 필요 시 도메인 연결 + HTTPS
+
+9. cloud
