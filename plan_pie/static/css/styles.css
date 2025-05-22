@@ -149,6 +149,8 @@ footer {
     height: 100%;
     flex-direction: row; /* 좌우로 배치 */
     justify-content: space-between; /* 두 영역 사이에 여백 추가 */
+    flex: 1;
+    transition: all 0.3s ease;
 }
 
 /* 헤더 스타일 */
@@ -239,8 +241,16 @@ footer {
     cursor: pointer;
 }
 
+.section {
+    transition: width 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    will-change: width;
+}
+
 .left-section {
-    width: 10%;
+    width: 4%;
+    background-color: white;
     transition: all 0.3s ease-in-out;
 }
 
@@ -249,18 +259,20 @@ footer {
     /*flex: 0 0 100%;  왼쪽 영역을 1:1 비율로 설정 */
     border: 0.5px solid #e6e6e6; /* 달력 주위에 테두리 */
     border-top: none;
-    width: 90%;
+    width: 96%;
     transition: all 0.3s ease-in-out;
 }
 
 /* 오른쪽 섹션(일정 등록) */
 .right-section {
-    flex: 0 0 25%; /* 오른쪽 영역을 1:1 비율로 설정 */
+    /*flex: 0 0 25%;  오른쪽 영역을 1:1 비율로 설정 */
+    width: 0%;
+    overflow: hidden;
     border: 0.5px solid #e6e6e6; /* 폼 주위에 테두리 */
     border-top: none;
     border-left: none;
     /*height: 95vh;  폼 영역 높이 설정 */
-    transition: transform 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
     flex-shrink: 0;
     background-color: white;
     box-sizing: border-box;
@@ -322,8 +334,8 @@ footer {
 .calThem {
     position: fixed;
     top: 15px;
-    left: 20px;
-    font-size: 30px;
+    left: 10px;
+    font-size: 35px;
     background: none;
     border: none;
     cursor: pointer;
@@ -333,23 +345,21 @@ footer {
 
 .calList {
     position: absolute;
-    top: 70px;
+    top: 38px;
     left: 1px;
-    width: 300px;
+    width: 100%;
     background: white;
-    border: 0.5px solid #ccc;
+    border: 0.5px solid #e6e6e6;
     z-index: 2;
     padding: 0;
     margin: 0;
     list-style: none;
-
+    align-items: center;
     border-top-right-radius: 8px;
     border-bottom-right-radius: 8px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     gap: 3px;
 
-    overflow: hidden;
-    opacity: 0;
     max-height: 0px;
     pointer-events: none;
 }
@@ -372,10 +382,44 @@ footer {
     margin-bottom: 8px;
     border-radius: 8px;
     cursor: pointer;
-    transition: background-color 0.2s ease;
+    transition: all 0.4s ease
 }
 
-.calImage {
+.calAddItem.calImage {
+
+}
+
+.calAddItem.calTitle {
+    display: none;
+}
+
+.calImage.small {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    overflow: hidden;
+    margin: auto;
+}
+
+.calImage.small img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.calImage.small.no-image {
+    background-color: #cceeff; /* 하늘색 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.calImage.small.no-image .calendar-initial {
+    color: white;
+    font-weight: bold;
+}
+
+.calImage.large img {
     display: flex;
     position:relative;
     align-items: center;
@@ -387,6 +431,8 @@ footer {
     height: 65px;
     z-index: 3;
 }
+
+
 
 .overlay {
     position:absolute;
@@ -439,14 +485,14 @@ footer {
     display: flex;
     align-items: center;
 }
-
+/*
 #btnAddCal .calImage {
     width: 80px;
     height: 60px;
     border: 1px dashed #ccc;
     background-color: white;
 }
-
+*/
 #btnAddCal .plus {
     color: #ccc;
     font-size: 40px;
@@ -457,7 +503,7 @@ footer {
     font-size: 18px;
     font-weight: 300;
     font-family: 'Pretendard', sans-serif;
-    display: flex;
+    display: none;
     align-items: center;
 }
 

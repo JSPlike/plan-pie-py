@@ -10,6 +10,12 @@ document.addEventListener("DOMContentLoaded", function () {
     const calendarEl = document.getElementById("calendar");
     const calendarYm = document.querySelector(".calendar-ym");
     const leftSection = document.querySelector(".left-section");
+
+    let layoutState = 'default'; // 'default', 'leftExpanded', 'bothExpanded', 'rightExpanded'
+    const leftLayout = document.getElementById("left-section");
+    const centerLayout = document.getElementById("center-section");
+    const rightLayout = document.getElementById("right-section");
+
     const countryCode = 'KR';
     let showHolidays = true;
     let holidayDates = {}; // 공휴일 날짜 저장용
@@ -28,8 +34,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // TEST 달력 테마를 위한 테스트 데이터
     const calendars = document.getElementById('calendars_json') ? JSON.parse(document.getElementById('calendars_json').textContent) : null; 
-
-    console.log(calendars);
     const calList = document.querySelector('.calList');
     const calButton = document.getElementById('calThem');
     const calAddButton = document.getElementById('btnAddCal');
@@ -41,14 +45,34 @@ document.addEventListener("DOMContentLoaded", function () {
             li.classList.add('calItem');
             
             
-            console.log(calendar);
+            console.log(calendar, index);
             // 저장된 이미지가 있으면 그 이미지 사용 없으면 default
             let imgSrc = calendar.image || "/static/image/bg-calendar.png";
-            let check = "/static/image/check.png";
+            let isImg = calendar.image ? true : false;
+            let check = "/static/image/check.png" || false;
             let name = calendar.name || "";
 
             const checkStyle = index === 0 ? 'style="opacity: 1;"' : 'style="opacity: 0;"'
 
+            let calImageHtml = '';
+
+            if(isImg) {
+                calImageHtml = `
+                    <div class="calImage small">
+                        <img src="${imgSrc}" alt="cal" />
+                    </div>
+                `
+            } else {
+                calImageHtml = `
+                    <div class="calImage small no-image">
+                        <span class="calendar-initial">${name[0] || '?'}</span>
+                    </div>
+                `
+            }
+
+
+            li.innerHTML = calImageHtml.trim();
+            /*
             li.innerHTML = `
                 <div class="calImage">
                     <img src="${imgSrc}" alt="달력" />
@@ -61,6 +85,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 
                 <div class="calTitle">${name}</div>
             `.trim();
+            */
 
             li.addEventListener('click', () => {
                 console.log(`선택한 달력: ${name}`);
@@ -73,22 +98,78 @@ document.addEventListener("DOMContentLoaded", function () {
         leftSection.append(calList);
     }
 
-
-    
     // TEST 햄버거 버튼 클릭 시 열기/닫기 토글
     calButton.addEventListener('click', function (e) {
-        e.stopPropagation(); // 다른 이벤트 방지
-        console.log("toggle btn click");
-        calList.classList.toggle('show');
+        //e.stopPropagation(); // 다른 이벤트 방지
+        //console.log("toggle btn click");
+        //calList.classList.toggle('show');
+
+        // left section 활성화
+
+        if (layoutState === 'default') {
+            expandLeftSection();
+        } else if(layoutState === 'rightExpanded') {
+            expandBothSection();
+        } else {
+            resetLayout();
+        }
+
     });
     
     // TEST 외부 클릭 시 닫기
+    /*
     document.addEventListener('click', function (e) {
         if (!calList.contains(e.target)) {
             calList.classList.remove('show');
+
+            if (layoutState === 'bothExpanded') {
+                expandRightSection();
+            } else {
+                resetLayout();
+            }
         }
     });
+    */
 
+    function updateCalendarItemStates(isExpanded) {
+        document.querySelectorAll('.calImage').forEach(item => {
+            item.classList.remove('small', 'large');
+            item.classList.add(isExpanded ? 'large' : 'small');
+        });
+    }
+
+    function expandLeftSection() {
+        layoutState = 'leftExpanded';
+        leftLayout.style.width = '20%';
+        centerLayout.style.width = '80%';
+        rightLayout.style.width = '0%';
+        updateCalendarItemStates(true);
+    }
+
+    function expandBothSection() {
+        layoutState = 'bothExpanded';
+        leftLayout.style.width = '20%';
+        centerLayout.style.width = '55%';
+        rightLayout.style.width = '25%';
+        updateCalendarItemStates(true);
+    }
+
+    function expandRightSection() {
+        layoutState = 'rightExpanded';
+        leftLayout.style.width = '4%';
+        centerLayout.style.width = '71%';
+        rightLayout.style.width = '25%';
+        updateCalendarItemStates(false);
+    }
+
+    // 초기 레이아웃으로 복원 (10%, 90%, 0%)
+    function resetLayout() {
+        layoutState = 'default';
+        leftLayout.style.width = '4%';
+        centerLayout.style.width = '96%';
+        rightLayout.style.width = '0%';
+        updateCalendarItemStates(false);
+    }
 
     // 저장된 이벤트 처리
 
@@ -125,8 +206,6 @@ document.addEventListener("DOMContentLoaded", function () {
         if(!calendarEl) {
             return;
         }
-
-        
 
         calendarEl.innerHTML = ""; // 기존 내용 지우기
         calendarYm.innerHTML = "";
@@ -228,10 +307,18 @@ document.addEventListener("DOMContentLoaded", function () {
      * 메인사이즈 조정 및 사이드섹션을 닫는다.
      */
     function offEventForm() {
+        /*
         $('.right-section').addClass('slide-out-right');
         $('.right-section').addClass('hidden-slide');
         $('.centerSection').removeClass('shirink-main');
         $('.centerSection').addClass('expand-main');
+        */
+
+        if (layoutState === 'bothExpanded') {
+            expandLeftSection();
+        } else if(layoutState === 'rightExpanded') {
+            resetLayout();
+        }
     }
 
     /**
@@ -288,7 +375,14 @@ document.addEventListener("DOMContentLoaded", function () {
     
     function handleDayDblclick() {
         onEventForm();
-    
+        
+        // layout
+        if (layoutState === 'default') {
+            expandRightSection();
+        } else if(layoutState === 'leftExpanded') {
+            expandBothSection();
+        }
+
         const clickedDate = getClickedDate(this);
         selectedDate = clickedDate;
     

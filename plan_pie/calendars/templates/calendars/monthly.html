@@ -12,10 +12,8 @@
                     <button id="calThem" class="calThem">
                         ☰
                     </button>
+                    <!--
                     <ul class="calList">
-                        <!-- 항목은 JS로 생성됨 -->
-
-                        <!-- 마지막: 달력 추가 버튼 -->
                         <li id="btnAddCal" class="calAddItem">
                             <div class="calImage">
                                 <span class="plus">+</span>
@@ -23,7 +21,7 @@
                             <div class="calTitle">Add Calendar</div>
                         </li>
                     </ul>
-                    
+                    -->
                 </div>
             </div>
             <div class="logoTitle">
@@ -99,10 +97,20 @@
 
 
     <div class="event-contents">
-        <div class="left-section">
+        <div class="section left-section" id="left-section">
+            <ul class="calList">
+                <!-- 항목은 JS로 생성됨 -->
 
+                <!-- 마지막: 달력 추가 버튼 -->
+                <li id="btnAddCal" class="calAddItem">
+                    <div class="calImage small">
+                        <span class="plus">+</span>
+                    </div>
+                    <div class="calTitle">Add Calendar</div>
+                </li>
+            </ul>
         </div>
-        <div class="centerSection expand-main">
+        <div class="section centerSection" id="center-section">
             {% if calendars_json %}
                 <!-- 달력 데이터가 있을 경우 -->
                 <div id="calendar"></div>
@@ -114,7 +122,8 @@
                 </div>
             {% endif %}
         </div>
-        <div class="right-section hidden-slide">
+        <!-- <div class="right-section hidden-slide" id="right-section">-->
+        <div class="section right-section" id="right-section">
             <div class="custom-event-form-wrap">
                 <form id="custom-event-form" class="custom-event-form">
                     {% csrf_token %}
