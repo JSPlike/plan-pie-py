@@ -279,6 +279,114 @@ footer {
     user-select: none; /* 텍스트 선택 방지 */
 }
 
+
+.left-section,
+.centerSection {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.right-section {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.3s ease,
+                visibility 0.3s ease;
+}
+
+/* 모바일 및 태블릿 반응형 */
+@media (max-width: 1200px) {
+    .event-contents {
+        position: relative;
+    }
+    
+    /* form이 활성화되지 않았을 때 */
+    .left-section {
+        width: 250px;
+    }
+    
+    .centerSection {
+        flex: 1;
+    }
+    
+    .right-section {
+        position: absolute;
+        top: 0;
+        right: 0;
+        height: 100%;
+        z-index: 100;
+        background: white;
+        box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+    }
+    
+    /* form이 활성화되었을 때 */
+    .right-section.active ~ .left-section,
+    .event-contents:has(.right-section.active) .left-section {
+        width: 200px; /* 좌측 섹션 축소 */
+    }
+    
+    .right-section.active ~ .centerSection,
+    .event-contents:has(.right-section.active) .centerSection {
+        margin-right: 350px; /* form 너비만큼 마진 */
+    }
+}
+
+@media (max-width: 768px) {
+    /* form이 활성화되지 않았을 때 */
+    .left-section {
+        width: 60px; /* 햄버거 메뉴만 보이도록 */
+        overflow: hidden;
+    }
+    
+    .left-section .calTitle {
+        display: none; /* 텍스트 숨김 */
+    }
+    
+    /* form이 활성화되었을 때 */
+    .right-section.active {
+        width: 100%;
+        position: fixed;
+        top: 80px; /* 헤더 높이 */
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 1000;
+    }
+    
+    .event-contents:has(.right-section.active) .left-section,
+    .event-contents:has(.right-section.active) .centerSection {
+        display: none; /* 완전히 숨김 */
+    }
+}
+
+@media (max-width: 480px) {
+    .event-header {
+        flex-wrap: wrap;
+        height: auto;
+        padding: 10px;
+    }
+    
+    .event-header-left,
+    .event-header-center,
+    .event-header-right {
+        flex-basis: 100%;
+        justify-content: center;
+        margin: 5px 0;
+    }
+    
+    .right-section.active {
+        top: 120px; /* 헤더 높이 조정 */
+    }
+    /* 모바일에서 form 배경 오버레이 */
+    .right-section.active::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: -1;
+    }
+}
+
 /* 오른쪽으로 숨김 */
 .hidden-slide {
     transform: translateX(100%);
@@ -341,6 +449,26 @@ footer {
     cursor: pointer;
     color: #808080;
     z-index: 1001;
+}
+
+/* 햄버거 메뉴 스타일 개선 */
+@media (max-width: 768px) {
+    .calThemContainer {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .calThem {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+    }
 }
 
 .calList {
@@ -987,6 +1115,13 @@ footer {
     text-align: right;
     margin-top: 1.5rem;
     padding: 20px 24px;
+
+    /* 추가: flex 레이아웃 명시적 설정 */
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: flex-end !important;
+    align-items: center !important;
+    gap: 10px !important;
 }
 
 .form-bottom-group > :first-child {
@@ -997,6 +1132,10 @@ footer {
     border-radius: 0.25rem;
     transition: all 0.15s ease-out;
     cursor: pointer;
+
+    /* 추가: 버튼 크기 고정 */
+    flex-shrink: 0;
+    min-width: 60px;
 }
   
 .form-bottom-group > :first-child:hover {
@@ -1011,6 +1150,10 @@ footer {
     border-radius: 0.25rem;
     transition: all 0.15s ease-out;
     cursor: pointer;
+
+    /* 추가: 버튼 크기 고정 */
+    flex-shrink: 0;
+    min-width: 60px;
 }
   
 .form-bottom-group > :nth-child(2):hover {
@@ -1025,8 +1168,39 @@ footer {
     stroke-width: 2;
 }
 
+/* 반응형에서도 버튼 레이아웃 유지 */
+@media (max-width: 768px) {
+    .form-bottom-group {
+        /* 모바일에서도 가로 정렬 강제 유지 */
+        display: flex !important;
+        flex-direction: row !important;
+        justify-content: flex-end !important;
+        gap: 8px !important;
+        padding: 15px 20px !important;
+    }
+    
+    .form-bottom-group > :first-child,
+    .form-bottom-group > :nth-child(2) {
+        min-height: 44px; /* 모바일 터치에 적합한 높이 */
+        padding: 0.6rem 1.2rem;
+    }
+}
 
-
+@media (max-width: 480px) {
+    .form-bottom-group {
+        /* 아주 작은 화면에서도 가로 정렬 유지 */
+        display: flex !important;
+        flex-direction: row !important;
+        justify-content: center !important; /* 중앙 정렬로 변경 */
+        gap: 15px !important;
+    }
+    
+    .form-bottom-group > :first-child,
+    .form-bottom-group > :nth-child(2) {
+        flex: 1; /* 버튼들이 동일한 크기를 가지도록 */
+        max-width: 100px; /* 최대 너비 제한 */
+    }
+}
 
 .invalid-data {
     background: rgba(231, 59, 59, 0.1);
