@@ -1168,6 +1168,8 @@ footer {
     stroke-width: 2;
 }
 
+
+
 /* 반응형에서도 버튼 레이아웃 유지 */
 @media (max-width: 768px) {
     .form-bottom-group {
