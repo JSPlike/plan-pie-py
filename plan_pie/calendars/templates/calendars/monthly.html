@@ -4,96 +4,70 @@
 {% block content %}
 <div class="container-event">
     <!-- 공통 헤더 포함 -->
-    <div class="event-header">
-        <div class="event-header-left">
-            <div id="calThemContainer" class="calThemContainer">
-                <!-- 햄버거 버튼 -->
-                <div class="dropdown">
-                    <button id="calThem" class="calThem">
-                        ☰
-                    </button>
-                    <!--
-                    <ul class="calList">
-                        <li id="btnAddCal" class="calAddItem">
-                            <div class="calImage">
-                                <span class="plus">+</span>
-                            </div>
-                            <div class="calTitle">Add Calendar</div>
-                        </li>
-                    </ul>
-                    -->
-                </div>
-            </div>
-            <div class="logoTitle">
-                <img src="/static/image/pie-log-con.png" alt="Plan Pie 로고" style="max-width: 80px; height: auto;" >
-            </div>
-              
-            <!-- 왼쪽: 연도 및 좌우 버튼 -->
+    <nav class="event-header">
+        <div class="btnCalList">
+            <button id="calThem" class="calThem">
+                ☰
+            </button>
+        </div>
 
-            {% if calendars_json %}
-                <!-- 달력 데이터가 있을 경우 -->
-                <div class="calendar-header">
-                    <button id="prev"><i data-lucide="chevron-left" class="icon"></i></button>
-                    <button id="next"><i data-lucide="chevron-right" class="icon"></i></button>
-                    <div class="calendar-ym"></div>
-                </div>
-            {% endif %}
-
-            
+        <div class="logoTitle">
+            <img src="/static/image/pie-log-con.png" alt="Plan Pie 로고" style="max-width: 80px; height: auto;" >
         </div>
     
         <!-- 가운데 -->
         <div class="event-header-center">
             {% if calendars_json %}
+            <div class="calendar-header">
+                <button id="prev"><i data-lucide="chevron-left" class="icon"></i></button>
+                <button id="next"><i data-lucide="chevron-right" class="icon"></i></button>
+                <div class="calendar-ym"></div>
+            </div>
             <div class="calendar-tab">
                 <a href="#" class="tab-link active-tab" data-url="/event/monthly" data-title="Monthly">Monthly</a>
                 <a href="#" class="tab-link" data-url="/event/weekly" data-title="Weekly">Weekly</a>
                 <a href="#" class="tab-link" data-url="/event/daily" data-title="Daily">Daily</a>
             </div>
+            <div class="add-event-section">
+                <button id="toggleEvent" class="btnDefaultQuad">+</button>
+            </div>
             {% endif %}
         </div>
         
-        <!-- 오른쪽: 사용자 프로필 및 + 버튼 -->
-        <div class="event-header-right">
-            <div>
-                {% if calendars_json %}
-                <button id="toggleEvent" class="btnDefaultQuad">+</button>
-                {% endif %}
-            </div>
-    
-            <div>
-                <img src="{% if user.profileimage %}{{ user.profileimage.url }}{% else %}{% static 'image/user.png' %}{% endif %}" id="profile" alt="프로필" class="profile-rounded">
-                <div class="profile-card" id="profileCard">
-                    <div class="profile-card-header">
-                      <div class="settings-icon" title="설정" id="settingsBtn">⚙️</div>
-                      <div class="settings-dropdown" id="settingsDropdown">
-                        <ul>
-                            <li><a href="#" data-modal="modalProfileEdit">프로필 수정</a></li>
-                            <li><a href="#">알림 설정</a></li>
-                            <li><a href="#">개인정보 설정</a></li>
-                            <li><a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">로그아웃</a></li>
+        
 
-                            <!-- 숨겨진 로그아웃 폼 -->
-                            <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">
-                                {% csrf_token %}
-                            </form>
-                        </ul>
-                      </div>
+        <div class="profile-section">
+            <img src="{% if user.profileimage %}{{ user.profileimage.url }}{% else %}{% static 'image/user.png' %}{% endif %}" id="profile" alt="프로필" class="profile-rounded">
+            <div class="profile-card" id="profileCard">
+                <div class="profile-card-header">
+                    <div class="settings-icon" title="설정" id="settingsBtn">⚙️</div>
+                    <div class="settings-dropdown" id="settingsDropdown">
+                    <ul>
+                        <li><a href="#" data-modal="modalProfileEdit">프로필 수정</a></li>
+                        <li><a href="#">알림 설정</a></li>
+                        <li><a href="#">개인정보 설정</a></li>
+                        <li><a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">로그아웃</a></li>
+
+                        <!-- 숨겨진 로그아웃 폼 -->
+                        <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">
+                            {% csrf_token %}
+                        </form>
+                    </ul>
                     </div>
-                    <div class="profile-card-body">
-                        <img src="{% if user.profileimage %}{{ user.profileimage.url }}{% else %}{% static 'image/user.png' %}{% endif %}" alt="Profile">
-                        <div class="nickname"> {{ user.nickname|default:"미설정" }}</div>
-                        <div class="email">{{ user.email }}</div>
-                    </div>
-                    <hr class="divider">
-                    <div class="profile-card-footer">
-                        <a href="/privacy-policy/" class="footer-link">개인정보처리방침</a>
-                        <a href="/terms-of-service/" class="footer-link">이용약관</a>
-                    </div>
-                  </div>
-            </div>
+                </div>
+                <div class="profile-card-body">
+                    <img src="{% if user.profileimage %}{{ user.profileimage.url }}{% else %}{% static 'image/user.png' %}{% endif %}" alt="Profile">
+                    <div class="nickname"> {{ user.nickname|default:"미설정" }}</div>
+                    <div class="email">{{ user.email }}</div>
+                </div>
+                <hr class="divider">
+                <div class="profile-card-footer">
+                    <a href="/privacy-policy/" class="footer-link">개인정보처리방침</a>
+                    <a href="/terms-of-service/" class="footer-link">이용약관</a>
+                </div>
+                </div>
         </div>
-    </div>
+    </nav>
 
 
     <div class="event-contents">

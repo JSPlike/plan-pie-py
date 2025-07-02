@@ -115,21 +115,14 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
     });
-    
-    // TEST 외부 클릭 시 닫기
-    /*
-    document.addEventListener('click', function (e) {
-        if (!calList.contains(e.target)) {
-            calList.classList.remove('show');
-
-            if (layoutState === 'bothExpanded') {
-                expandRightSection();
-            } else {
-                resetLayout();
-            }
-        }
-    });
-    */
+   
+    // 레이아웃
+    const LAYOUT_BREAKPOINTS = {
+        leftDeft: '60px',
+        leftExpd: '300px',
+        rightDeft: '0px',
+        rightExpd: '400px'
+    };
 
     function updateCalendarItemStates(isExpanded) {
         document.querySelectorAll('.calImage').forEach(item => {
@@ -140,34 +133,34 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function expandLeftSection() {
         layoutState = 'leftExpanded';
-        leftLayout.style.width = '20%';
-        centerLayout.style.width = '80%';
-        rightLayout.style.width = '0%';
+        leftLayout.style.width = LAYOUT_BREAKPOINTS.leftExpd;
+        centerLayout.style.width = `calc(100% - ${LAYOUT_BREAKPOINTS.leftExpd} - ${LAYOUT_BREAKPOINTS.rightDeft})`;
+        rightLayout.style.width = LAYOUT_BREAKPOINTS.rightDeft;
         updateCalendarItemStates(true);
     }
 
     function expandBothSection() {
         layoutState = 'bothExpanded';
-        leftLayout.style.width = '20%';
-        centerLayout.style.width = '55%';
-        rightLayout.style.width = '25%';
+        leftLayout.style.width = LAYOUT_BREAKPOINTS.leftExpd;
+        centerLayout.style.width = `calc(100% - ${LAYOUT_BREAKPOINTS.leftExpd} - ${LAYOUT_BREAKPOINTS.rightExpd})`;
+        rightLayout.style.width = LAYOUT_BREAKPOINTS.rightExpd;
         updateCalendarItemStates(true);
     }
 
     function expandRightSection() {
         layoutState = 'rightExpanded';
-        leftLayout.style.width = '4%';
-        centerLayout.style.width = '71%';
-        rightLayout.style.width = '25%';
+        leftLayout.style.width = LAYOUT_BREAKPOINTS.leftDeft;
+        centerLayout.style.width = `calc(100% - ${LAYOUT_BREAKPOINTS.leftDeft} - ${LAYOUT_BREAKPOINTS.rightExpd})`;
+        rightLayout.style.width = LAYOUT_BREAKPOINTS.rightExpd;
         updateCalendarItemStates(false);
     }
 
     // 초기 레이아웃으로 복원 (10%, 90%, 0%)
     function resetLayout() {
         layoutState = 'default';
-        leftLayout.style.width = '4%';
-        centerLayout.style.width = '96%';
-        rightLayout.style.width = '0%';
+        leftLayout.style.width = LAYOUT_BREAKPOINTS.leftDeft;
+        centerLayout.style.width = `calc(100% - ${LAYOUT_BREAKPOINTS.leftDeft} - ${LAYOUT_BREAKPOINTS.rightDeft})`;
+        rightLayout.style.width = LAYOUT_BREAKPOINTS.rightDeft;
         updateCalendarItemStates(false);
     }
 

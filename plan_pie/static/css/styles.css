@@ -148,7 +148,6 @@ footer {
     overflow: hidden; /* 전체 스크롤 막기 */
     height: 100%;
     flex-direction: row; /* 좌우로 배치 */
-    justify-content: space-between; /* 두 영역 사이에 여백 추가 */
     flex: 1;
     transition: all 0.3s ease;
 }
@@ -156,39 +155,21 @@ footer {
 /* 헤더 스타일 */
 .event-header {
     display: flex;
-    justify-content: space-between;
     align-items: center;
     background-color: white;
-    padding: 0 0.5rem;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* shadow 대응 */
     border-radius: 0.5rem;
-    
-    min-height: 63px; /* svg 높이와 동일하게 */
-}
-
-.event-header-left {
-    margin-left: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1.5rem;
+    min-height: 60px; /* svg 높이와 동일하게 */
 }
 
 .event-header-center {
     display: flex;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
+    -webkit-box-align: center;
     align-items: center;
-}
-
-.event-header-right {
-    display: flex;
-    align-items: center;
-}
-
-.event-header-right > *:not(:first-child) {
-    margin-left: 1rem; /* 1rem = 16px */
+    -webkit-box-pack: justify;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
 }
 
 .btnBlueRound {
@@ -239,6 +220,8 @@ footer {
     object-fit: contain; /* 👈 비율 유지하며 컨테이너에 맞춤 */
     justify-content: center;
     cursor: pointer;
+    width: 60px;
+    height: 60px;
 }
 
 .section {
@@ -249,7 +232,7 @@ footer {
 }
 
 .left-section {
-    width: 4%;
+    width: 60px;
     background-color: white;
     transition: all 0.3s ease-in-out;
 }
@@ -279,66 +262,19 @@ footer {
     user-select: none; /* 텍스트 선택 방지 */
 }
 
-
+/*
 .left-section,
 .centerSection {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
-
+*/
 .right-section {
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
                 opacity 0.3s ease,
                 visibility 0.3s ease;
 }
 
-/* 모바일 및 태블릿 반응형 */
-@media (max-width: 1200px) {
-    .event-contents {
-        position: relative;
-    }
-    
-    /* form이 활성화되지 않았을 때 */
-    .left-section {
-        width: 250px;
-    }
-    
-    .centerSection {
-        flex: 1;
-    }
-    
-    .right-section {
-        position: absolute;
-        top: 0;
-        right: 0;
-        height: 100%;
-        z-index: 100;
-        background: white;
-        box-shadow: -2px 0 10px rgba(0,0,0,0.1);
-    }
-    
-    /* form이 활성화되었을 때 */
-    .right-section.active ~ .left-section,
-    .event-contents:has(.right-section.active) .left-section {
-        width: 200px; /* 좌측 섹션 축소 */
-    }
-    
-    .right-section.active ~ .centerSection,
-    .event-contents:has(.right-section.active) .centerSection {
-        margin-right: 350px; /* form 너비만큼 마진 */
-    }
-}
-
 @media (max-width: 768px) {
-    /* form이 활성화되지 않았을 때 */
-    .left-section {
-        width: 60px; /* 햄버거 메뉴만 보이도록 */
-        overflow: hidden;
-    }
-    
-    .left-section .calTitle {
-        display: none; /* 텍스트 숨김 */
-    }
-    
     /* form이 활성화되었을 때 */
     .right-section.active {
         width: 100%;
@@ -350,7 +286,6 @@ footer {
         z-index: 1000;
     }
     
-    .event-contents:has(.right-section.active) .left-section,
     .event-contents:has(.right-section.active) .centerSection {
         display: none; /* 완전히 숨김 */
     }
@@ -363,9 +298,7 @@ footer {
         padding: 10px;
     }
     
-    .event-header-left,
-    .event-header-center,
-    .event-header-right {
+    .event-header-center {
         flex-basis: 100%;
         justify-content: center;
         margin: 5px 0;
@@ -401,26 +334,17 @@ footer {
     font-family: Arial, sans-serif;
 }
 
-@media (max-width: 1224px) {
-    .event-header-center {
-        display: none;
-    }
-}
-
-.calThemContainer {
-    padding: auto;
-    display: flex;
-    flex-grow: 1; /* 너비를 유동적으로 확장 */
-}
-
 .logoTitle {
+    display: flex;
+    height: 100%;
     white-space: nowrap;
-    padding: 1px 30px 1px 50px; /* 양 옆에 더 많은 여백 추가 */
     align-items: center;
     user-select: none; /* 텍스트 선택 방지 */
+    margin: 0;
+    padding-left: 16px;
 }
 
-@media (max-width: 868px) {
+@media (max-width: 1000px) {
     .logoTitle {
         display: none;
     }
@@ -439,27 +363,10 @@ footer {
   }
   
   /* calendar theme */
-.calThem {
-    position: fixed;
-    top: 15px;
-    left: 10px;
-    font-size: 35px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: #808080;
-    z-index: 1001;
-}
+
 
 /* 햄버거 메뉴 스타일 개선 */
 @media (max-width: 768px) {
-    .calThemContainer {
-        width: 40px;
-        height: 40px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
     
     .calThem {
         width: 100%;
@@ -473,11 +380,8 @@ footer {
 
 .calList {
     position: absolute;
-    top: 38px;
-    left: 1px;
     width: 100%;
     background: white;
-    border: 0.5px solid #e6e6e6;
     z-index: 2;
     padding: 0;
     margin: 0;
@@ -487,22 +391,42 @@ footer {
     border-bottom-right-radius: 8px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     gap: 3px;
-
     max-height: 0px;
     pointer-events: none;
 }
 
 .calList.show {
     opacity: 1;
-
     max-height: 600px; /* 원하는 높이로 조정 */
     overflow-y: auto;
     overflow-x: hidden; /* 가로 스크롤 방지 (선택 사항) */
     pointer-events: auto;
 }
 
+.btnCalList {
+    display: flex;
+    flex-flow: column;
+    flex-shrink: 0;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+}
+
+.calThem {
+    font-size: 30px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #808080;
+    z-index: 1001;
+}
+
 .calItem, .calAddItem {
     display: flex;
+    text-align: center;
     align-items: center;
     gap: 10px;
     padding: 0px 10px;
@@ -514,12 +438,17 @@ footer {
 }
 
 .calAddItem.calImage {
+    text-align: center;
+}
 
+.calAddItem.calTitle .plus{
+    text-align: center;
 }
 
 .calAddItem.calTitle {
     display: none;
 }
+
 
 .calImage.small {
     width: 40px;
