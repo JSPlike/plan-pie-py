@@ -38,6 +38,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const calButton = document.getElementById('calThem');
     const calAddButton = document.getElementById('btnAddCal');
 
+    console.log('calendars 데이터>>>:');
+    console.log(calendars);
+
     if(calendars !== null) {
         // TEST 리스트 동적 생성
         calendars.forEach((calendar, index) => {
