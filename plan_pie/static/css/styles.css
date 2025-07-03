@@ -656,7 +656,6 @@ footer {
 .calendar-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: 0.5px;
 }
 
 .day-header {
@@ -674,7 +673,7 @@ footer {
     padding: 10px 0px;
     /* padding: 80px 50px; */
     background: white;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 0.5px solid rgba(0, 0, 0, 0.1);
     cursor: pointer;
     display: flex;
     flex-direction: column;
@@ -781,11 +780,12 @@ footer {
     position: relative;
 }
 
+/*
 .new-event-item {
     text-align: left;
     display: flex;
     white-space: nowrap;
-    overflow: hidden; /* 넘칠 때 잘리게 */
+    overflow: hidden;
     color: white;
     border: none;
     height: 20px;
@@ -797,11 +797,10 @@ footer {
     font-size: 12px;
     border-radius: 4px;
     pointer-events: none;
-    user-select: none; /* 텍스트 선택 방지 */
-    /* 일정 이벤트 폰트 */
+    user-select: none;
     font-family: 'Pretendard', sans-serif;
 }
-
+*/
 .event-item {
     text-align: left;
     display: flex;
@@ -1705,4 +1704,188 @@ html, body {
 
 .logout-link:hover {
     text-decoration: none;
+}
+
+
+
+
+
+
+
+
+
+/* ========== 이벤트 컨테이너 및 기본 스타일 ========== */
+.day-events-container {
+    width: 100%;
+    display: flex;
+    max-height: 120px;
+    flex-direction: column;
+    overflow-y: auto;
+    position: relative;
+    min-height: 22px;
+    margin-top: 2px;
+}
+
+/* ========== 기본 이벤트 아이템 스타일 ========== */
+.new-event-item {
+    display: block;
+    width: 100%;
+    border: none;
+    border-radius: 4px;
+    padding: 2px 4px;
+    margin-bottom: 1px;
+    font-size: 0.75rem;
+    color: white;
+    text-align: left;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    font-family: 'Pretendard', sans-serif;
+    height: 20px;
+    font-weight: 700;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+/* ========== 텍스트 스타일 (통합) ========== */
+.dayEventSpan {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: 500;
+    line-height: 1.2;
+    width: 100%;
+    font-size: 0.75rem;
+}
+
+/* ========== 연속/범위 이벤트 공통 스타일 ========== */
+.range-event,
+.continuous-event {
+    position: relative;
+    z-index: 1;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    margin: 0 !important;
+    box-sizing: border-box;
+}
+
+/* ========== 시작 이벤트 스타일 ========== */
+.range-start,
+.continuous-start {
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+    margin-right: 0 !important;
+    border-right: none;
+}
+
+/* ========== 중간 이벤트 스타일 ========== */
+.range-middle,
+.continuous-middle {
+    border-radius: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    border-left: none;
+    border-right: none;
+}
+
+/* 중간 날짜 텍스트 숨김 */
+.range-middle .dayEventSpan,
+.continuous-middle .dayEventSpan {
+    display: none;
+}
+
+.range-middle .dayEventSpan:empty,
+.continuous-middle .dayEventSpan:empty {
+    height: 0.75rem;
+}
+
+/* ========== 끝 이벤트 스타일 ========== */
+.range-end,
+.continuous-end {
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+    margin-left: 0 !important;
+    border-left: none;
+}
+
+/* ========== 연결 효과 ========== */
+.range-event::before,
+.continuous-event::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: -1px;
+    width: 1px;
+    height: 100%;
+    background-color: inherit;
+    z-index: -1;
+}
+
+.range-end::before,
+.continuous-end::before {
+    display: none;
+}
+
+/* 범위 이벤트가 날짜 경계를 넘나들도록 */
+.range-start::after,
+.range-middle::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: -2px;
+    width: 2px;
+    height: 100%;
+    background-color: inherit;
+    z-index: 1;
+}
+
+/* ========== 행별 위치 설정 ========== */
+.new-event-item[data-row="0"] {
+    top: 0px;
+}
+
+.new-event-item[data-row="1"] {
+    top: 22px;
+}
+
+.new-event-item[data-row="2"] {
+    top: 44px;
+}
+
+.new-event-item[data-row="3"] {
+    top: 66px;
+}
+
+/* ========== 호버 효과 ========== */
+.range-event:hover,
+.continuous-event:hover {
+    z-index: 10;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* 같은 이벤트 그룹 하이라이트 */
+.continuous-event:hover ~ .continuous-event[data-event-title],
+.continuous-event[data-event-title]:hover {
+    opacity: 1;
+    z-index: 9;
+}
+
+/* ========== 캘린더 레이아웃 ========== */
+.calendar-row {
+    display: flex;
+}
+
+.calendar-day {
+    flex: 1;
+    position: relative;
+    padding: 2px !important;
+}
+
+/* ========== 모바일 대응 ========== */
+@media (max-width: 768px) {
+    .new-event-item {
+        font-size: 0.7rem;
+        padding: 1px 2px;
+    }
 }

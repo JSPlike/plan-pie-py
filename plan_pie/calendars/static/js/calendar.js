@@ -38,9 +38,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const calButton = document.getElementById('calThem');
     const calAddButton = document.getElementById('btnAddCal');
 
-    console.log('calendars 데이터>>>:');
-    console.log(calendars);
-
     if(calendars !== null) {
         // TEST 리스트 동적 생성
         calendars.forEach((calendar, index) => {
@@ -198,6 +195,7 @@ document.addEventListener("DOMContentLoaded", function () {
      * @param {*} year 
      * @param {*} month 
      */
+    /*
     function renderCalendar(year, month) {
         if(!calendarEl) {
             return;
@@ -281,8 +279,182 @@ document.addEventListener("DOMContentLoaded", function () {
             drawEvent(title, selectedDate);
         }
     }
+    */
 
-    renderCalendar(today.getFullYear(), today.getMonth());
+    function renderCalendar(year, month) {
+        if(!calendarEl) {
+            return;
+        }
+
+        calendarEl.innerHTML = ""; // 기존 내용 지우기
+        calendarYm.innerHTML = "";
+        currentYear = year;
+        currentMonth = month;
+        let isActiveEvent = false;
+
+        const firstDay = new Date(year, month, 1).getDay(); // 월의 첫째 날 요일
+        const daysInMonth = new Date(year, month + 1, 0).getDate(); // 월의 총 일수
+
+        let calendarYmHTML = `<span>${year}년 ${month + 1}월</span>`
+        let calendarHTML = `<div class="calendar-grid">`;
+
+        // 요일 헤더 추가
+        const weekDays = ["일", "월", "화", "수", "목", "금", "토"];
+        weekDays.forEach(day => calendarHTML += `<div class="day-header">${day}</div>`);
+
+        // 첫 주 빈 칸 추가
+        for (let i = 0; i < firstDay; i++) {
+            calendarHTML += `<div class="empty"></div>`;
+        }
+
+        // 날짜 채우기
+        for (let day = 1; day <= daysInMonth; day++) {
+            const fullDateStr = `${year}-${padMonth(month)}-${padDay(day)}`;
+            
+            let dayClass = 'day';
+            let holidayHTML = '';
+
+            const date = new Date(year, month, day);
+            const dayOfWeek = date.getDay();
+
+            // 달력의 날짜가 오늘날짜라면 표시해준다
+            if(fullDateStr == todayStr) {   
+                dayClass += ' today'
+            }
+            
+            // 일요일과 토요일 날짜색상을 적용해준다
+            if (dayOfWeek === 0) {
+                dayClass += ' sunday'
+            } else if (dayOfWeek === 6) {
+                dayClass += ' saturday'
+            }
+
+            // 주의 첫째날과 마지막날 클래스 추가 (연속 이벤트용)
+            if (dayOfWeek === 0) { // 월요일
+                dayClass += ' week-start';
+            } else if (dayOfWeek === 6) { // 일요일
+                dayClass += ' week-end';
+            }
+
+            // 현재 달에 작성중인 이벤트가 있는지 확인한다.
+            if(selectedDate != null && isSameDate(date, selectedDate)) {
+                isActiveEvent = true;
+                console.log("현재달에 작성중인 이벤트가 있습니다.");
+            }
+
+            // 공휴일 체크박스에 체크되어있는경우 실행한다.
+            if (showHolidays && holidayDates[fullDateStr]) {
+                dayClass += ' holiday';
+                holidayHTML = holidayDates[fullDateStr].map(name => 
+                    `<button class="dayEventBtn"><span class="dayEventSpan">${name}</span></button>`
+                ).join('');
+            }
+
+            calendarHTML += `<div class="${dayClass}" 
+                                data-year="${year}" 
+                                data-month="${month}" 
+                                data-day="${day}"
+                                data-date="${fullDateStr}"
+                                data-day-of-week="${dayOfWeek}">
+                                <div class="day-number-container">
+                                    <div class="day-number">${day}</div>
+                                </div>
+                                <div class="holiday-container">${holidayHTML}</div>
+                                <div class="day-events-container"></div>
+                            </div>`;
+        }
+
+        calendarHTML += `</div>`;
+        calendarEl.innerHTML = calendarHTML;
+        calendarYm.innerHTML = calendarYmHTML;
+
+        // 달력의 이벤트 및 요소들 초기 세팅
+        initWindow();
+
+        // 기존 이벤트들 다시 그리기 (서버에서 가져온 이벤트들)
+        loadAndRenderExistingEvents(year, month);
+
+        // 현재 작성 중인 이벤트가 있으면 그리기
+        if(isActiveEvent) {
+            let title = $('#event-title').val()?.trim() || 'New Event';
+            
+            // 범위 선택이 있는지 확인
+            if(selectedEndDate && selectedEndDate !== selectedDate) {
+                drawEvent(title, selectedDate, selectedEndDate);
+            } else {
+                drawEvent(title, selectedDate);
+            }
+        }
+
+        // 연속 이벤트 간격 제거 (렌더링 완료 후)
+        setTimeout(() => {
+            removeEventGaps();
+            adjustCalendarLayout();
+        }, 50);
+    }
+
+    // 기존 이벤트들을 로드하고 렌더링하는 함수
+    function loadAndRenderExistingEvents(year, month) {
+        // 여기서 서버나 로컬 스토리지에서 기존 이벤트들을 가져와서 렌더링
+        // 예시:
+        /*
+        const existingEvents = getEventsForMonth(year, month);
+        existingEvents.forEach(event => {
+            drawEvent(event.title, new Date(event.startDate), new Date(event.endDate));
+        });
+        */
+    }
+
+    // 연속 이벤트 간격 제거 함수
+    function removeEventGaps() {
+        const rangeEvents = document.querySelectorAll('.range-event, .continuous-event');
+        
+        rangeEvents.forEach(event => {
+            const parentDay = event.closest('.day');
+            if (!parentDay) return;
+            
+            const isWeekStart = parentDay.classList.contains('week-start');
+            const isWeekEnd = parentDay.classList.contains('week-end');
+            
+            if (event.classList.contains('range-start') || event.classList.contains('continuous-start')) {
+                if (!isWeekEnd) {
+                    event.style.marginRight = '-1px';
+                    event.style.paddingRight = '1px';
+                }
+            }
+            
+            if (event.classList.contains('range-end') || event.classList.contains('continuous-end')) {
+                if (!isWeekStart) {
+                    event.style.marginLeft = '-1px';
+                    event.style.paddingLeft = '1px';
+                }
+            }
+            
+            if (event.classList.contains('range-middle') || event.classList.contains('continuous-middle')) {
+                event.style.marginLeft = '-1px';
+                event.style.marginRight = '-1px';
+                event.style.paddingLeft = '1px';
+                event.style.paddingRight = '1px';
+            }
+        });
+    }
+
+    // 캘린더 레이아웃 조정
+    function adjustCalendarLayout() {
+        // 캘린더 그리드 간격 최소화
+        const calendarGrid = document.querySelector('.calendar-grid');
+        if (calendarGrid) {
+            calendarGrid.style.gap = '1px';
+        }
+        
+        // 각 날짜 셀의 패딩 조정
+        const dayCells = document.querySelectorAll('.day');
+        dayCells.forEach(cell => {
+            cell.style.padding = '8px 1px';
+        });
+    }
+
+    
 
     function initWindow() {
         // 시간 요소를 숨긴다.
@@ -451,7 +623,7 @@ document.addEventListener("DOMContentLoaded", function () {
         $('#end-date')[0]._flatpickr.setDate(clickedDate, true);
 
         /* 선택된 날짜에 New Event 박스 생성 */
-        drawEvent("New Event", clickedDate)
+        drawEvent("New Event", clickedDate, clickedDate);
     }
 
     /**
@@ -462,6 +634,7 @@ document.addEventListener("DOMContentLoaded", function () {
     /**
      * 달력화면에 해당 이벤트를 그려준다.
      */
+    /*
     function drawEvent(title, d) {
         // 기존에 이미 새 이벤트 아이템이 있으면 지워준다.
         const existingEventItems = document.querySelectorAll('.new-event-item');
@@ -508,6 +681,150 @@ document.addEventListener("DOMContentLoaded", function () {
             eventContainer.appendChild(eventDiv);
         }
     }
+    */
+
+    /*
+    function drawEvent(title, startDate, endDate = null) {
+        // 기존에 이미 새 이벤트 아이템이 있으면 지워준다.
+        const existingEventItems = document.querySelectorAll('.new-event-item');
+        existingEventItems.forEach(item => item.remove());
+        
+        // 종료일이 없으면 시작일과 동일하게 설정 (단일 날짜)
+        const finalEndDate = endDate || startDate;
+        
+        // 날짜 범위 생성
+        const dateRange = getDateRange(startDate, finalEndDate);
+
+        // 이벤트 배치 계획 수립
+        const eventLayout = planEventLayout(dateRange, title);
+        
+        // 각 날짜에 대해 이벤트 그리기
+        dateRange.forEach((date, index) => {
+            drawEventForDate(title, date, index, dateRange.length);
+        });
+    }
+    */
+
+    function drawEvent(title, startDate, endDate = null) {
+        // 기존에 이미 새 이벤트 아이템이 있으면 지워준다.
+        const existingEventItems = document.querySelectorAll('.new-event-item');
+        existingEventItems.forEach(item => item.remove());
+        
+        // 종료일이 없으면 시작일과 동일하게 설정 (단일 날짜)
+        const finalEndDate = endDate || startDate;
+        
+        // 날짜 범위 생성
+        const dateRange = getDateRange(startDate, finalEndDate);
+        
+        // 각 날짜에 이벤트 그리기 (간단한 방식)
+        dateRange.forEach((date, index) => {
+            drawEventForDate(title, date, index, dateRange.length);
+        });
+    }
+
+    function drawEventForDate(title, date, index, totalDays) {
+        const year = date.getFullYear();
+        const month = date.getMonth();
+        const day = date.getDate();
+
+        const container = document.querySelector(
+            `[data-year="${year}"][data-month="${month}"][data-day="${day}"]`
+        );
+
+        if (!container) {
+            console.warn(`Container not found for date: ${date.toDateString()}`);
+            return;
+        }
+
+        const eventContainer = container.querySelector('.day-events-container');
+        
+        if (!eventContainer) {
+            console.warn(`Event container not found for date: ${date.toDateString()}`);
+            return;
+        }
+
+        // 휴일 및 기존 이벤트 확인
+        const hasHoliday = container.querySelector('.holiday-container')?.innerHTML.trim() !== '';
+        const existingEvents = eventContainer.querySelectorAll('.event-item, .new-event-item');
+
+        const eventDiv = document.createElement('button');
+        const eventSpan = document.createElement('span');
+        
+        eventSpan.classList.add('dayEventSpan');
+        eventDiv.classList.add('new-event-item');
+
+        // 선택중인 색상
+        const color = $('#event-color-select').val() || '#3b82f6';
+        eventDiv.style.backgroundColor = color;
+
+        // 마진 설정 (휴일이나 기존 이벤트가 있으면)
+        if (hasHoliday || existingEvents.length > 0) {
+            eventDiv.style.marginTop = '2px';
+        }
+
+        // 범위 이벤트 스타일링
+        if (totalDays > 1) {
+            eventDiv.classList.add('range-event');
+            
+            if (index === 0) {
+                // 시작일
+                eventDiv.classList.add('range-start');
+                eventDiv.style.borderTopRightRadius = '0';
+                eventDiv.style.borderBottomRightRadius = '0';
+                eventDiv.style.marginRight = '0';
+                eventDiv.style.borderRight = 'none';
+            } else if (index === totalDays - 1) {
+                // 종료일
+                eventDiv.classList.add('range-end');
+                eventDiv.style.borderTopLeftRadius = '0';
+                eventDiv.style.borderBottomLeftRadius = '0';
+                eventDiv.style.marginLeft = '0';
+                eventDiv.style.borderLeft = 'none';
+            } else {
+                // 중간일
+                eventDiv.classList.add('range-middle');
+                eventDiv.style.borderRadius = '0';
+                eventDiv.style.marginLeft = '0';
+                eventDiv.style.marginRight = '0';
+                eventDiv.style.borderLeft = 'none';
+                eventDiv.style.borderRight = 'none';
+            }
+        }
+
+        // 이벤트 텍스트 설정
+        let label = title;
+        if (index > 0 && index < totalDays - 1) {
+            label = '';
+        }
+        
+        
+        eventSpan.innerHTML = label;
+
+        // 구조 조립
+        eventDiv.appendChild(eventSpan);
+        eventContainer.appendChild(eventDiv);
+    }
+
+    // 날짜 범위 생성 함수
+    function getDateRange(startDate, endDate) {
+        const dates = [];
+        const currentDate = new Date(startDate);
+        const finalDate = new Date(endDate);
+        
+        while (currentDate <= finalDate) {
+            dates.push(new Date(currentDate));
+            currentDate.setDate(currentDate.getDate() + 1);
+            
+            // 무한 루프 방지
+            if (dates.length > 365) {
+                console.warn('Date range too large, limiting to 365 days');
+                break;
+            }
+        }
+        
+        return dates;
+    }
+
 
     flatpickr("#start-date", {
         dateFormat: "Y-m-d",
@@ -519,6 +836,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 $('#end-date').val(dateStr);
                 $('#end-date')[0]._flatpickr.setDate(dateStr, true);
                 $('#end-date').removeClass('invalid-data');
+            } else { // 종료일 보다 앞이라면
+                // 달력에 해당 범위를 그려준다
+                drawEvent("New Event", $('#start-date').val(), $('#end-date').val());
             }
         }
     });
@@ -531,6 +851,9 @@ document.addEventListener("DOMContentLoaded", function () {
             // 만약 선택된 날짜가 시작일보다 앞이라면 불가능 하다는 표시가 필요
             if( $('#start-date').val() > $('#end-date').val() ){
                 $('#end-date').addClass('invalid-data');
+            } else { // 시작일 보다 뒤라면
+                // 달력에 해당 범위를 그려준다
+                drawEvent("New Event", $('#start-date').val(), $('#end-date').val());
             }
         }
     });
@@ -868,4 +1191,6 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     });
+
+    renderCalendar(today.getFullYear(), today.getMonth());
 });
