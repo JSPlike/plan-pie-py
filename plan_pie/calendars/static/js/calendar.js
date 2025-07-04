@@ -253,7 +253,7 @@ document.addEventListener("DOMContentLoaded", function () {
             if (showHolidays && holidayDates[fullDateStr]) {
                 dayClass += ' holiday';
                 holidayHTML = holidayDates[fullDateStr].map(name => 
-                    `<button class="dayEventBtn"><span class="dayEventSpan">${name}</span></button>`
+                    `<button class="dayEventBtn"><span class="holidayItemSpan">${name}</span></button>`
                 ).join('');
             }
 
@@ -295,6 +295,10 @@ document.addEventListener("DOMContentLoaded", function () {
         const firstDay = new Date(year, month, 1).getDay(); // 월의 첫째 날 요일
         const daysInMonth = new Date(year, month + 1, 0).getDate(); // 월의 총 일수
 
+        // 실제 필요한 줄 수 계산
+        const totalCells = firstDay + daysInMonth; // 빈칸 + 실제 날짜
+        const actualRows = Math.ceil(totalCells / 7); // 실제 필요한 줄 수
+
         let calendarYmHTML = `<span>${year}년 ${month + 1}월</span>`
         let calendarHTML = `<div class="calendar-grid">`;
 
@@ -302,9 +306,26 @@ document.addEventListener("DOMContentLoaded", function () {
         const weekDays = ["일", "월", "화", "수", "목", "금", "토"];
         weekDays.forEach(day => calendarHTML += `<div class="day-header">${day}</div>`);
 
+        // 일별 화면 높이 계산
+        let dayHeight;
+        let calculatedHeight;
+
+        if (actualRows === 5) {
+            calculatedHeight = (window.innerHeight - 44 - 60 - 21 -90) / 5;
+            dayHeight = `${calculatedHeight}px`;
+        } else if (actualRows === 6) {
+            calculatedHeight = (window.innerHeight - 44 - 60 - 21 -90) / 6;
+            dayHeight = `${calculatedHeight}px`;
+        }
+
+        console.log("달력의 일수 높이 :: ", dayHeight);
+        console.log("계산된 높이 (숫자) :: ", calculatedHeight);
+        console.log("화면 높이 :: ", window.innerHeight);
+        console.log("실제 줄 수 :: ", actualRows);
+
         // 첫 주 빈 칸 추가
         for (let i = 0; i < firstDay; i++) {
-            calendarHTML += `<div class="empty"></div>`;
+            calendarHTML += `<div class="empty" style="height:${dayHeight}"></div>`;
         }
 
         // 날짜 채우기
@@ -329,13 +350,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 dayClass += ' saturday'
             }
 
-            // 주의 첫째날과 마지막날 클래스 추가 (연속 이벤트용)
-            if (dayOfWeek === 0) { // 월요일
-                dayClass += ' week-start';
-            } else if (dayOfWeek === 6) { // 일요일
-                dayClass += ' week-end';
-            }
-
             // 현재 달에 작성중인 이벤트가 있는지 확인한다.
             if(selectedDate != null && isSameDate(date, selectedDate)) {
                 isActiveEvent = true;
@@ -346,11 +360,11 @@ document.addEventListener("DOMContentLoaded", function () {
             if (showHolidays && holidayDates[fullDateStr]) {
                 dayClass += ' holiday';
                 holidayHTML = holidayDates[fullDateStr].map(name => 
-                    `<button class="dayEventBtn"><span class="dayEventSpan">${name}</span></button>`
+                    `<button class="holidayItem"><span class="holidayItemSpan">${name}</span></button>`
                 ).join('');
             }
-
-            calendarHTML += `<div class="${dayClass}" 
+            
+            calendarHTML += `<div class="${dayClass}" style="height:${dayHeight}"
                                 data-year="${year}" 
                                 data-month="${month}" 
                                 data-day="${day}"
@@ -359,8 +373,8 @@ document.addEventListener("DOMContentLoaded", function () {
                                 <div class="day-number-container">
                                     <div class="day-number">${day}</div>
                                 </div>
-                                <div class="holiday-container">${holidayHTML}</div>
                                 <div class="day-events-container"></div>
+                                <div class="day-holiday-container">${holidayHTML}</div>
                             </div>`;
         }
 
@@ -378,18 +392,13 @@ document.addEventListener("DOMContentLoaded", function () {
         if(isActiveEvent) {
             let title = $('#event-title').val()?.trim() || 'New Event';
             
-            // 범위 선택이 있는지 확인
-            if(selectedEndDate && selectedEndDate !== selectedDate) {
-                drawEvent(title, selectedDate, selectedEndDate);
-            } else {
-                drawEvent(title, selectedDate);
-            }
+            drawEvent(title, initialStaDt, initialEndDt);
         }
 
         // 연속 이벤트 간격 제거 (렌더링 완료 후)
         setTimeout(() => {
             removeEventGaps();
-            adjustCalendarLayout();
+            //adjustCalendarLayout();
         }, 50);
     }
 
@@ -631,79 +640,6 @@ document.addEventListener("DOMContentLoaded", function () {
      */
     $('#calendar').on('click', '.day', handleDayClick);
     $('#calendar').on('dblclick', '.day', handleDayDblclick);
-    /**
-     * 달력화면에 해당 이벤트를 그려준다.
-     */
-    /*
-    function drawEvent(title, d) {
-        // 기존에 이미 새 이벤트 아이템이 있으면 지워준다.
-        const existingEventItems = document.querySelectorAll('.new-event-item');
-        existingEventItems.forEach(item => item.remove());
-        
-        // 클릭한 날짜에 대한 정보
-        const year = d.getFullYear();
-        const month = d.getMonth(); // 월은 0부터 시작
-        const day = d.getDate();
-
-        const container = document.querySelector(
-            `[data-year="${year}"][data-month="${month}"][data-day="${day}"]`
-        );
-
-        console.log(container);
-        
-        const eventContainer = container.querySelector('.day-events-container');
-        
-        // 만약 추가해야할 이벤트 해당 날짜에 대해 위에 휴일이 있거나 첫번째 이벤트가 아닐경우에는 상단마진 2px 설정
-        const hasHoliday = container.querySelector('.holiday-container')?.innerHTML.trim() !== ''; // 휴일 요소
-        const existingEvents = container.querySelectorAll('.new-event-item').length > 0; // 이벤트 요소
-
-        if (eventContainer) {
-            const eventDiv = document.createElement('button');
-            const eventSpan = document.createElement('span');
-            eventSpan.classList.add('dayEventSpan');
-            eventDiv.classList.add('new-event-item');
-
-            // 선택중인 색상
-            const color = $('#event-color-select').val();
-
-            eventDiv.style.backgroundColor = color;
-
-            if(hasHoliday || existingEvents) {
-                console.log("margin 2px 발생")
-                eventDiv.style.marginTop = '2px';
-            }
-
-            // 시작일만 시간 표시
-            const label = `${title}`
-            eventSpan.innerHTML = label;
-            // 구조 조립
-            eventDiv.appendChild(eventSpan);
-            eventContainer.appendChild(eventDiv);
-        }
-    }
-    */
-
-    /*
-    function drawEvent(title, startDate, endDate = null) {
-        // 기존에 이미 새 이벤트 아이템이 있으면 지워준다.
-        const existingEventItems = document.querySelectorAll('.new-event-item');
-        existingEventItems.forEach(item => item.remove());
-        
-        // 종료일이 없으면 시작일과 동일하게 설정 (단일 날짜)
-        const finalEndDate = endDate || startDate;
-        
-        // 날짜 범위 생성
-        const dateRange = getDateRange(startDate, finalEndDate);
-
-        // 이벤트 배치 계획 수립
-        const eventLayout = planEventLayout(dateRange, title);
-        
-        // 각 날짜에 대해 이벤트 그리기
-        dateRange.forEach((date, index) => {
-            drawEventForDate(title, date, index, dateRange.length);
-        });
-    }
-    */
 
     function drawEvent(title, startDate, endDate = null) {
         // 기존에 이미 새 이벤트 아이템이 있으면 지워준다.
@@ -744,13 +680,20 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         // 휴일 및 기존 이벤트 확인
-        const hasHoliday = container.querySelector('.holiday-container')?.innerHTML.trim() !== '';
+        const hasHoliday = container.querySelector('.day-holiday-container')?.innerHTML.trim() !== '';
         const existingEvents = eventContainer.querySelectorAll('.event-item, .new-event-item');
 
         const eventDiv = document.createElement('button');
         const eventSpan = document.createElement('span');
         
         eventSpan.classList.add('dayEventSpan');
+
+        // 임시로 newEventSpan을 사용한다.
+        // 해당 클래스는 이벤트 저장시 사라지고
+        // 새롭게 dayEventSpan을 사용한다.
+
+        //eventSpan.classList.add('newEventSpan');
+
         eventDiv.classList.add('new-event-item');
 
         // 선택중인 색상
@@ -797,6 +740,7 @@ document.addEventListener("DOMContentLoaded", function () {
             label = '';
         }
         
+        $('button.range-start > span').addClass('newEventSpan');
         
         eventSpan.innerHTML = label;
 
@@ -836,8 +780,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 $('#end-date').val(dateStr);
                 $('#end-date')[0]._flatpickr.setDate(dateStr, true);
                 $('#end-date').removeClass('invalid-data');
-            } else { // 종료일 보다 앞이라면
+
                 // 달력에 해당 범위를 그려준다
+                initialStaDt = $('#start-date').val();
+                initialEndDt = $('#end-date').val();
                 drawEvent("New Event", $('#start-date').val(), $('#end-date').val());
             }
         }
@@ -853,6 +799,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 $('#end-date').addClass('invalid-data');
             } else { // 시작일 보다 뒤라면
                 // 달력에 해당 범위를 그려준다
+                $('#end-date').removeClass('invalid-data');
+                initialStaDt = $('#start-date').val();
+                initialEndDt = $('#end-date').val();
                 drawEvent("New Event", $('#start-date').val(), $('#end-date').val());
             }
         }
@@ -867,6 +816,14 @@ document.addEventListener("DOMContentLoaded", function () {
         maxDate: "today",  // 오늘 날짜 이후는 선택할 수 없도록 제한
     });
 
+
+    // 입력할 때마다 실행
+    $('#event-title').on('input', function(e) {
+        const title = e.target.value;
+
+        $('.newEventSpan').text(title);
+    });
+
     // 종일 체크박스 toggle
     $('#all-day').on('change', function () {
         if ($(this).is(':checked')) {
@@ -877,6 +834,7 @@ document.addEventListener("DOMContentLoaded", function () {
             $('.time-input').css('visibility', 'visible');
         }
     });
+
 
     /**
      * 태그 색상 변경 이벤트
@@ -934,9 +892,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 function (res) {
 
                     console.log(res);
+
+
                     // 성공했으면 화면에 그려주는 로직
                     //drawEvent(res.title, res.color, res.start_date, res.end_date)
 
+                    // newEventSpan 클래스는 지워준다.
+                    
                     // 화면에 반영해주는 로직필요
                 },
                 function (xhr, status, error) {

@@ -313,9 +313,7 @@ footer {
 #calendar {
     width: 100%;
     min-width: 500px;
-    margin: auto;
     text-align: center;
-    font-family: Arial, sans-serif;
 }
 
 .logoTitle {
@@ -472,8 +470,6 @@ footer {
     height: 70px;
     z-index: 3;
 }
-
-
 
 .overlay {
     position:absolute;
@@ -656,6 +652,7 @@ footer {
 .calendar-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
+    height: auto;
 }
 
 .day-header {
@@ -663,33 +660,26 @@ footer {
     border-bottom: 0.5px solid #e6e6e6;
     color: rgb(143, 143, 143);
     padding: 9.5px 3px;
-
-    /* 요일헤더 폰트 (일월화수목금토) */
     font-family: 'Gmarket Sans', sans-serif;
 }
 
 .day {
-    height: 168px; /* 고정 높이 지정 */
     padding: 10px 0px;
-    /* padding: 80px 50px; */
     background: white;
     border-bottom: 0.5px solid rgba(0, 0, 0, 0.1);
     cursor: pointer;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start; /* 세로 방향으로 상단 정렬 */
-    align-items: center; /* 가로 방향으로 가운데 정렬 */
-    position: relative; /* 숫자를 상단으로 위치시키기 위한 상대적 위치 */
+    justify-content: flex-start;
+    align-items: center; 
+    position: relative;
     overflow: hidden;
 }
 
 .day.focused {
-    background-color: rgb(248, 248, 248)/* 옅은 회색 배경 */
-  }
+    background-color: rgb(248, 248, 248)
+}
 
-/**
- * 화면 사이즈별로 달력크기를 조정한다
- */
 @media (max-height: 900px) {
     .day {
       height: 129px;
@@ -727,35 +717,28 @@ footer {
     font-family: 'SUIT', sans-serif;
 }
 
-.holiday-container {
+.day-holiday-container {
     width: 100%;
     display: flex;
     max-height: 60px;
     flex-direction: column;
     overflow-y: auto;
     position: relative;
+    margin: 0.5px 0px;
 }
 
-.holiday-event-item {
-    white-space: nowrap;
-    overflow: hidden; /* 넘칠 때 잘리게 */
-    background-color: #ef4444;
-    color: white;
-    border-radius: 4px;
-}
-
-.dayEventBtn {
+.holidayItem {
     text-align: left;
     display: flex;
     background-color: #e73b3b;
     color: white;
     height: 20px;
+    margin: 0.5px 0px;
     /* 휴일 이벤트 폰트 */
     font-family: 'Pretendard', sans-serif;
     font-weight: 700;
     align-items: center;
     width: calc(100% - 6px);
-    margin: 0;
     padding: 0 6px;
     font-size: 12px;
     border: none;
@@ -764,43 +747,6 @@ footer {
     user-select: none; /* 텍스트 선택 방지 */
 }
 
-.dayEventSpan {
-    flex: 1;
-    overflow: hidden;
-    white-space: nowrap;
-}
-
-/* 추가 등록한 이벤트 모음 */
-.day-events-container {
-    width: 100%;
-    display: flex;
-    max-height: 120px;
-    flex-direction: column;
-    overflow-y: auto;
-    position: relative;
-}
-
-/*
-.new-event-item {
-    text-align: left;
-    display: flex;
-    white-space: nowrap;
-    overflow: hidden;
-    color: white;
-    border: none;
-    height: 20px;
-    font-weight: 700;
-    align-items: center;
-    width: calc(100% - 6px);
-    margin: 0;
-    padding: 0 6px;
-    font-size: 12px;
-    border-radius: 4px;
-    pointer-events: none;
-    user-select: none;
-    font-family: 'Pretendard', sans-serif;
-}
-*/
 .event-item {
     text-align: left;
     display: flex;
@@ -1707,13 +1653,6 @@ html, body {
 }
 
 
-
-
-
-
-
-
-
 /* ========== 이벤트 컨테이너 및 기본 스타일 ========== */
 .day-events-container {
     width: 100%;
@@ -1722,8 +1661,6 @@ html, body {
     flex-direction: column;
     overflow-y: auto;
     position: relative;
-    min-height: 22px;
-    margin-top: 2px;
 }
 
 /* ========== 기본 이벤트 아이템 스타일 ========== */
@@ -1745,6 +1682,7 @@ html, body {
     font-weight: 700;
     align-items: center;
     box-sizing: border-box;
+    margin: 0.5px 0px;
 }
 
 /* ========== 텍스트 스타일 (통합) ========== */
@@ -1790,7 +1728,8 @@ html, body {
 
 /* 중간 날짜 텍스트 숨김 */
 .range-middle .dayEventSpan,
-.continuous-middle .dayEventSpan {
+.continuous-middle .dayEventSpan,
+.range-end .dayEventSpan {
     display: none;
 }
 
