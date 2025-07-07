@@ -471,26 +471,9 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     /**
-     * 메인사이즈 조정 및 사이드 섹션을 호출한다
-     */
-    function onEventForm() {
-        $('.right-section').removeClass('slide-out-right');
-        $('.right-section').removeClass('hidden-slide');
-        $('.centerSection').removeClass('expand-main');
-        $('.centerSection').addClass('shirink-main');
-    }
-
-    /**
      * 메인사이즈 조정 및 사이드섹션을 닫는다.
      */
     function offEventForm() {
-        /*
-        $('.right-section').addClass('slide-out-right');
-        $('.right-section').addClass('hidden-slide');
-        $('.centerSection').removeClass('shirink-main');
-        $('.centerSection').addClass('expand-main');
-        */
-
         if (layoutState === 'bothExpanded') {
             expandLeftSection();
         } else if(layoutState === 'rightExpanded') {
@@ -502,7 +485,8 @@ document.addEventListener("DOMContentLoaded", function () {
      * 일정 생성 섹션을 호출한다
      */
     $('#toggleEvent').on('click', function() {
-        onEventForm()
+        expandRightSection();
+        //onEventForm()
     });
 
     /**
@@ -551,8 +535,8 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     
     function handleDayDblclick() {
-        onEventForm();
-        
+        //onEventForm();
+        console.log('clicked handleDayClick');
         // layout
         if (layoutState === 'default') {
             expandRightSection();
@@ -574,8 +558,9 @@ document.addEventListener("DOMContentLoaded", function () {
      */
     
     function handleDayClick1 () {
-        onEventForm();
+        //onEventForm();
 
+        console.log('clicked handleDayClick1');
         // 클릭한 개체를 탐지한다. 날짜 값을 받는다.
         const year = $(this).data('year');
         const month = $(this).data('month');
@@ -600,7 +585,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     function handleDayDblclick1 () {
-        onEventForm();
+        //onEventForm();
 
         // 클릭한 개체를 탐지한다. 날짜 값을 받는다.
         const year = $(this).data('year');

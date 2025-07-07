@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block content %}
-<div class="container-event">
+<div class="calendarContainer">
     <!-- 공통 헤더 포함 -->
     <nav class="event-header">
         <div class="btnCalList">
@@ -70,7 +70,7 @@
     </nav>
 
 
-    <div class="event-contents">
+    <div class="calendarContent">
         <div class="section left-section" id="left-section">
             <ul class="calList">
                 <!-- 항목은 JS로 생성됨 -->
@@ -96,10 +96,9 @@
                 </div>
             {% endif %}
         </div>
-        <!-- <div class="right-section hidden-slide" id="right-section">-->
         <div class="section right-section" id="right-section">
             <div class="custom-event-form-wrap">
-                <form id="custom-event-form" class="custom-event-form">
+                <form id="custom-event-form" class="custom-event-form" action="#">
                     {% csrf_token %}
                     <!-- 제목 -->
                     <div>

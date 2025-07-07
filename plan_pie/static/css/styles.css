@@ -1,10 +1,4 @@
 /* static/styles.css */
-
-/*
-갈색 : 4B2E2B
-
-*/
-
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -135,14 +129,15 @@ footer {
     text-decoration: underline;
 }
 
-.container-event {
-    flex-direction: column;
+.calendarContainer {
     width: 100%;
     height: 100vh; /* main 영역이 화면을 꽉 채우도록 설정 */
+    flex-direction: column;
     margin-left: auto;
     margin-right: auto;
 }
-.event-contents {
+
+.calendarContent {
     background-color: white; /* 이벤트 화면 최상위 */
     display: flex;
     overflow: hidden; /* 전체 스크롤 막기 */
@@ -238,7 +233,7 @@ footer {
 }
 
 .section {
-    transition: width 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.3s ease;
+    transition: width 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.3s ease;
     position: relative;
     overflow: hidden;
     will-change: width;
@@ -261,31 +256,26 @@ footer {
 
 /* 오른쪽 섹션(일정 등록) */
 .right-section {
-    /*flex: 0 0 25%;  오른쪽 영역을 1:1 비율로 설정 */
     width: 0%;
     overflow: hidden;
     border: 0.5px solid #e6e6e6; /* 폼 주위에 테두리 */
     border-top: none;
     border-left: none;
-    /*height: 95vh;  폼 영역 높이 설정 */
-    transition: all 0.3s ease-in-out;
     flex-shrink: 0;
     background-color: white;
     box-sizing: border-box;
-    user-select: none; /* 텍스트 선택 방지 */
+    user-select: none;
+    position: relative; /* 추가 */
+    /*
+    transition: width 0.6s cubic-bezier(0.25, 0.8, 0.25, 1),
+                transform 0.8s cubic-bezier(0.25, 0.8, 0.25, 1),
+                opacity 0.6s ease-out,
+                visibility 0s linear 0s
+                */
+
+    /*transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);*/
 }
 
-/*
-.left-section,
-.centerSection {
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-*/
-.right-section {
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-                opacity 0.3s ease,
-                visibility 0.3s ease;
-}
 
 @media (max-width: 768px) {
     /* form이 활성화되었을 때 */
@@ -299,7 +289,7 @@ footer {
         z-index: 1000;
     }
     
-    .event-contents:has(.right-section.active) .centerSection {
+    .calendarContent:has(.right-section.active) .centerSection {
         display: none; /* 완전히 숨김 */
     }
 }
@@ -799,21 +789,6 @@ footer {
     visibility: hidden;
 }
 
-/* side section slide*/
-.slide-out-right {
-    transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
-    transform: translateX(100%);
-    opacity: 0;
-}
-
-.shrink-main {
-    flex: 0 0 75%;
-}
-
-.expand-main {
-    flex: 0 0 100%;
-}
-
 .custom-event-form-wrap {
     display: flex;
     justify-content: space-between;
@@ -1034,48 +1009,59 @@ footer {
 }
 
 .form-bottom-group {
-    text-align: right;
-    margin-top: 1.5rem;
-    padding: 20px 24px;
+    display: flex;
+    justify-content: flex-end;
+    padding: 20px;
+    margin-top: auto; /* 자동으로 아래쪽으로 밀어냄 */
 
-    /* 추가: flex 레이아웃 명시적 설정 */
-    display: flex !important;
-    flex-direction: row !important;
-    justify-content: flex-end !important;
-    align-items: center !important;
-    gap: 10px !important;
+    min-width: 360px; /* 버튼들이 들어갈 최소 너비 확보 */
+    flex-shrink: 0; /* 축소 방지 */
 }
 
 .form-bottom-group > :first-child {
-    background-color: white;
-    color: gray;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 0.25rem;
-    transition: all 0.15s ease-out;
-    cursor: pointer;
+    height: 40px;
+    color: rgb(143, 143, 143);
+    background-color: rgb(255, 255, 255);
+    margin-right: 12px;
+    padding: 0px 28px;
+    font-size: 0.875rem;
 
-    /* 추가: 버튼 크기 고정 */
-    flex-shrink: 0;
-    min-width: 60px;
+    white-space: nowrap;
+    text-align: center;
+    text-overflow: ellipsis;
+    border: .5px solid #ededed;
+    border-radius: 8px;
+    outline: none;
+    cursor: pointer;
+    transition-timing-function: ease-in-out;
+    transition-duration: .2s;
+    transition-property: background-color, color;
+    user-select: none;
 }
-  
+
 .form-bottom-group > :first-child:hover {
     background-color: #D3D3D3;
 }
 
 .form-bottom-group > :nth-child(2) {
-    background-color: #3b82f6;
+    height: 40px;
     color: #ffffff;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 0.25rem;
-    transition: all 0.15s ease-out;
+    background-color: #3b82f6;
+    padding: 0px 28px;
+    border-radius: 8px;
     cursor: pointer;
 
-    /* 추가: 버튼 크기 고정 */
-    flex-shrink: 0;
-    min-width: 60px;
+    white-space: nowrap;
+    text-align: center;
+    text-overflow: ellipsis;
+    border: .5px solid #ededed;
+    border-radius: 8px;
+    outline: none;
+    transition-timing-function: ease-in-out;
+    transition-duration: .2s;
+    transition-property: background-color, color;
+    user-select: none;
+    margin-right: var(--kqj581);
 }
   
 .form-bottom-group > :nth-child(2):hover {
@@ -1089,8 +1075,6 @@ footer {
     stroke: #000000; /* 색상 바꾸기 (indigo-600 같은 느낌) */
     stroke-width: 2;
 }
-
-
 
 /* 반응형에서도 버튼 레이아웃 유지 */
 @media (max-width: 768px) {
@@ -1130,11 +1114,9 @@ footer {
     background: rgba(231, 59, 59, 0.1);
 }
 
-
 html, body {
     height: 100%;
 }
-
 
 /* event-tab */
 .calendar-tab {
@@ -1183,8 +1165,6 @@ html, body {
     color: #fff;
     font-weight: bold;
 }
-
-
 
 #search-input {
     padding: 5px;
@@ -1251,12 +1231,9 @@ html, body {
     background-size: 16px;
 }
 
-
-
-/* common - popup */
 .confirm-popup {
-    position: relative;  /* 버튼을 상대적으로 위치시킬 수 있게 팝업을 relative로 설정 */
-    width: 400px;        /* 팝업 너비 */
+    position: relative;
+    width: 400px;
     padding: 20px;
     background-color: white;
     border-radius: 8px;
@@ -1271,9 +1248,9 @@ html, body {
     align-items: center;
     justify-content: center;
     z-index: 999;
-  }
+}
   
-  .popup-box {
+.popup-box {
     background: #fff;
     padding: 20px 30px;
     border-radius: 10px;
@@ -1281,29 +1258,29 @@ html, body {
     text-align: center;
     width: 300px;
     animation: fadeIn 0.2s ease-in-out;
-  }
-  
-  .popup-message {
+}
+
+.popup-message {
     margin-bottom: 20px;
     font-size: 16px;
-  }
+}
   
-  .popup-buttons {
+.popup-buttons {
     float: right;
     bottom: 10px;  /* 하단에서 10px 떨어지도록 */
     right: 10px;   /* 오른쪽에서 10px 떨어지도록 */
     display: flex;
     gap: 10px;     /* 버튼 간 간격 10px */
-  }
+}
   
-  .popup-btn {
+.popup-btn {
     padding: 8px 16px;
     border-radius: 5px;
     font-weight: bold;
     cursor: pointer;
     border: none;
     font-size: 13px;
-  }
+}
   
   .popup-btn.yes {
     background-color: #B78C5C; /* 갈색 */
