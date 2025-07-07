@@ -72,20 +72,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
             li.innerHTML = calImageHtml.trim();
-            /*
-            li.innerHTML = `
-                <div class="calImage">
-                    <img src="${imgSrc}" alt="달력" />
-                    <div class="overlay" ${checkStyle}>
-                        <span>
-                            <img class="checkImg" src="${check}" />
-                        </span>
-                    </div>
-                </div>
-                
-                <div class="calTitle">${name}</div>
-            `.trim();
-            */
 
             li.addEventListener('click', () => {
                 console.log(`선택한 달력: ${name}`);
@@ -100,16 +86,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // TEST 햄버거 버튼 클릭 시 열기/닫기 토글
     calButton.addEventListener('click', function (e) {
-        //e.stopPropagation(); // 다른 이벤트 방지
-        //console.log("toggle btn click");
-        //calList.classList.toggle('show');
-
-        // left section 활성화
-
+        console.log('현재 레이아웃 상태 : ' + layoutState);
         if (layoutState === 'default') {
             expandLeftSection();
         } else if(layoutState === 'rightExpanded') {
             expandBothSection();
+        } else if (layoutState === 'bothExpanded') {
+            expandRightSection();
         } else {
             resetLayout();
         }
@@ -189,97 +172,6 @@ document.addEventListener("DOMContentLoaded", function () {
     if(document.getElementById("next")) {
         document.getElementById("next").addEventListener("click", () => renderCalendar(currentYear, currentMonth + 1));
     }
-    
-    /**
-     * 달력데이터를 갱신및 생성한다.
-     * @param {*} year 
-     * @param {*} month 
-     */
-    /*
-    function renderCalendar(year, month) {
-        if(!calendarEl) {
-            return;
-        }
-
-        calendarEl.innerHTML = ""; // 기존 내용 지우기
-        calendarYm.innerHTML = "";
-        currentYear = year;
-        currentMonth = month;
-        let isActiveEvent = false;
-
-        const firstDay = new Date(year, month, 1).getDay(); // 월의 첫째 날 요일
-        const daysInMonth = new Date(year, month + 1, 0).getDate(); // 월의 총 일수
-
-        let calendarYmHTML = `<span>${year}년 ${month + 1}월</span>`
-        let calendarHTML =  `<div class="calendar-grid">`;
-
-        // 요일 헤더 추가
-        const weekDays = ["일", "월", "화", "수", "목", "금", "토"];
-        weekDays.forEach(day => calendarHTML += `<div class="day-header">${day}</div>`);
-
-        // 첫 주 빈 칸 추가
-        for (let i = 0; i < firstDay; i++) {
-            calendarHTML += `<div class="empty"></div>`;
-        }
-
-        // 날짜 채우기
-        for (let day = 1; day <= daysInMonth; day++) {
-            const fullDateStr = `${year}-${padMonth(month)}-${padDay(day)}`;
-            
-            let dayClass = 'day';
-            let holidayHTML = '';
-
-            const date = new Date(year, month, day);
-            const dayOfWeek = date.getDay();
-
-            // 달력의 날짜가 오늘날짜라면 표시해준다
-            if(fullDateStr == todayStr) {   
-                dayClass += ' today'
-            }
-            // 일요일과 토요일 날짜색상을 적용해준다
-            if (dayOfWeek === 0) {
-                dayClass += ' sunday'
-            } else if (dayOfWeek === 6) {
-                dayClass += ' saturday'
-            }
-
-            // 현재 달에 작성중인 이벤트가 있는지 확인한다.
-            if(selectedDate != null && isSameDate(date, selectedDate)) {
-                isActiveEvent = true;
-                console.log("현재달에 작성중인 이벤트가 있습니다.");
-            }
-
-            // 공휴일 체크박스에 체크되어있는경우 실행한다.
-            if (showHolidays && holidayDates[fullDateStr]) {
-                dayClass += ' holiday';
-                holidayHTML = holidayDates[fullDateStr].map(name => 
-                    `<button class="dayEventBtn"><span class="holidayItemSpan">${name}</span></button>`
-                ).join('');
-            }
-
-
-
-            calendarHTML += `<div class="${dayClass}" data-year="${year}" data-month="${month}" data-day="${day}">
-                                <div class="day-number-container"><div class="day-number">${day}</div></div>
-                                <div class="holiday-container">${holidayHTML}</div>
-                                <div class="day-events-container"></div>
-                            </div>`;
-        }
-
-        calendarHTML += `</div>`;
-        calendarEl.innerHTML = calendarHTML;
-        calendarYm.innerHTML = calendarYmHTML;
-
-        // 달력의 이벤트 및 요소들 초기 세팅
-        initWindow();
-
-        if(isActiveEvent) {
-            let title = $('#event-title').val()?.trim() || 'New Event';
-
-            drawEvent(title, selectedDate);
-        }
-    }
-    */
 
     function renderCalendar(year, month) {
         if(!calendarEl) {
@@ -463,8 +355,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    
-
     function initWindow() {
         // 시간 요소를 숨긴다.
         $('.time-input').css('visibility', 'hidden');
@@ -494,7 +384,6 @@ document.addEventListener("DOMContentLoaded", function () {
      */
     $('#close-section-btn').on('click', function () {
         // 변경된 값이 있는지 체크할 필요가 있다.
-
         showConfirmPopup("정말 취소하시겠습니까?", function () {
             const existingEventItems = document.querySelectorAll('.new-event-item');
             existingEventItems.forEach(item => item.remove());
@@ -519,18 +408,60 @@ document.addEventListener("DOMContentLoaded", function () {
         $(el).addClass('focused');
     }
     
-    function updateFlatpickr(date) {
+    function updateFlatpickr(startDate, endDate) {
+        /*
         const formatted = formatDate(date);
         $('#start-date').val(formatted);
         $('#end-date').val(formatted);
         $('#start-date')[0]._flatpickr.setDate(date, true);
         $('#end-date')[0]._flatpickr.setDate(date, true);
+        */
+       
+        // 종료일이 없으면 시작일을 사용
+        const finalEndDate = endDate || startDate;
+        
+        const formattedStartDate = formatDate(startDate);
+        const formattedEndDate = formatDate(finalEndDate);
+        
+        // 시작일 설정
+        $('#start-date').val(formattedStartDate);
+        $('#start-date')[0]._flatpickr.setDate(startDate, true);
+        
+        // 종료일 설정
+        $('#end-date').val(formattedEndDate);
+        $('#end-date')[0]._flatpickr.setDate(finalEndDate, true);
     }
 
     function handleDayClick() {
         const clickedDate = getClickedDate(this);
         selectedDate = clickedDate;
-    
+        
+        // 현재 수정중인 날짜가 있으면
+        if(initialStaDt && initialEndDt) {
+            // 두 날짜의 차이를 구해서 현재 클릭한 날짜부터 차이만큼 다시 그려준다
+            const startDate = new Date(initialStaDt);
+            const endDate = new Date(initialEndDt);
+            const dayDifference = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
+            
+            // 새로운 시작일 설정
+            const newStartDate = new Date(clickedDate);
+            
+            // 새로운 종료일 계산 (시작일 + 기존 기간)
+            const newEndDate = new Date(newStartDate);
+            newEndDate.setDate(newStartDate.getDate() + dayDifference);
+            
+            // 날짜 업데이트
+            initialStaDt = newStartDate.toISOString().split('T')[0]; // YYYY-MM-DD 형식
+            initialEndDt = newEndDate.toISOString().split('T')[0];
+            
+            let title = $('#event-title').val()?.trim() || 'New Event';
+
+            updateFlatpickr(newStartDate, newEndDate);
+
+            // 화면 다시 그리기 (이 부분은 실제 렌더링 함수명으로 바꿔주세요)
+            drawEvent(title, newStartDate, newEndDate); // 또는 updateDateRange() 등
+        }
+
         setFocusOnDay(this);
     }
     
