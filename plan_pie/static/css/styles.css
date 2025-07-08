@@ -217,10 +217,14 @@ footer {
     color: #4B2E2B;
     background-color: #d3d3d3;
 }
+.profile-section{
+    padding: 10px 10px;
+    justify-content: center;
+}
 
 .profile-rounded {
-    width: 2.5rem;        /* 너비 */
-    height: 2.5rem;       /* 높이 (동일하게 해야 정원) */
+    width: 40px;        /* 너비 */
+    height: 40px;       /* 높이 (동일하게 해야 정원) */
     border-radius: 50%;   /* 정원 */
     border: none;         /* 테두리 제거 */
     display: flex;        /* 가운데 정렬 위해 flex 사용 */
@@ -228,8 +232,6 @@ footer {
     object-fit: contain; /* 👈 비율 유지하며 컨테이너에 맞춤 */
     justify-content: center;
     cursor: pointer;
-    width: 60px;
-    height: 60px;
 }
 
 .section {
