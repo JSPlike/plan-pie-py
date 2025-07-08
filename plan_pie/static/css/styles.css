@@ -244,7 +244,7 @@ footer {
 .left-section {
     width: 60px;
     background-color: white;
-    transition: all 0.3s ease-in-out;
+    /*transition: all 0.3s ease-in-out;*/
 }
 
 /* 왼쪽 섹션(달력) */
@@ -408,7 +408,7 @@ footer {
     margin-bottom: 8px;
     border-radius: 8px;
     cursor: pointer;
-    transition: all 0.4s ease
+    /* transition: all 0.4s ease */
 }
 
 .calAddItem.calImage {
@@ -422,7 +422,6 @@ footer {
 .calAddItem.calTitle {
     display: none;
 }
-
 
 .calImage.small {
     width: 40px;
