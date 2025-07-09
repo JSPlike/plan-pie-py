@@ -106,7 +106,7 @@ document.addEventListener("DOMContentLoaded", function () {
    
     // 레이아웃
     const LAYOUT_BREAKPOINTS = {
-        leftDeft: '60px',
+        leftDeft: '70px',
         leftExpd: '300px',
         rightDeft: '0px',
         rightExpd: '400px'
