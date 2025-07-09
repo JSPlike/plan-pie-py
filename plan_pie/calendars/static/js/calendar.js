@@ -35,7 +35,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // TEST 달력 테마를 위한 테스트 데이터
     const calendars = document.getElementById('calendars_json') ? JSON.parse(document.getElementById('calendars_json').textContent) : null; 
     const calList = document.querySelector('.calList');
-    const calButton = document.getElementById('calThem');
+    const calTheme = document.getElementById('calThem');
     const calAddButton = document.getElementById('btnAddCal');
 
     if(calendars !== null) {
@@ -45,7 +45,9 @@ document.addEventListener("DOMContentLoaded", function () {
             li.classList.add('calItem');
             
             
+            
             console.log(calendar, index);
+
             // 저장된 이미지가 있으면 그 이미지 사용 없으면 default
             let imgSrc = calendar.image || "/static/image/bg-calendar.png";
             let isImg = calendar.image ? true : false;
@@ -56,10 +58,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
             let calImageHtml = '';
 
+            console.log("달력이미지 ")
+            console.log(name);
+
             if(isImg) {
                 calImageHtml = `
-                    <div class="calImage small">
-                        <img src="${imgSrc}" alt="cal" />
+                    <div class="calContainer small">
+                        <img class="calImage" src="${imgSrc}" alt="cal" />
+                        <span class="calTitle">${name}</span>
                     </div>
                 `
             } else {
@@ -75,7 +81,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
             li.addEventListener('click', () => {
                 console.log(`선택한 달력: ${name}`);
-                //calList.style.display = 'none'; // 선택 후 닫기
             });
 
             calList.insertBefore(li, calAddButton);
@@ -85,7 +90,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // TEST 햄버거 버튼 클릭 시 열기/닫기 토글
-    calButton.addEventListener('click', function (e) {
+    calTheme.addEventListener('click', function (e) {
         console.log('현재 레이아웃 상태 : ' + layoutState);
         if (layoutState === 'default') {
             expandLeftSection();
@@ -108,10 +113,12 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 
     function updateCalendarItemStates(isExpanded) {
-        document.querySelectorAll('.calImage').forEach(item => {
+        document.querySelectorAll('.calContainer').forEach(item => {
             item.classList.remove('small', 'large');
             item.classList.add(isExpanded ? 'large' : 'small');
         });
+
+
     }
 
     function expandLeftSection() {

@@ -235,7 +235,7 @@ footer {
 }
 
 .section {
-    transition: width 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.3s ease;
+    transition: width 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.3s ease;
     position: relative;
     overflow: hidden;
     will-change: width;
@@ -398,7 +398,7 @@ footer {
     z-index: 1001;
 }
 
-.calItem, .calAddItem {
+.calItem {
     display: flex;
     text-align: center;
     align-items: center;
@@ -408,21 +408,88 @@ footer {
     margin-bottom: 8px;
     border-radius: 8px;
     cursor: pointer;
-    /* transition: all 0.4s ease */
+    transition: all 0.3s ease
 }
 
-.calAddItem.calImage {
-    text-align: center;
+/* 기본적으로 제목 숨김 (small일 때) */
+/* .calAddItem.calTitle {
+    opacity: 0;
+    transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+} */
+
+/* large일 때 제목 보여주기 */
+/* .calAddItem.calTitle.large {
+    display: flex;
+    opacity: 1;
+} */
+
+.calContainer {
+    /* width: 100%; */
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+/*
+.calImage {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+    */
+
+/* Small 사이즈 */
+.calItem .calContainer.small .calImage{
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.calAddItem.calTitle .plus{
-    text-align: center;
-}
-
-.calAddItem.calTitle {
+.calItem .calContainer.small .calTitle {
     display: none;
 }
 
+/* Large 사이즈 */
+.calItem .calContainer.large .calImage{
+    position: relative;
+    background-color: white;
+    width: 80px;
+    height: 70px;
+    margin-right: 8px;
+    z-index: 3;
+}
+
+.calItem .calContainer.large .calTitle {
+    opacity: 1;
+    color: #333;
+    flex: 1; /* 남은 공간 차지 */
+    text-align: left;
+    font-size: 18px;
+    font-weight: 500;
+    font-family: 'Pretendard', sans-serif;
+    align-items: center;
+}
+
+/* 이미지가 없을 때 스타일 */
+.calImage.no-image {
+    background-color: #cceeff;
+}
+
+.calImage.no-image .calendar-initial {
+    color: white;
+    font-weight: bold;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 호버 효과 (선택사항) */
+.calImage:hover {
+    transform: scale(1.05);
+}
+
+/*
 .calImage.small {
     width: 40px;
     height: 40px;
@@ -438,7 +505,6 @@ footer {
 }
 
 .calImage.small.no-image {
-    background-color: #cceeff; /* 하늘색 */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -462,17 +528,17 @@ footer {
     z-index: 3;
 }
 
+*/
+
 .overlay {
     position:absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-
     display: flex;
     justify-content: center; /* 가로 중앙 */
     align-items: center;     /* 세로 중앙 */
-
     background-color: rgba(0, 0, 0, 0.4); /* 어두운 투명 배경 */
     opacity: 1;
     transition: opacity 0.3s ease-in-out;
@@ -500,47 +566,178 @@ footer {
     opacity: 1;
 }
 
-.calImage img {
-    width: 100%;
-    height: 100%;
-    object-fit: fill;
-}
-
-.calTitle {
-    font-size: 18px;
-    font-weight: 500;
-    font-family: 'Pretendard', sans-serif;
-    display: flex;
-    align-items: center;
-}
-/*
-#btnAddCal .calImage {
-    width: 80px;
-    height: 60px;
-    border: 1px dashed #ccc;
-    background-color: white;
-}
-*/
-#btnAddCal .plus {
+.calContainer .plus {
     color: #ccc;
     font-size: 40px;
 }
 
-#btnAddCal .calTitle {
+/*
+    AddCalendar Button 부분
+ */
+
+/*
+.calAddItem {
+    display: flex;
+    text-align: center;
+    align-items: center;
+    padding: 0px 10px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease
+}
+
+.calAddItem .calContainer {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: 10px;
+}
+
+.calAddItem .calContainer.small {
+    justify-content: center; 
+    gap: 0;
+}
+
+.calAddItem .calContainer.large {
+    justify-content: flex-start;
+}
+
+.calAddItem .plus{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 80px;
+    height: 70px;
+    border: 0.5px solid #e8e8e8;
+    border-radius: 8px;
+    text-align: center;
+    flex-shrink: 0;
+    opacity: 0;
+    transform: translateX(-10px);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.calAddItem .calContainer.small .plus {
+    opacity: 0;
+    transform: translateX(-10px);
+}
+
+.calAddItem .calContainer.large .plus {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.calAddItem .calContainer.small .calTitle {
+    width: 0;
+    opacity: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    transform: translateX(-10px);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.calAddItem .calContainer.large .calTitle {
+    width: auto;
+    opacity: 1;
+    flex: 1;
+    text-align: left;
     color: #ccc;
     font-size: 18px;
     font-weight: 300;
     font-family: 'Pretendard', sans-serif;
-    display: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transform: translateX(0);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+*/
+
+.calAddItem {
+    display: flex;
+    text-align: center;
     align-items: center;
+    padding: 0px 10px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
 }
 
-#btnAddCal:hover .calImage {
+.calAddItem .calContainer {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: 10px;
+    justify-content: flex-start; /* 항상 flex-start 유지 */
+    position: relative;
+}
+
+.calAddItem .calContainer.small {
+    gap: 0;
+}
+
+.calAddItem .calContainer.large {
+    gap: 10px;
+}
+
+.calAddItem .plus {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 80px;
+    height: 70px;
+    border: 0.5px solid #e8e8e8;
+    border-radius: 8px;
+    text-align: center;
+    flex-shrink: 0;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.calAddItem .calContainer.small .plus {
+    opacity: 0;
+    transform: scale(0.8);
+}
+
+.calAddItem .calContainer.large .plus {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.calAddItem .calContainer.small .calTitle {
+    width: 0;
+    opacity: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    transform: scale(0.9); /* 살짝 작아지며 사라짐 */
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.calAddItem .calContainer.large .calTitle {
+    width: auto;
+    opacity: 1;
+    flex: 1;
+    text-align: left;
+    color: #ccc;
+    font-size: 18px;
+    font-weight: 300;
+    font-family: 'Pretendard', sans-serif;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transform: scale(1); /* 원래 크기로 나타남 */
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.calAddItem:hover .calContainer {
     border: 1px dashed #000000;
 }
 
-#btnAddCal:hover .plus,
-#btnAddCal:hover .calTitle {
+.calAddItem:hover .plus,
+.calAddItem:hover .calTitle {
     color: #000000;
 }
 
@@ -630,7 +827,6 @@ footer {
     stroke: #4B2E2B; /* hover 시 색상 (갈색) */
     /*stroke: #808080; hover 시 색상 (옅은 회색) */
 }
-
 
 .calendar-header button:hover {
     background: #d3d3d3; /* 호버 시 배경색 변화 */
