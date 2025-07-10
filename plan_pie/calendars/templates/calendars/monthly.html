@@ -174,8 +174,7 @@
                             <select name="calendar_id">
                                 {% for calendar in calendars %}
                                     <option value="{{ calendar.id }}" {% if forloop.first %}selected{% endif %}>
-                                        {{ calendar.calendar_name }}
-                                        ddd
+                                        {{ calendar.name }}
                                     </option>
                                 {% endfor %}
                             </select>
