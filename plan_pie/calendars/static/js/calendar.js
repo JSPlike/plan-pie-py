@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const today = new Date();
     lucide.createIcons();  // 아이콘 렌더링
     const csrftoken = getCookie('csrftoken');
+
     let selectedDate = null; // 선택되어진 날짜
     let currentYear = today.getFullYear();  // 현재 화면의 년수
     let currentMonth = today.getMonth(); // 현재 화면의 월수
@@ -44,9 +45,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const li = document.createElement('li');
             li.classList.add('calItem');
             
-            
-            
-            console.log(calendar, index);
+            console.log(calendar);
 
             // 저장된 이미지가 있으면 그 이미지 사용 없으면 default
             let imgSrc = calendar.image || "/static/image/bg-calendar.png";
@@ -57,9 +56,6 @@ document.addEventListener("DOMContentLoaded", function () {
             const checkStyle = index === 0 ? 'style="opacity: 1;"' : 'style="opacity: 0;"'
 
             let calImageHtml = '';
-
-            console.log("달력이미지 ")
-            console.log(name);
 
             if(isImg) {
                 calImageHtml = `
@@ -216,11 +212,6 @@ document.addEventListener("DOMContentLoaded", function () {
             calculatedHeight = (window.innerHeight - 44 - 60 - 21 -90) / 6;
             dayHeight = `${calculatedHeight}px`;
         }
-
-        console.log("달력의 일수 높이 :: ", dayHeight);
-        console.log("계산된 높이 (숫자) :: ", calculatedHeight);
-        console.log("화면 높이 :: ", window.innerHeight);
-        console.log("실제 줄 수 :: ", actualRows);
 
         // 첫 주 빈 칸 추가
         for (let i = 0; i < firstDay; i++) {
@@ -620,7 +611,7 @@ document.addEventListener("DOMContentLoaded", function () {
         eventDiv.classList.add('new-event-item');
 
         // 선택중인 색상
-        const color = $('#event-color-select').val() || '#3b82f6';
+        const color = $('#cmbEventColor').val() || '#3b82f6';
         eventDiv.style.backgroundColor = color;
 
         // 마진 설정 (휴일이나 기존 이벤트가 있으면)
@@ -762,11 +753,14 @@ document.addEventListener("DOMContentLoaded", function () {
     /**
      * 태그 색상 변경 이벤트
      */
-    $('#event-color-select').on('change', function () {
+    $('#cmbEventColor').on('change', function () {
         const selectedColor = $(this).val();
 
-        $('.option-section .icon').css('stroke', selectedColor);
+        $('.option-section .optIcon').css('stroke', selectedColor);
         $('.new-event-item').css('background', selectedColor);
+        $('.event-option select').css('border-bottom-color', selectedColor);
+        $('.form-contents input:checked').css('background-color', selectedColor);
+        $('.form-contents input:checked').css('border-color', selectedColor);
     });
 
     /**

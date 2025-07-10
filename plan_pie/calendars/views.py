@@ -184,6 +184,7 @@ def monthly(request):
     holiday_keys = r.keys('holiday:*') # redis key
 
     holidays_json = []
+    
     for key in holiday_keys:
         date_str = key.split(':')[1]
         title = r.get(key)
@@ -194,30 +195,17 @@ def monthly(request):
             'allDay': True,
             'type': 'holiday',
         })    
-    """
-    return render(request, 'calendars/monthly.html', {
-        'events': events, 
-        'invites': invites, 
-        'events_json': json.dumps(events_json, indent=4, ensure_ascii=False),
-        'invites_json': invites_json,
-        'holidays_json': json.dumps(holidays_json, ensure_ascii=False),
-        'calendars_json': json.dumps(calendars_json, ensure_ascii=False), # 현재유저가 참여중인 달력 목록
-        'pendingcalendars_json': json.dumps(pendingcalendars_json, ensure_ascii=False), # 현재유저가 참여중인 달력 목록
-        'participants_json': json.dumps(participants_json, ensure_ascii=False),
-    })
-    """
-
-
+        
     context = {
-        #'events': events,
-        #'invites': invites,
-        #'events_json': json.dumps(events_json, indent=4, ensure_ascii=False),
-        'holidays_json': json.dumps(holidays_json, ensure_ascii=False),
+        'calendars': calendars_json,  # 원본 데이터
     }
 
     if calendars_json:
         context['calendars_json'] = json.dumps(calendars_json, ensure_ascii=False)
 
+    if holidays_json:
+        context['holidays_json'] = json.dumps(holidays_json, ensure_ascii=False)
+        
     if pendingcalendars_json:
         context['pendingcalendars_json'] = json.dumps(pendingcalendars_json, ensure_ascii=False)
 
@@ -226,6 +214,8 @@ def monthly(request):
 
     if invites_json:
         context['invites_json'] = invites_json  # 이미 JSON인 경우
+        
+    
 
     return render(request, 'calendars/monthly.html', context)
     

@@ -920,17 +920,51 @@ footer {
 }
 
 .form-contents > * + * {
-    margin-left: 0.5rem; /* Tailwind의 space-x-2는 0.5rem (8px) 간격 */
+    margin-left: 0.5rem;
 }  
 
-.form-contents > :first-child {
-    vertical-align: middle;
-    width: 1rem;
-    height: 1rem;
+.form-contents input {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 1px solid #cbd5e0;
+    border-radius: 6px;
+    background-color: white;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-.form-contents > :nth-child(2) {
+.form-contents input:checked {
+    background-color: #6366f1;
+    border-color: #6366f1;
+}
+
+.form-contents label {
     font-size: 0.875rem;
+    font-weight: 500;
+    color: #2d3748;
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    align-items: center;
+}
+
+.form-contents input:checked::after {
+    content: '✓';
+    position: absolute;
+    left: 3px;
+    top: -4px;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+}
+
+.form-contents input:hover {
+    border-color: #6366f1;
+    box-shadow: 0 2px 8px rgba(99, 102, 241, 0.2);
 }
 
 .end-date {
@@ -941,32 +975,67 @@ footer {
     gap: 2px; /* 요소 사이 간격 */
 }
 
-#custom-event-form .date-section {
+.custom-event-form .date-section {
     padding: 20px 24px;
     border-top: 0.5px solid rgb(237, 237, 237);
     border-bottom: 0.5px solid rgb(237, 237, 237);
 }
 
-
-
-#custom-event-form .option-section {
+.custom-event-form .option-section {
     padding: 20px 24px;
-    /*border-top: 0.5px solid rgb(237, 237, 237);*/
     border-bottom: 0.5px solid rgb(237, 237, 237);
 }
 
-#custom-event-form .option-section .event-option{
+.custom-event-form .option-section .event-option{
     display: flex;
     width: 100%;
     padding: 10px 0px;
     align-items: center;
+    max-width: 400px;
     gap: 0.75rem; /* 12px */
 }
 
-.event-tag {
-    border: 1px solid #e5e7eb; /* 연한 회색 테두리 */
-    border-radius: 4px;
-    padding: 0.5rem 0.75rem; /* 위아래 8px, 좌우 12px */
+.event-option select {
+    width: 100%;
+    border: none;
+    border-radius: 0;
+    padding: 8px 12px;
+    background-color: white;
+    font-size: 14px;
+    appearance: none; /* 기본 드롭다운 화살표 제거 */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    cursor: pointer;
+    /* 포커스 시 outline 제거 */
+    outline: none;
+    
+    background-position: bottom 30px; /* 드롭다운 위치 조정 */
+}
+
+.event-option select:focus {
+    font-weight: 700;
+    transition: border-color 0.3s ease;
+    /*border-bottom: 3px solid #e5e5e5;  하단에만 보더 */
+}
+
+.event-option .optIcon {
+    width: 24px;
+    height: 24px;
+    stroke-width: 2;
+    stroke: #6366f1; 
+}
+
+.event-option select option {
+    padding: 10px 15px;
+    border: 0.5px solid #e5e5e5; /* 테두리 두께 조정 */
+    background-color: white;
+    color: #333;
+    font-size: 14px;
+}
+
+.event-option select option:hover {
+    background-color: #f8f9fa;
+    border-color: #6366f1; /* 호버 시 테두리 색상 */
 }
 
 .participant-list {
@@ -1255,28 +1324,20 @@ html, body {
     display: flex;
     align-items: center;
     gap: 8px;
-    max-width: 300px;
     background-color: #f9f9f9;
 }
 
-.calSelectContainer .icon {
-    width: 24px;
-    height: 24px;
-    color: #555;
+.calSelectContainer select {
+    color: #333;
 }
 
-.calSelectContainer select {
-    flex: 1;
-    padding: 6px 8px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    background-color: white;
-    font-size: 14px;
-    appearance: none; /* remove default dropdown arrow */
-    background-image: url("data:image/svg+xml,%3Csvg fill='gray' height='20' viewBox='0 0 24 24' width='20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 8px center;
-    background-size: 16px;
+.calSelectContainer select option{
+    border-color: #e5e5e5;
+}
+
+.calSelectContainer select:focus {
+    border-color: #e5e5e5; /* 기본과 동일하게 */
+    box-shadow: none;
 }
 
 .confirm-popup {

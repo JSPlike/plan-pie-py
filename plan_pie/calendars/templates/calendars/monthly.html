@@ -142,12 +142,22 @@
                             </div>
                         </div>
                     </div>
-                    
                     <div class="option-section">
+
+                        <div class="event-option">
+                            <i data-lucide="circle-user-round" class="optIcon"></i>
+                            <div id="participant-list" class="participant-list">
+                                <!-- 기본 참여자 목록 -->
+                                <div class="participant" data-email="joonyoung@potato.co.kr">
+                                    <img src="{% static 'image/user.png' %}" alt="박준영" class="participant-img">
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- 색상 선택 -->
                         <div class="event-option">
-                            <i data-lucide="tag" class="icon"></i>
-                            <select id="event-color-select" name="color" class="event-tag">
+                            <i data-lucide="tag" class="optIcon"></i>
+                            <select id="cmbEventColor" name="color">
                                 <option value="#6366f1">🟣 퍼플 블루</option>
                                 <option value="#f472b6">🌸 핑크 로즈</option>
                                 <option value="#34d399">💚 민트 그린</option>
@@ -159,22 +169,13 @@
                               </select>
                         </div>
 
-                        <div class="event-option">
-                            <i data-lucide="circle-user-round" class="icon"></i>
-                            <div id="participant-list" class="participant-list">
-                                <!-- 기본 참여자 목록 -->
-                                <div class="participant" data-email="joonyoung@potato.co.kr">
-                                    <img src="{% static 'image/user.png' %}" alt="박준영" class="participant-img">
-                                </div>
-                            </div>
-                        </div>
-
                         <div class="event-option calSelectContainer">
-                            <i data-lucide="calendar" class="icon"></i>
+                            <i data-lucide="calendar" class="optIcon"></i>
                             <select name="calendar_id">
                                 {% for calendar in calendars %}
                                     <option value="{{ calendar.id }}" {% if forloop.first %}selected{% endif %}>
                                         {{ calendar.calendar_name }}
+                                        ddd
                                     </option>
                                 {% endfor %}
                             </select>
