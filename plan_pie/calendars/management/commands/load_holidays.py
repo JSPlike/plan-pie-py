@@ -14,7 +14,7 @@ class Command(BaseCommand):
             # settins 파일에 정의된 api key
             key = settings.HOLIDAY_API_KEY;
             # redis 접속정보
-            r = redis.StrictRedis(host='127.0.0.1', port=6379, db=0, decode_responses=True)
+            r = redis.StrictRedis(host='127.0.0.1', port=6379, db=1, decode_responses=True)
 
             for year in range(2025, 2041):  # 2040년까지 포함
                 for month in range(1, 13):
