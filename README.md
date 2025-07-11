@@ -61,3 +61,10 @@ plan pie app with django
 8. 필요 시 도메인 연결 + HTTPS
 
 9. cloud
+
+## 화면
+<img width="1920" height="956" alt="main" src="https://github.com/user-attachments/assets/5e656476-666d-4f36-aff5-d49055c78274" />
+
+
+<img width="1920" height="959" alt="selectedDateView" src="https://github.com/user-attachments/assets/cac81d99-db9f-4bb8-962b-e4c84dd913cf" />
+
