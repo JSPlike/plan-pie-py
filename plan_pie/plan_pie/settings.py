@@ -26,8 +26,7 @@ SECRET_KEY = 'django-insecure-cir95^a9idpdvszxmp!qqpad5+737_o&p1z3*htx$g&2u&g&e(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['planpie.com', 'www.planpie.com', 'localhost', '127.0.0.1']
 
 # Application definition
 
