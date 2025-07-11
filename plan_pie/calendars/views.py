@@ -180,7 +180,7 @@ def monthly(request):
     
     
     # 🔥 Redis에서 휴일 가져오기
-    r = redis.StrictRedis(host='127.0.0.1', port=6379, db=0, decode_responses=True)
+    r = redis.StrictRedis(host='127.0.0.1', port=6379, db=1, decode_responses=True)
     holiday_keys = r.keys('holiday:*') # redis key
 
     holidays_json = []
