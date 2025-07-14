@@ -577,6 +577,37 @@ footer {
     transition: box-shadow 0.2s ease;
 }
 
+/* 모바일 대응 */
+@media (max-width: 768px) {
+    .calendar-options {
+        flex-direction: column; /* 세로 배치 */
+        align-items: center;    /* 가운데 정렬 */
+        gap: 20px;             /* 간격 줄이기 */
+        margin-top: 20px;      /* 상단 여백 줄이기 */
+    }
+    
+    .calendar-option {
+        width: 100%;           /* 전체 너비 사용 */
+        max-width: 300px;      /* 최대 너비 제한 */
+        padding: 20px;         /* 패딩 줄이기 */
+    }
+}
+
+/* 더 작은 화면 */
+@media (max-width: 480px) {
+    .calendar-options {
+        gap: 15px;
+        margin-top: 15px;
+        padding: 0 10px;      /* 좌우 여백 추가 */
+    }
+    
+    .calendar-option {
+        width: 100%;
+        max-width: none;      /* 최대 너비 제한 제거 */
+        padding: 15px;        /* 패딩 더 줄이기 */
+    }
+}
+
 .calendar-option:hover {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
@@ -1469,10 +1500,10 @@ html, body {
   }
 
 .modal {
-    display: none;
     position: fixed;
     z-index: 999;
     left: 0; top: 0;
+    display: none;
     width: 100%; height: 100%;
     background-color: rgba(0,0,0,0.4);
     justify-content: center; /* 가로 중앙 */
@@ -1538,19 +1569,230 @@ html, body {
     border-bottom: 2px solid #f4e1c1; /* 아래 라인만 보이도록 설정 */
 }
 
-/*
- .modal-content button {
-    margin-top: 1rem;
-    padding: 0.6rem 1.2rem;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
- }
- */
+@media (max-width: 768px) {
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    
+    .modal-content {
+        width: 95vw;           /* 모바일에서 더 넓게 */
+        max-width: 400px;       /* 최대 너비 제한 해제 */
+        margin: 5% auto;       /* 상하 여백 줄이기 */
+        max-height: 95vh;      /* 높이 더 크게 */
+        border-radius: 12px;   /* 모바일에 맞는 둥근 모서리 */
+    }
+    
+    .modal-content h3 {
+        font-size: 1.25rem;    /* 제목 크기 조정 */
+        margin: 1rem 0;
+        padding: 0 1rem;
+    }
+    
+    .profile-form {
+        padding: 1.5rem;       /* 폼 패딩 조정 */
+    }
+    
+    .profile-form div {
+        margin-bottom: 1.25rem; /* 필드 간격 늘리기 */
+    }
+    
+    .close {
+        top: 12px;
+        right: 16px;
+        font-size: 28px;       /* 터치하기 쉽게 크기 증가 */
+        width: 40px;           /* 터치 영역 확대 */
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background-color: rgba(0, 0, 0, 0.1);
+    }
+    
+    .close:hover {
+        background-color: rgba(0, 0, 0, 0.2);
+    }
+    
+    .modal-content label {
+        font-size: 14px;       /* 라벨 크기 증가 */
+        margin-bottom: 8px;
+        display: block;
+    }
+    
+    .modal-content input[type="text"],
+    .modal-content input[type="date"],
+    .modal-content input[type="file"] {
+        padding: 0.75rem;      /* 터치하기 쉽게 패딩 증가 */
+        font-size: 16px;       /* iOS 줌 방지를 위해 16px 이상 */
+        margin-top: 8px;
+        border-bottom: 2px solid #e0e0e0; /* 기본 보더 색상 추가 */
+    }
+    
+    .modal-content input[type="text"]:focus,
+    .modal-content input[type="date"]:focus,
+    .modal-content input[type="file"]:focus {
+        border-bottom: 2px solid #f4e1c1;
+        transform: none;       /* 모바일에서 변형 효과 제거 */
+    }
+    
+    /* 프로필 사진 컨테이너 */
+    .profile-photo-container {
+        margin: 1.5rem 0;
+    }
+    
+    /* 프로필 사진 크기 조정 */
+    .profile-photo {
+        width: 150px !important;
+        height: 150px !important;
+    }
+    
+    /* 사진 편집 버튼 위치 조정 */
+    .edit-photo-btn {
+        top: 90px !important;
+        right: 120px !important;
+        width: 35px;
+        height: 35px;
+        font-size: 14px;
+    }
+    
+    /* 모달 하단 버튼 */
+    .modal-bottom-group {
+        padding: 1rem 1.5rem;
+        margin-top: 1.5rem;
+        gap: 10px;
+    }
+    
+    .modal-bottom-group > :first-child,
+    .modal-bottom-group > :nth-child(2) {
+        padding: 0.75rem 1.5rem; /* 버튼 패딩 증가 */
+        font-size: 16px;          /* 버튼 텍스트 크기 증가 */
+        min-height: 44px;         /* 터치하기 쉬운 최소 높이 */
+    }
+}
 
- .profile-form {
+/* 작은 모바일 화면 */
+@media (max-width: 480px) {
+    .modal {
+        padding: 5px;
+    }
+    
+    .modal-content {
+        width: 98vw;
+        margin: 2% auto;
+        max-height: 98vh;
+        border-radius: 8px;
+    }
+    
+    .modal-content h3 {
+        font-size: 1.1rem;
+        margin: 0.75rem 0;
+    }
+    
+    .profile-form {
+        padding: 1rem;
+    }
+    
+    .profile-form div {
+        margin-bottom: 1rem;
+    }
+    
+    .close {
+        top: 8px;
+        right: 12px;
+        font-size: 24px;
+        width: 36px;
+        height: 36px;
+    }
+    
+    .modal-content input[type="text"],
+    .modal-content input[type="date"],
+    .modal-content input[type="file"] {
+        padding: 0.6rem;
+    }
+    
+    .profile-photo {
+        width: 120px !important;
+        height: 120px !important;
+    }
+    
+    .edit-photo-btn {
+        top: 75px !important;
+        right: 95px !important;
+        width: 30px;
+        height: 30px;
+        font-size: 12px;
+    }
+    
+    .modal-bottom-group {
+        padding: 0.75rem 1rem;
+        flex-direction: row;     /* 버튼을 가로로 유지 */
+        justify-content: space-between;
+    }
+    
+    .modal-bottom-group > :first-child,
+    .modal-bottom-group > :nth-child(2) {
+        flex: 1;                 /* 버튼들이 동일한 크기 */
+        margin: 0 5px;           /* 버튼 간 간격 */
+        padding: 0.6rem 1rem;
+        font-size: 14px;
+    }
+}
+
+/* 매우 작은 화면 */
+@media (max-width: 360px) {
+    .modal-content h3 {
+        font-size: 1rem;
+    }
+    
+    .profile-form {
+        padding: 0.75rem;
+    }
+    
+    .modal-content input[type="text"],
+    .modal-content input[type="date"],
+    .modal-content input[type="file"] {
+        padding: 0.5rem;
+        font-size: 14px;
+    }
+    
+    .profile-photo {
+        width: 100px !important;
+        height: 100px !important;
+    }
+    
+    .edit-photo-btn {
+        top: 65px !important;
+        right: 80px !important;
+        width: 28px;
+        height: 28px;
+        font-size: 11px;
+    }
+}
+
+/* 모바일에서 스크롤 개선 */
+@media (max-width: 768px) {
+    .modal-content {
+        /* 모바일에서 부드러운 스크롤 */
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;  /* Firefox */
+        -ms-overflow-style: none;  /* IE and Edge */
+    }
+    
+    .modal-content::-webkit-scrollbar {
+        display: none;  /* Chrome, Safari, Opera */
+    }
+}
+
+.profile-form {
     padding: 2rem;
  }
 
