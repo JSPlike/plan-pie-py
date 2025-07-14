@@ -163,6 +163,7 @@ function saveCalendarData() {
     formData.append('theme', calendarTheme);
 
     console.log(formData);
+    var $modal = $(this).closest('.modal');
 
     // Ajax 요청 예시
     $.ajax({
@@ -173,17 +174,12 @@ function saveCalendarData() {
         contentType: false,  // 파일 업로드 시 content-type을 자동으로 설정하지 않도록 설정
         headers: { 'X-CSRFToken': getCookie('csrftoken') },
         success: function(response) {
-            console.log('캘린더 저장 성공!');
-
-            var modal = $(this).closest('.modal');
-
-            console.log(modal);
-
-            console.log(response);
             // 모달 내의 폼 초기화
-            resetModalForm(modal);
+            resetModalForm($modal);
             // 모달 닫기
-            modal.hide();
+            $modal.hide();
+            alert('캘린더가 성공적으로 저장되었습니다!');
+            window.location.href = '/calendar/';
         },
         error: function() {
             alert('캘린더 저장 실패!');

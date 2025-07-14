@@ -21,6 +21,26 @@ $(document).ready(function () {
                 alert(data.message);  // 성공 메시지 표시
                 if (data.success) {
                     window.location.href = data.redirect_url;  // 페이지 이동
+                } else {
+                    messageDiv.html(`<div class="alert alert-error">${data.message}</div>`);
+                    
+                    // 기존 에러 스타일 제거
+                    $('.form-error').remove();
+                    $('input').css('border-color', '');
+                    
+                    // 개별 필드 에러 표시
+                    if (data.errors) {
+                        Object.keys(data.errors).forEach(field => {
+                            const input = $(`[name="${field}"]`);
+                            if (input.length) {
+                                input.css('border-color', 'red');
+                                
+                                // 에러 메시지 표시
+                                const errorDiv = $(`<div class="form-error" style="color: red; font-size: 0.8rem; margin-top: 5px;">${data.errors[field][0]}</div>`);
+                                input.parent().append(errorDiv);
+                            }
+                        });
+                    }
                 }
             },
             error: function (error) {

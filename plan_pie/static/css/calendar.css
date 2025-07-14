@@ -1848,4 +1848,635 @@ html, body {
         font-size: 0.7rem;
         padding: 1px 2px;
     }
+
+    .calendar-tab {
+        display: none;
+    }
+
+    .add-event-section {
+        display: none;
+    }
+
+    .left-section.mobile-fullscreen {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        z-index: 1000 !important;
+        background-color: white !important;
+    }
+    
+    /* 오른쪽 섹션이 전체화면일 때 */
+    .right-section.mobile-fullscreen {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        z-index: 1000 !important;
+        background-color: white !important;
+        transform: translateX(0) !important;
+    }
+    
+    /* 뒤로가기 버튼 스타일 */
+    .mobile-back-btn {
+        transition: all 0.2s ease;
+    }
+    
+    .mobile-back-btn:hover {
+        background: rgba(255, 255, 255, 1) !important;
+        transform: scale(1.1);
+    }
+    
+    .mobile-back-btn:active {
+        transform: scale(0.95);
+    }
+}
+
+/* ========== 모바일 전용 스타일 ========== */
+@media (max-width: 768px) {
+    /* 기본 레이아웃 */
+    body {
+        font-size: 14px;
+        overflow-x: hidden;
+    }
+
+    .container {
+        width: 100%;
+        padding: 10px;
+        margin-top: 5px;
+    }
+
+    /* 헤더 */
+    .header {
+        font-size: 1.5em;
+        margin-bottom: 10px;
+    }
+
+    /* 캘린더 컨테이너 */
+    .calendarContainer {
+        height: 100vh;
+        overflow: hidden;
+    }
+
+    .calendarContent {
+        flex-direction: column;
+        height: calc(100vh - 60px);
+    }
+
+    /* 이벤트 헤더 */
+    .event-header {
+        height: 50px;
+        padding: 0 10px;
+        flex-shrink: 0;
+    }
+
+    .profile-section {
+        padding: 5px;
+    }
+
+    .profile-rounded {
+        width: 35px;
+        height: 35px;
+    }
+
+    .btnBlueRound {
+        width: 2rem;
+        height: 2rem;
+    }
+
+    .btnDefaultQuad {
+        width: 1.8rem;
+        height: 1.8rem;
+        font-size: 20px;
+    }
+
+    /* 왼쪽 섹션 */
+    .left-section {
+        width: 60px;
+    }
+
+    .btnCalList {
+        width: 50px;
+        height: 50px;
+    }
+
+    .calThem {
+        font-size: 24px;
+    }
+
+    .calList {
+        width: 100vw;
+        left: 0;
+        right: 0;
+        border-radius: 0;
+        box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .calItem .calContainer.large .calImage {
+        width: 60px;
+        height: 50px;
+    }
+
+    .calItem .calContainer.large .calTitle {
+        font-size: 16px;
+    }
+
+    /* 중앙 섹션 (캘린더) */
+    .centerSection {
+        flex: 1;
+        overflow: hidden;
+    }
+
+    #calendar {
+        min-width: auto;
+        width: 100%;
+    }
+
+    .logoTitle {
+        display: none;
+    }
+
+    .calendar-header {
+        padding: 5px 10px;
+        gap: 8px;
+        font-size: 0.9rem;
+    }
+
+    .calendar-header button {
+        width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+
+    .calendar-ym {
+        font-size: 0.9rem;
+    }
+
+    /* 캘린더 그리드 */
+    .calendar-grid {
+        font-size: 12px;
+    }
+
+    .day-header {
+        padding: 6px 2px;
+        font-size: 11px;
+    }
+
+    .day {
+        padding: 4px 2px;
+        min-height: 80px;
+        font-size: 12px;
+    }
+
+    .day-number-container {
+        min-height: 1.5rem;
+        margin-bottom: 2px;
+    }
+
+    .day-number {
+        font-size: 14px;
+        padding: 0 0 2px 0;
+    }
+
+    .day.today .day-number {
+        width: 20px;
+        height: 18px;
+        border: 2px solid #000000;
+    }
+
+    /* 이벤트 아이템 */
+    .day-holiday-container,
+    .day-events-container {
+        max-height: 50px;
+        overflow: hidden;
+    }
+
+    .holidayItem,
+    .event-item,
+    .new-event-item {
+        height: 16px;
+        font-size: 10px;
+        padding: 0 3px;
+        margin: 1px 0;
+        border-radius: 2px;
+    }
+
+    .dayEventSpan {
+        font-size: 10px;
+        line-height: 1.1;
+    }
+
+    /* 범위 이벤트 모바일 조정 */
+    .new-event-item[data-row="0"] {
+        top: 0px;
+    }
+
+    .new-event-item[data-row="1"] {
+        top: 18px;
+    }
+
+    .new-event-item[data-row="2"] {
+        top: 36px;
+    }
+
+    /* 오른쪽 섹션 (폼) */
+    .right-section {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        z-index: 1000;
+        background-color: white;
+        transform: translateX(100%);
+        transition: transform 0.3s ease;
+    }
+
+    .right-section.active {
+        transform: translateX(0);
+    }
+
+    /* 폼 스타일 */
+    .custom-event-form {
+        height: 100vh;
+        overflow-y: auto;
+    }
+
+    .custom-event-form-wrap {
+        padding: 10px;
+        border-bottom: 1px solid #e6e6e6;
+    }
+
+    #custom-event-form .event-title {
+        padding: 20px 15px;
+        font-size: 1.1rem;
+    }
+
+    .custom-event-form .date-section,
+    .custom-event-form .option-section {
+        padding: 15px 20px;
+    }
+
+    .event-date {
+        gap: 6px;
+        margin-bottom: 15px;
+    }
+
+    .date-input input,
+    .time-input input {
+        height: 28px;
+        padding: 3px 6px;
+        font-size: 13px;
+    }
+
+    .name-date {
+        font-size: 13px;
+        min-width: 50px;
+    }
+
+    .form-contents input {
+        width: 18px;
+        height: 18px;
+    }
+
+    .form-contents label {
+        font-size: 0.8rem;
+    }
+
+    .event-option {
+        padding: 8px 0;
+        gap: 0.5rem;
+    }
+
+    .event-option .optIcon {
+        width: 20px;
+        height: 20px;
+    }
+
+    .event-option select {
+        padding: 6px 10px;
+        font-size: 13px;
+    }
+
+    .participant-list {
+        gap: 0.3rem;
+    }
+
+    .participant-img {
+        width: 25px;
+        height: 25px;
+    }
+
+    .participant-count {
+        min-width: 25px;
+        height: 25px;
+        font-size: 0.7rem;
+    }
+
+    /* 하단 버튼 */
+    .form-bottom-group {
+        padding: 15px 20px;
+        gap: 10px;
+        justify-content: center;
+    }
+
+    .form-bottom-group > :first-child,
+    .form-bottom-group > :nth-child(2) {
+        height: 44px;
+        padding: 0.6rem 1.2rem;
+        font-size: 0.9rem;
+        min-width: 80px;
+    }
+
+    /* 모달 */
+    .modal-content {
+        width: 95vw;
+        margin: 5% auto;
+        max-height: 90vh;
+    }
+
+    .profile-form {
+        padding: 1.5rem;
+    }
+
+    .profile-photo {
+        width: 150px;
+        height: 150px;
+    }
+
+    .edit-photo-btn {
+        top: 85px;
+        right: 130px;
+        font-size: 12px;
+    }
+
+    .modal-content input[type="text"],
+    .modal-content input[type="date"],
+    .modal-content input[type="file"] {
+        padding: 0.4rem;
+        font-size: 14px;
+    }
+
+    .calendarModalForm {
+        padding: 30px 15px;
+    }
+
+    .calendarImageContainer img {
+        width: 120px;
+        max-height: 90px;
+    }
+
+    .btnEditCalendarImage {
+        width: 120px;
+        height: 40px;
+        font-size: 13px;
+    }
+
+    /* 프로필 카드 */
+    .profile-card {
+        width: 200px;
+        top: 50px;
+        right: 10px;
+    }
+
+    .profile-card-body img {
+        width: 80px;
+        height: 80px;
+    }
+
+    .profile-card-body .nickname,
+    .profile-card-body .email {
+        font-size: 12px;
+    }
+
+    .profile-card-footer {
+        font-size: 0.75rem;
+        padding: 0 0.8rem 0.8rem 0.8rem;
+    }
+
+    /* 팝업 */
+    .popup-box {
+        width: 280px;
+        padding: 15px 20px;
+    }
+
+    .popup-message {
+        font-size: 14px;
+        margin-bottom: 15px;
+    }
+
+    .popup-btn {
+        padding: 6px 12px;
+        font-size: 12px;
+    }
+
+    /* 검색 */
+    #search-input {
+        width: 150px;
+        padding: 4px;
+        font-size: 13px;
+    }
+
+    #search-results {
+        max-height: 120px;
+    }
+
+    .search-result-item {
+        padding: 6px;
+        font-size: 13px;
+    }
+
+    .search-result-item img {
+        width: 18px;
+        height: 18px;
+    }
+
+    /* 테이블 */
+    .customer-table {
+        font-size: 13px;
+    }
+
+    .customer-table th,
+    .customer-table td {
+        padding: 8px;
+    }
+
+    /* 스크롤바 숨기기 (모바일) */
+    .day-holiday-container::-webkit-scrollbar,
+    .day-events-container::-webkit-scrollbar {
+        display: none;
+    }
+
+    .day-holiday-container,
+    .day-events-container {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+}
+
+/* ========== 매우 작은 화면 (480px 이하) ========== */
+@media (max-width: 480px) {
+    .container {
+        padding: 5px;
+    }
+
+    .event-header {
+        height: 45px;
+        padding: 0 5px;
+    }
+
+    .left-section {
+        width: 50px;
+    }
+
+    .btnCalList {
+        width: 45px;
+        height: 45px;
+    }
+
+    .calThem {
+        font-size: 20px;
+    }
+
+    .calendar-header {
+        padding: 3px 5px;
+        gap: 5px;
+    }
+
+    .calendar-header button {
+        width: 24px;
+        height: 24px;
+        font-size: 10px;
+    }
+
+    .calendar-ym {
+        font-size: 0.8rem;
+    }
+
+    .day {
+        min-height: 70px;
+        padding: 2px 1px;
+    }
+
+    .day-number {
+        font-size: 12px;
+    }
+
+    .day.today .day-number {
+        width: 18px;
+        height: 16px;
+        border: 1px solid #000000;
+    }
+
+    .holidayItem,
+    .event-item,
+    .new-event-item {
+        height: 14px;
+        font-size: 9px;
+        padding: 0 2px;
+    }
+
+    .dayEventSpan {
+        font-size: 9px;
+    }
+
+    #custom-event-form .event-title {
+        padding: 15px 10px;
+        font-size: 1rem;
+    }
+
+    .custom-event-form .date-section,
+    .custom-event-form .option-section {
+        padding: 10px 15px;
+    }
+
+    .form-bottom-group {
+        padding: 10px 15px;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .form-bottom-group > :first-child,
+    .form-bottom-group > :nth-child(2) {
+        flex: 1;
+        max-width: 120px;
+        margin: 0 5px;
+    }
+
+    .modal-content {
+        width: 98vw;
+        margin: 2% auto;
+    }
+
+    .profile-form {
+        padding: 1rem;
+    }
+
+    .profile-photo {
+        width: 120px;
+        height: 120px;
+    }
+
+    .edit-photo-btn {
+        top: 70px;
+        right: 100px;
+        font-size: 10px;
+    }
+
+    .popup-box {
+        width: 250px;
+        padding: 12px 15px;
+    }
+}
+
+/* ========== 초소형 화면 (360px 이하) ========== */
+@media (max-width: 360px) {
+    .event-header {
+        height: 40px;
+    }
+
+    .left-section {
+        width: 45px;
+    }
+
+    .btnCalList {
+        width: 40px;
+        height: 40px;
+    }
+
+    .calThem {
+        font-size: 18px;
+    }
+
+    .day {
+        min-height: 60px;
+        font-size: 10px;
+    }
+
+    .day-number {
+        font-size: 11px;
+    }
+
+    .holidayItem,
+    .event-item,
+    .new-event-item {
+        height: 12px;
+        font-size: 8px;
+    }
+
+    .calendar-header {
+        gap: 3px;
+    }
+
+    .calendar-ym {
+        font-size: 0.75rem;
+    }
+
+    .form-bottom-group > :first-child,
+    .form-bottom-group > :nth-child(2) {
+        font-size: 0.8rem;
+        padding: 0.5rem 0.8rem;
+    }
 }

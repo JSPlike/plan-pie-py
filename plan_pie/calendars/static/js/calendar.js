@@ -101,6 +101,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
    
     // 레이아웃
+    /*
     const LAYOUT_BREAKPOINTS = {
         leftDeft: '70px',
         leftExpd: '300px',
@@ -141,7 +142,6 @@ document.addEventListener("DOMContentLoaded", function () {
         updateCalendarItemStates(false);
     }
 
-    // 초기 레이아웃으로 복원 (10%, 90%, 0%)
     function resetLayout() {
         layoutState = 'default';
         leftLayout.style.width = LAYOUT_BREAKPOINTS.leftDeft;
@@ -149,6 +149,295 @@ document.addEventListener("DOMContentLoaded", function () {
         rightLayout.style.width = LAYOUT_BREAKPOINTS.rightDeft;
         updateCalendarItemStates(false);
     }
+    */
+
+    // 레이아웃 상수
+    const LAYOUT_BREAKPOINTS = {
+        // 데스크톱
+        desktop: {
+            leftDeft: '70px',
+            leftExpd: '300px',
+            rightDeft: '0px',
+            rightExpd: '400px'
+        },
+        // 모바일 - 전체 화면
+        mobile: {
+            leftDeft: '60px',
+            leftExpd: '100vw',
+            rightDeft: '0px',
+            rightExpd: '100vw'
+        }
+    };
+
+    // 현재 화면이 모바일인지 확인
+    function isMobile() {
+        return window.innerWidth <= 768;
+    }
+
+    function getCurrentBreakpoints() {
+        return isMobile() ? LAYOUT_BREAKPOINTS.mobile : LAYOUT_BREAKPOINTS.desktop;
+    }
+
+    function updateCalendarItemStates(isExpanded) {
+        if (isMobile()) {
+            // 모바일에서는 항상 적절한 크기 유지
+            document.querySelectorAll('.calContainer').forEach(item => {
+                item.classList.remove('small', 'large');
+                item.classList.add(isExpanded ? 'large' : 'small');
+            });
+            return;
+        }
+        
+        // 데스크톱 로직
+        document.querySelectorAll('.calContainer').forEach(item => {
+            item.classList.remove('small', 'large');
+            item.classList.add(isExpanded ? 'large' : 'small');
+        });
+    }
+
+    function expandLeftSection() {
+        const breakpoints = getCurrentBreakpoints();
+        
+        if (isMobile()) {
+            // 모바일: 왼쪽 섹션이 화면 전체 차지
+            layoutState = 'leftExpanded';
+            
+            // 왼쪽 섹션을 전체 화면으로
+            leftLayout.style.position = 'fixed';
+            leftLayout.style.top = '0';
+            leftLayout.style.left = '0';
+            leftLayout.style.width = '100vw';
+            leftLayout.style.height = '100vh';
+            leftLayout.style.zIndex = '1000';
+            leftLayout.style.backgroundColor = 'white';
+            
+            // 다른 섹션들 숨김
+            centerLayout.style.display = 'none';
+            rightLayout.style.display = 'none';
+            
+        } else {
+            // 데스크톱: 기존 로직
+            layoutState = 'leftExpanded';
+            leftLayout.style.width = breakpoints.leftExpd;
+            centerLayout.style.width = `calc(100% - ${breakpoints.leftExpd} - ${breakpoints.rightDeft})`;
+            rightLayout.style.width = breakpoints.rightDeft;
+        }
+        
+        updateCalendarItemStates(true);
+    }
+
+    function expandRightSection() {
+        const breakpoints = getCurrentBreakpoints();
+        
+        if (isMobile()) {
+            // 모바일: 오른쪽 섹션이 화면 전체 차지
+            layoutState = 'rightExpanded';
+            
+            // 오른쪽 섹션을 전체 화면으로
+            rightLayout.style.position = 'fixed';
+            rightLayout.style.top = '0';
+            rightLayout.style.left = '0';
+            rightLayout.style.width = '100vw';
+            rightLayout.style.height = '100vh';
+            rightLayout.style.zIndex = '1000';
+            rightLayout.style.transform = 'translateX(0)';
+            rightLayout.classList.add('active');
+            
+            // 다른 섹션들 숨김
+            centerLayout.style.display = 'none';
+            leftLayout.style.display = 'none';
+            
+        } else {
+            // 데스크톱: 기존 로직
+            layoutState = 'rightExpanded';
+            leftLayout.style.width = breakpoints.leftDeft;
+            centerLayout.style.width = `calc(100% - ${breakpoints.leftDeft} - ${breakpoints.rightExpd})`;
+            rightLayout.style.width = breakpoints.rightExpd;
+        }
+        
+        updateCalendarItemStates(false);
+    }
+
+    function expandBothSection() {
+        const breakpoints = getCurrentBreakpoints();
+        
+        if (isMobile()) {
+            // 모바일에서는 both expansion을 right expansion으로 처리
+            expandRightSection();
+            return;
+        }
+        
+        // 데스크톱: 기존 로직
+        layoutState = 'bothExpanded';
+        leftLayout.style.width = breakpoints.leftExpd;
+        centerLayout.style.width = `calc(100% - ${breakpoints.leftExpd} - ${breakpoints.rightExpd})`;
+        rightLayout.style.width = breakpoints.rightExpd;
+        updateCalendarItemStates(true);
+    }
+
+    function resetLayout() {
+        const breakpoints = getCurrentBreakpoints();
+        
+        layoutState = 'default';
+        
+        if (isMobile()) {
+            // 모바일: 모든 것을 원래 상태로
+            
+            // 왼쪽 섹션 리셋
+            leftLayout.style.position = 'relative';
+            leftLayout.style.top = 'auto';
+            leftLayout.style.left = 'auto';
+            leftLayout.style.width = breakpoints.leftDeft;
+            leftLayout.style.height = 'auto';
+            leftLayout.style.zIndex = 'auto';
+            leftLayout.style.display = 'block';
+            
+            // 오른쪽 섹션 리셋
+            rightLayout.style.position = 'relative';
+            rightLayout.style.top = 'auto';
+            rightLayout.style.left = 'auto';
+            rightLayout.style.width = breakpoints.rightDeft;
+            rightLayout.style.height = 'auto';
+            rightLayout.style.zIndex = 'auto';
+            rightLayout.style.transform = 'translateX(100%)';
+            rightLayout.classList.remove('active');
+            rightLayout.style.display = 'block';
+            
+            // 중앙 섹션 리셋
+            centerLayout.style.width = `calc(100% - ${breakpoints.leftDeft} - ${breakpoints.rightDeft})`;
+            centerLayout.style.display = 'block';
+            
+        } else {
+            // 데스크톱: 기존 로직
+            leftLayout.style.position = 'relative';
+            leftLayout.style.width = breakpoints.leftDeft;
+            
+            rightLayout.style.position = 'relative';
+            rightLayout.style.width = breakpoints.rightDeft;
+            
+            centerLayout.style.width = `calc(100% - ${breakpoints.leftDeft} - ${breakpoints.rightDeft})`;
+        }
+        
+        updateCalendarItemStates(false);
+    }
+
+    // 화면 크기 변경 감지
+    function handleResize() {
+        if (layoutState !== 'default') {
+            resetLayout();
+        }
+        updateCalendarItemStates(false);
+    }
+
+    // 모바일에서 뒤로가기 버튼 추가
+    function addMobileBackButton() {
+        if (!isMobile()) return;
+        
+        // 왼쪽 섹션용 뒤로가기 버튼
+        if (!leftLayout.querySelector('.mobile-back-btn')) {
+            const leftBackBtn = document.createElement('button');
+            leftBackBtn.innerHTML = '✕';
+            leftBackBtn.className = 'mobile-back-btn left-back';
+            leftBackBtn.style.cssText = `
+                position: absolute;
+                top: 15px;
+                right: 15px;
+                width: 40px;
+                height: 40px;
+                border: none;
+                background: rgba(255, 255, 255, 0.9);
+                border-radius: 50%;
+                font-size: 16px;
+                font-weight: bold;
+                cursor: pointer;
+                z-index: 1001;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+                display: none;
+            `;
+            leftBackBtn.addEventListener('click', resetLayout);
+            leftLayout.appendChild(leftBackBtn);
+        }
+        
+        // 오른쪽 섹션용 뒤로가기 버튼
+        if (!rightLayout.querySelector('.mobile-back-btn')) {
+            const rightBackBtn = document.createElement('button');
+            rightBackBtn.innerHTML = '✕';
+            rightBackBtn.className = 'mobile-back-btn right-back';
+            rightBackBtn.style.cssText = `
+                position: absolute;
+                top: 15px;
+                right: 15px;
+                width: 40px;
+                height: 40px;
+                border: none;
+                background: rgba(255, 255, 255, 0.9);
+                border-radius: 50%;
+                font-size: 16px;
+                font-weight: bold;
+                cursor: pointer;
+                z-index: 1001;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+                display: none;
+            `;
+            rightBackBtn.addEventListener('click', resetLayout);
+            rightLayout.appendChild(rightBackBtn);
+        }
+    }
+
+    // 뒤로가기 버튼 표시/숨김
+    function showMobileBackButton(section) {
+        if (!isMobile()) return;
+        
+        if (section === 'left') {
+            const btn = leftLayout.querySelector('.left-back');
+            if (btn) btn.style.display = 'block';
+        } else if (section === 'right') {
+            const btn = rightLayout.querySelector('.right-back');
+            if (btn) btn.style.display = 'block';
+        }
+    }
+
+    function hideMobileBackButtons() {
+        const leftBtn = leftLayout.querySelector('.left-back');
+        const rightBtn = rightLayout.querySelector('.right-back');
+        
+        if (leftBtn) leftBtn.style.display = 'none';
+        if (rightBtn) rightBtn.style.display = 'none';
+    }
+
+    // 기존 함수들 수정 - 버튼 표시 추가
+    const originalExpandLeft = expandLeftSection;
+    expandLeftSection = function() {
+        originalExpandLeft();
+        if (isMobile()) showMobileBackButton('left');
+    };
+
+    const originalExpandRight = expandRightSection;
+    expandRightSection = function() {
+        originalExpandRight();
+        if (isMobile()) showMobileBackButton('right');
+    };
+
+    const originalReset = resetLayout;
+    resetLayout = function() {
+        originalReset();
+        hideMobileBackButtons();
+    };
+
+    // 이벤트 리스너
+    window.addEventListener('resize', handleResize);
+
+    // ESC 키로 레이아웃 리셋
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && layoutState !== 'default') {
+            resetLayout();
+        }
+    });
+
+    // 초기화
+    document.addEventListener('DOMContentLoaded', function() {
+        addMobileBackButton();
+    });
 
     // 저장된 이벤트 처리
 
