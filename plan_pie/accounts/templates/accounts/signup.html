@@ -3,27 +3,59 @@
 {% load static %}
 
 {% block content %}
-<div class="account-form-wrap">
-    <h2 class="account-form-heading">회원가입</h2>
-    <form method="POST" id="signup-form" class="account-form">
-        {% csrf_token %}
-        <div>
-            <label>이메일</label>
-            <input type="email" name="email">
+<div class="signup-container">
+    <!-- 헤더 -->
+    <div class="signup-header web">
+        <div class="logo">
+            <img src="/static/image/pie-logo-white.png" alt="Plan Pie 로고" style="max-width: 140px; height: auto;" >
         </div>
-        <div>
-            <label>비밀번호</label>
-            <input type="password" name="password1">
+        <a href="{% url 'login' %}" class="login-link">LOG IN</a>
+    </div>
+
+    <div class="signup-header mobile">
+        <div class="logo">
+            <img src="/static/image/pie-logo.png" alt="Plan Pie 로고" style="max-width: 100px; height: auto;" >
         </div>
-        <div>
-            <label>비밀번호 확인</label>
-            <input type="password" name="password2">
-        </div>
-        <button type="submit">회원가입</button>
-    </form>
-    <p>
-        이미 계정이 있으신가요? <a href="{% url 'login' %}">로그인</a>
-    </p>
+        <a href="{% url 'login' %}" class="login-link">LOG IN</a>
+    </div>
+    <!-- 로그인 폼 -->
+    <div class="signup-form-container">
+        
+        <h1 class="signup-title">회원가입</h1>
+        
+        <form method="POST" id="signup-form" class="signup-form">
+            {% csrf_token %}
+            <div class="input-group">
+                <input type="email" name="email" placeholder="이메일" required>
+            </div>
+            <div class="input-group">
+                <input type="password" name="password" placeholder="비밀번호" required>
+            </div>
+            <div class="input-group">
+                <input type="password" name="password2" placeholder="비밀번호 확인" required>
+            </div>
+            <!-- 약관 동의 -->
+            <div class="terms-group">
+                <label class="checkbox-label">
+                    <input type="checkbox" name="terms" required>
+                    <span class="checkmark"></span>
+                    <span class="terms-text">
+                        <a href="#" class="terms-link">이용약관</a> 및 
+                        <a href="#" class="terms-link">개인정보처리방침</a>에 동의합니다
+                    </span>
+                </label>
+            </div>
+            
+            <button type="submit" class="signup-btn">회원가입</button>
+        </form>
+
+        <div id="message"></div>
+    </div>
+    
+    <!-- 푸터 -->
+    <div class="signup-footer">
+        <p>Copyright © PlanPie. Inc. All rights reserved.</p>
+    </div>
 </div>
 {% endblock %}
 

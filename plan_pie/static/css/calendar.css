@@ -62,72 +62,7 @@ footer {
     margin-top: auto; /* 남은 공간을 밀어내어 footer가 아래로 가게 함 */
 }
 
-/* account */
-.account-form-wrap {
-    background-color: #ffffff;
-    padding: 2rem;
-    border-radius: 0.5rem;
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
-                0 4px 6px -2px rgba(0, 0, 0, 0.05);
-    width: 24rem;
-}
 
-.account-form-heading {
-    font-size: 1.5rem;
-    font-weight: bold;
-    margin-bottom: 1rem;
-    text-align: center;
-}
-
-
-.account-form > * {
-    margin-bottom: 1rem;
-}
-
-.account-form label {
-    display: block;
-    color: #374151; /* Tailwind의 gray-700 */
-    font-size: 0.875rem; /* 선택적으로 추가 - Tailwind의 text-sm */
-    margin-bottom: 0.25rem; /* 약간의 간격 주기 */
-}
-
-.account-form input {
-    width: 100%;                  /* w-full */
-    padding: 0.5rem;              /* p-2 */
-    border: 1px solid #d1d5db;    /* border + border-gray-300 */
-    border-radius: 0.25rem;       /* rounded */
-    box-sizing: border-box;       /* 패딩이 너비에 포함되도록 */
-}
-
-.account-form button {
-    width: 100%;                      /* w-full */
-    background-color: #3b82f6;        /* bg-blue-500 */
-    color: white;                     /* text-white */
-    padding: 0.5rem;                  /* p-2 */
-    border-radius: 0.25rem;           /* rounded */
-    border: none;                     /* 기본적으로 border 없애주는 게 좋음 */
-    cursor: pointer;                  /* 마우스 포인터 */
-    transition: background-color 0.2s ease; /* hover 효과 부드럽게 */
-}
-
-.account-form button:hover {
-    background-color: #2563eb;        /* hover:bg-blues-600 */
-}
-
-.account-form-wrap p {
-    margin-top: 1rem;
-    text-align: center;
-    color: #4b5563;
-}
-
-.account-form-wrap p a {
-    color: #3b82f6;
-    text-decoration: none;
-}
-
-.account-form-wrap p a:hover {
-    text-decoration: underline;
-}
 
 .calendarContainer {
     width: 100%;
