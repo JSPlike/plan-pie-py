@@ -2280,11 +2280,17 @@ html, body {
     .day-number-container {
         min-height: 1.5rem;
         margin-bottom: 2px;
+
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        padding-top: 2px;
     }
 
     .day-number {
-        font-size: 14px;
-        padding: 0 0 2px 0;
+        font-size: 12px;
+        padding: 2px 0 2px 0;
+        margin-top: 2px;
     }
 
     .day.today .day-number {
@@ -2602,12 +2608,12 @@ html, body {
 
     .calendar-header {
         padding: 3px 5px;
-        gap: 5px;
+        gap: 6px;
     }
 
     .calendar-header button {
-        width: 24px;
-        height: 24px;
+        width: 22px;
+        height: 22px;
         font-size: 10px;
     }
 
@@ -2621,13 +2627,20 @@ html, body {
     }
 
     .day-number {
-        font-size: 12px;
+        font-size: 11px;
+    }
+
+    .day-number-container {
+        min-height: 1.5rem;
+        padding-top: 3px;
     }
 
     .day.today .day-number {
         width: 18px;
         height: 16px;
         border: 1px solid #000000;
+        margin: 3px auto 0 auto;
+        font-size: 11px;
     }
 
     .holidayItem,
