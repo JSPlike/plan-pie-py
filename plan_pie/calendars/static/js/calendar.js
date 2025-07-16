@@ -204,16 +204,22 @@ document.addEventListener("DOMContentLoaded", function () {
             
             // 왼쪽 섹션을 전체 화면으로
             leftLayout.style.position = 'fixed';
-            leftLayout.style.top = '0';
+            leftLayout.style.top = '60';
             leftLayout.style.left = '0';
             leftLayout.style.width = '100vw';
             leftLayout.style.height = '100vh';
-            leftLayout.style.zIndex = '1000';
+            leftLayout.style.zIndex = '200';
             leftLayout.style.backgroundColor = 'white';
+            leftLayout.style.display = 'block';
+            leftLayout.style.visibility = 'visible';
+            leftLayout.style.opacity = '1';
             
             // 다른 섹션들 숨김
             centerLayout.style.display = 'none';
             rightLayout.style.display = 'none';
+            
+            // 스크롤 방지
+            document.body.style.overflow = 'hidden';
             
         } else {
             // 데스크톱: 기존 로직
@@ -235,17 +241,23 @@ document.addEventListener("DOMContentLoaded", function () {
             
             // 오른쪽 섹션을 전체 화면으로
             rightLayout.style.position = 'fixed';
-            rightLayout.style.top = '0';
+            rightLayout.style.top = '60';
             rightLayout.style.left = '0';
             rightLayout.style.width = '100vw';
             rightLayout.style.height = '100vh';
-            rightLayout.style.zIndex = '1000';
+            rightLayout.style.zIndex = '200';
             rightLayout.style.transform = 'translateX(0)';
+            rightLayout.style.display = 'block';
+            rightLayout.style.visibility = 'visible';
+            rightLayout.style.opacity = '1';
             rightLayout.classList.add('active');
             
             // 다른 섹션들 숨김
             centerLayout.style.display = 'none';
             leftLayout.style.display = 'none';
+            
+            // 스크롤 방지
+            document.body.style.overflow = 'hidden';
             
         } else {
             // 데스크톱: 기존 로직
@@ -283,29 +295,40 @@ document.addEventListener("DOMContentLoaded", function () {
         if (isMobile()) {
             // 모바일: 모든 것을 원래 상태로
             
+            // 스크롤 복원
+            document.body.style.overflow = 'auto';
+            
             // 왼쪽 섹션 리셋
             leftLayout.style.position = 'relative';
-            leftLayout.style.top = 'auto';
+            leftLayout.style.top = '60';
             leftLayout.style.left = 'auto';
-            leftLayout.style.width = breakpoints.leftDeft;
+            leftLayout.style.width = '0';
             leftLayout.style.height = 'auto';
             leftLayout.style.zIndex = 'auto';
-            leftLayout.style.display = 'block';
+            leftLayout.style.backgroundColor = '';
+            leftLayout.style.display = 'none';
+            leftLayout.style.visibility = 'visible';
+            leftLayout.style.opacity = '1';
+            
             
             // 오른쪽 섹션 리셋
             rightLayout.style.position = 'relative';
-            rightLayout.style.top = 'auto';
+            rightLayout.style.top = '60';
             rightLayout.style.left = 'auto';
-            rightLayout.style.width = breakpoints.rightDeft;
+            rightLayout.style.width = '0';
             rightLayout.style.height = 'auto';
             rightLayout.style.zIndex = 'auto';
-            rightLayout.style.transform = 'translateX(100%)';
             rightLayout.classList.remove('active');
-            rightLayout.style.display = 'block';
-            
-            // 중앙 섹션 리셋
-            centerLayout.style.width = `calc(100% - ${breakpoints.leftDeft} - ${breakpoints.rightDeft})`;
-            centerLayout.style.display = 'block';
+            rightLayout.style.display = 'none';
+            rightLayout.style.visibility = 'visible';
+            rightLayout.style.opacity = '1';
+
+            // centerLayout.style.width = `calc(100% - ${breakpoints.leftDeft} - ${breakpoints.rightDeft})`;
+            centerLayout.style.width = '100%';
+            centerLayout.style.display = 'flex';
+            centerLayout.style.visibility = 'visible';
+            centerLayout.style.opacity = '1';
+            centerLayout.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
             
         } else {
             // 데스크톱: 기존 로직
@@ -316,133 +339,22 @@ document.addEventListener("DOMContentLoaded", function () {
             rightLayout.style.width = breakpoints.rightDeft;
             
             centerLayout.style.width = `calc(100% - ${breakpoints.leftDeft} - ${breakpoints.rightDeft})`;
+            
+            // 스크롤 복원
+            document.body.style.overflow = 'auto';
         }
         
         updateCalendarItemStates(false);
     }
 
-    // 화면 크기 변경 감지
-    function handleResize() {
+    // 리사이즈 이벤트 리스너
+    window.addEventListener('resize', function() {
         if (layoutState !== 'default') {
             resetLayout();
         }
-        updateCalendarItemStates(false);
-    }
-
-    // 모바일에서 뒤로가기 버튼 추가
-    function addMobileBackButton() {
-        if (!isMobile()) return;
-        
-        // 왼쪽 섹션용 뒤로가기 버튼
-        if (!leftLayout.querySelector('.mobile-back-btn')) {
-            const leftBackBtn = document.createElement('button');
-            leftBackBtn.innerHTML = '✕';
-            leftBackBtn.className = 'mobile-back-btn left-back';
-            leftBackBtn.style.cssText = `
-                position: absolute;
-                top: 15px;
-                right: 15px;
-                width: 40px;
-                height: 40px;
-                border: none;
-                background: rgba(255, 255, 255, 0.9);
-                border-radius: 50%;
-                font-size: 16px;
-                font-weight: bold;
-                cursor: pointer;
-                z-index: 1001;
-                box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-                display: none;
-            `;
-            leftBackBtn.addEventListener('click', resetLayout);
-            leftLayout.appendChild(leftBackBtn);
-        }
-        
-        // 오른쪽 섹션용 뒤로가기 버튼
-        if (!rightLayout.querySelector('.mobile-back-btn')) {
-            const rightBackBtn = document.createElement('button');
-            rightBackBtn.innerHTML = '✕';
-            rightBackBtn.className = 'mobile-back-btn right-back';
-            rightBackBtn.style.cssText = `
-                position: absolute;
-                top: 15px;
-                right: 15px;
-                width: 40px;
-                height: 40px;
-                border: none;
-                background: rgba(255, 255, 255, 0.9);
-                border-radius: 50%;
-                font-size: 16px;
-                font-weight: bold;
-                cursor: pointer;
-                z-index: 1001;
-                box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-                display: none;
-            `;
-            rightBackBtn.addEventListener('click', resetLayout);
-            rightLayout.appendChild(rightBackBtn);
-        }
-    }
-
-    // 뒤로가기 버튼 표시/숨김
-    function showMobileBackButton(section) {
-        if (!isMobile()) return;
-        
-        if (section === 'left') {
-            const btn = leftLayout.querySelector('.left-back');
-            if (btn) btn.style.display = 'block';
-        } else if (section === 'right') {
-            const btn = rightLayout.querySelector('.right-back');
-            if (btn) btn.style.display = 'block';
-        }
-    }
-
-    function hideMobileBackButtons() {
-        const leftBtn = leftLayout.querySelector('.left-back');
-        const rightBtn = rightLayout.querySelector('.right-back');
-        
-        if (leftBtn) leftBtn.style.display = 'none';
-        if (rightBtn) rightBtn.style.display = 'none';
-    }
-
-    // 기존 함수들 수정 - 버튼 표시 추가
-    const originalExpandLeft = expandLeftSection;
-    expandLeftSection = function() {
-        originalExpandLeft();
-        if (isMobile()) showMobileBackButton('left');
-    };
-
-    const originalExpandRight = expandRightSection;
-    expandRightSection = function() {
-        originalExpandRight();
-        if (isMobile()) showMobileBackButton('right');
-    };
-
-    const originalReset = resetLayout;
-    resetLayout = function() {
-        originalReset();
-        hideMobileBackButtons();
-    };
-
-    // 이벤트 리스너
-    window.addEventListener('resize', handleResize);
-
-    // ESC 키로 레이아웃 리셋
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && layoutState !== 'default') {
-            resetLayout();
-        }
     });
-
-    // 초기화
-    document.addEventListener('DOMContentLoaded', function() {
-        addMobileBackButton();
-    });
-
-    // 저장된 이벤트 처리
 
     // 해당 유저에 저장되어진 이벤트를 가져온다.
-
     holidaysJson.forEach(event => {
         const dateStr = event.start_time.split(' ')[0]; // 'YYYY-MM-DD'
         
@@ -768,74 +680,6 @@ document.addEventListener("DOMContentLoaded", function () {
         updateFlatpickr(clickedDate);
     
         drawEvent("New Event", clickedDate);
-    }
-
-
-    /**
-     * 캘린더에서 특정 날짜를 클릭했을때 이벤트를 발생시킨다
-     */
-    
-    function handleDayClick1 () {
-        //onEventForm();
-
-        console.log('clicked handleDayClick1');
-        // 클릭한 개체를 탐지한다. 날짜 값을 받는다.
-        const year = $(this).data('year');
-        const month = $(this).data('month');
-        const day = $(this).data('day');
-
-        // 현재 클릭한 날짜데이터
-        // javascript에서 0은 1월로 표현된다.
-        const clickedDate = new Date(year, month, day);
-
-        selectedDate = clickedDate;
-        const format = (date) => `${date.getFullYear()}-${padMonth(date.getMonth())}-${padDay(date.getDate())}`;
-
-        // 1. 모든 날짜 포커스 해제
-        document.querySelectorAll('.day').forEach(d => d.classList.remove('focused'));
-
-        // ✅ 1. 기존 포커스 해제
-        $('#calendar .day.focused').removeClass('focused');
-
-        // ✅ 2. 현재 클릭된 요소에 포커스 클래스 추가
-        $(this).addClass('focused');
-    }
-
-
-    function handleDayDblclick1 () {
-        //onEventForm();
-
-        // 클릭한 개체를 탐지한다. 날짜 값을 받는다.
-        const year = $(this).data('year');
-        const month = $(this).data('month');
-        const day = $(this).data('day');
-
-        // 현재 클릭한 날짜데이터
-        // javascript에서 0은 1월로 표현된다.
-        const clickedDate = new Date(year, month, day);
-
-        selectedDate = clickedDate;
-        const format = (date) => `${date.getFullYear()}-${padMonth(date.getMonth())}-${padDay(date.getDate())}`;
-
-        // 1. 모든 날짜 포커스 해제
-        document.querySelectorAll('.day').forEach(d => d.classList.remove('focused'));
-
-        // ✅ 1. 기존 포커스 해제
-        //$('#calendar .day.focused').removeClass('focused');
-
-        // ✅ 2. 현재 클릭된 요소에 포커스 클래스 추가
-        //$(this).addClass('focused');
-
-        // 초기 날짜 세팅 (둘다 오늘날짜)
-        $('#start-date').val(format(clickedDate));
-        $('#end-date').val(format(clickedDate));
-
-        // 3. flatpickr 인스턴스에 날짜 반영
-        $('#start-date')[0]._flatpickr.setDate(clickedDate, true);  // true는 onChange 트리거 포함
-        $('#end-date')[0]._flatpickr.setDate(clickedDate, true);
-
-        /* 선택된 날짜에 New Event 박스 생성 */
-        drawEvent("New Event", clickedDate, clickedDate);
     }
 
     /**

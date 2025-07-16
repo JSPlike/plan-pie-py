@@ -162,8 +162,10 @@ function saveCalendarData() {
 
     formData.append('theme', calendarTheme);
 
-    console.log(formData);
     var $modal = $(this).closest('.modal');
+
+    $modal.hide();
+    showToast('캘린더를 저장하는 중...', 'info');
 
     // Ajax 요청 예시
     $.ajax({
@@ -176,15 +178,27 @@ function saveCalendarData() {
         success: function(response) {
             // 모달 내의 폼 초기화
             resetModalForm($modal);
-            // 모달 닫기
-            $modal.hide();
-            alert('캘린더가 성공적으로 저장되었습니다!');
-            window.location.href = '/calendar/';
+            showToast('캘린더가 성공적으로 저장되었습니다!', 'info');
+            setTimeout(() => window.location.href = '/calendar/', 300);
         },
         error: function() {
             alert('캘린더 저장 실패!');
         }
     });
+}
+
+function showToast(message, type) {
+    const toast = $(`
+        <div class="toast ${type}" style="
+            position: fixed; top: 20px; right: 20px; 
+            padding: 15px 20px; z-index: 9999;
+            background: ${type === 'success' ? '#4CAF50' : type === 'error' ? '#f44336' : '#2196F3'}; 
+            color: white; border-radius: 5px;
+        ">${message}</div>
+    `);
+    
+    $('body').append(toast);
+    setTimeout(() => toast.fadeOut(() => toast.remove()), 3000);
 }
 
 
