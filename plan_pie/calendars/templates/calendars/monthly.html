@@ -20,8 +20,10 @@
             {% if calendars_json %}
             <div class="calendar-header">
                 <div class="calendar-ym"></div>
-                <button id="prev"><i data-lucide="chevron-left" class="icon"></i></button>
-                <button id="next"><i data-lucide="chevron-right" class="icon"></i></button>
+                <div class="calendar-move">
+                    <button id="prev"><i data-lucide="chevron-left" class="icon"></i></button>
+                    <button id="next"><i data-lucide="chevron-right" class="icon"></i></button>
+                </div>
             </div>
             <div class="calendar-tab">
                 <a href="#" class="tab-link active-tab" data-url="/event/monthly" data-title="Monthly">Monthly</a>

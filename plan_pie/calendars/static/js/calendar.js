@@ -61,7 +61,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 calImageHtml = `
                     <div class="calContainer small">
                         <img class="calImage" src="${imgSrc}" alt="cal" />
-                        <span class="calTitle">${name}</span>
+                        <div class="calInfoContainer">
+                            <span class="calTitle">${name}</span>
+                            <div class="calendarParticipant">
+                            </div>
+                        </div>
                     </div>
                 `
             } else {
@@ -71,7 +75,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     </div>
                 `
             }
-
 
             li.innerHTML = calImageHtml.trim();
 
@@ -99,57 +102,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
     });
-   
-    // 레이아웃
-    /*
-    const LAYOUT_BREAKPOINTS = {
-        leftDeft: '70px',
-        leftExpd: '300px',
-        rightDeft: '0px',
-        rightExpd: '400px'
-    };
-
-    function updateCalendarItemStates(isExpanded) {
-        document.querySelectorAll('.calContainer').forEach(item => {
-            item.classList.remove('small', 'large');
-            item.classList.add(isExpanded ? 'large' : 'small');
-        });
-
-
-    }
-
-    function expandLeftSection() {
-        layoutState = 'leftExpanded';
-        leftLayout.style.width = LAYOUT_BREAKPOINTS.leftExpd;
-        centerLayout.style.width = `calc(100% - ${LAYOUT_BREAKPOINTS.leftExpd} - ${LAYOUT_BREAKPOINTS.rightDeft})`;
-        rightLayout.style.width = LAYOUT_BREAKPOINTS.rightDeft;
-        updateCalendarItemStates(true);
-    }
-
-    function expandBothSection() {
-        layoutState = 'bothExpanded';
-        leftLayout.style.width = LAYOUT_BREAKPOINTS.leftExpd;
-        centerLayout.style.width = `calc(100% - ${LAYOUT_BREAKPOINTS.leftExpd} - ${LAYOUT_BREAKPOINTS.rightExpd})`;
-        rightLayout.style.width = LAYOUT_BREAKPOINTS.rightExpd;
-        updateCalendarItemStates(true);
-    }
-
-    function expandRightSection() {
-        layoutState = 'rightExpanded';
-        leftLayout.style.width = LAYOUT_BREAKPOINTS.leftDeft;
-        centerLayout.style.width = `calc(100% - ${LAYOUT_BREAKPOINTS.leftDeft} - ${LAYOUT_BREAKPOINTS.rightExpd})`;
-        rightLayout.style.width = LAYOUT_BREAKPOINTS.rightExpd;
-        updateCalendarItemStates(false);
-    }
-
-    function resetLayout() {
-        layoutState = 'default';
-        leftLayout.style.width = LAYOUT_BREAKPOINTS.leftDeft;
-        centerLayout.style.width = `calc(100% - ${LAYOUT_BREAKPOINTS.leftDeft} - ${LAYOUT_BREAKPOINTS.rightDeft})`;
-        rightLayout.style.width = LAYOUT_BREAKPOINTS.rightDeft;
-        updateCalendarItemStates(false);
-    }
-    */
 
     // 레이아웃 상수
     const LAYOUT_BREAKPOINTS = {
@@ -186,13 +138,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 item.classList.add(isExpanded ? 'large' : 'small');
             });
             return;
+        } else {
+            // 데스크톱 로직
+            document.querySelectorAll('.calContainer').forEach(item => {
+                item.classList.remove('small', 'large');
+                item.classList.add(isExpanded ? 'large' : 'small');
+            });
         }
-        
-        // 데스크톱 로직
-        document.querySelectorAll('.calContainer').forEach(item => {
-            item.classList.remove('small', 'large');
-            item.classList.add(isExpanded ? 'large' : 'small');
-        });
     }
 
     function expandLeftSection() {
@@ -323,13 +275,11 @@ document.addEventListener("DOMContentLoaded", function () {
             rightLayout.style.visibility = 'visible';
             rightLayout.style.opacity = '1';
 
-            // centerLayout.style.width = `calc(100% - ${breakpoints.leftDeft} - ${breakpoints.rightDeft})`;
             centerLayout.style.width = '100%';
             centerLayout.style.display = 'flex';
             centerLayout.style.visibility = 'visible';
             centerLayout.style.opacity = '1';
             centerLayout.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
-            
         } else {
             // 데스크톱: 기존 로직
             leftLayout.style.position = 'relative';
@@ -341,7 +291,7 @@ document.addEventListener("DOMContentLoaded", function () {
             centerLayout.style.width = `calc(100% - ${breakpoints.leftDeft} - ${breakpoints.rightDeft})`;
             
             // 스크롤 복원
-            document.body.style.overflow = 'auto';
+            //document.body.style.overflow = 'auto';
         }
         
         updateCalendarItemStates(false);
@@ -608,14 +558,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     
     function updateFlatpickr(startDate, endDate) {
-        /*
-        const formatted = formatDate(date);
-        $('#start-date').val(formatted);
-        $('#end-date').val(formatted);
-        $('#start-date')[0]._flatpickr.setDate(date, true);
-        $('#end-date')[0]._flatpickr.setDate(date, true);
-        */
-       
         // 종료일이 없으면 시작일을 사용
         const finalEndDate = endDate || startDate;
         
@@ -995,7 +937,6 @@ document.addEventListener("DOMContentLoaded", function () {
         return true;
     }
 
-
     function padMonth(m) {
         return String(m + 1).padStart(2, '0');
     }
@@ -1013,10 +954,6 @@ document.addEventListener("DOMContentLoaded", function () {
                d1.getMonth() === d2.getMonth() &&
                d1.getDate() === d2.getDate();
     };
-
-
-
-
 
     // 참여자 검색
     $('#search-input').on('input', function () {
