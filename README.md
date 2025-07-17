@@ -11,7 +11,6 @@ plan pie app with django
 → participants: CalendarParticipant 모델을 통해 참여자 관리
 
  
-
 이벤트(Event)
 → 특정 캘린더에 소속됨
 → 참여자 정보는 없음 (정확히 Event 자체에는 participants 필드가 없음)
