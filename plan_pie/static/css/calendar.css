@@ -736,6 +736,134 @@
     background-color: rgb(248, 248, 248)
 }
 
+
+
+/* 공유 설정 컨테이너 */
+.shareSettingsContainer {
+    margin-bottom: 20px;
+    padding: 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+
+.shareSettingsContainer label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* 이메일 입력 그룹 */
+.emailInputContainer {
+    margin-bottom: 15px;
+}
+
+.email-input-group {
+    display: flex;
+    gap: 10px;
+}
+
+.email-input-group input[type="email"] {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.btn-add-email {
+    padding: 8px 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.btn-add-email:hover {
+    background-color: #45a049;
+}
+
+.btn-add-email:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+/* 공유된 이메일 목록 */
+.shared-emails-list {
+    margin-bottom: 15px;
+    max-height: 120px;
+    overflow-y: auto;
+}
+
+.email-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    margin-bottom: 5px;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.email-item .email-text {
+    flex: 1;
+    margin-right: 10px;
+}
+
+.email-item .permission-badge {
+    padding: 2px 8px;
+    background-color: #e3f2fd;
+    color: #1976d2;
+    border-radius: 12px;
+    font-size: 12px;
+    margin-right: 10px;
+}
+
+.email-item .btn-remove {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.email-item .btn-remove:hover {
+    background-color: #d32f2f;
+}
+
+
+.shareSettingsContainer {
+    transition: all 0.3s ease;
+}
+
+.email-item {
+    animation: slideInDown 0.3s ease;
+}
+
+@keyframes slideInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
 @media (max-height: 900px) {
     .day {
       height: 129px;
@@ -1915,7 +2043,7 @@
 .calendarNameContainer {
     display: flex;
     align-items: center;
-    margin-top: 20px;
+    margin-top: 50px;
 }
 
 .modal-bottom-group {

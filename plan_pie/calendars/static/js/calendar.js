@@ -871,13 +871,15 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             });
 
+            console.log(participants);
+
             formData['participants'] = participants;
 
+            console.log("저장할 이벤트 데이터 >>>>>");
             // JSON으로 출력 확인 (디버깅용)
             console.log(JSON.stringify(formData));
 
-            console.log("이벤트 저장로직 실행 =======>");
-            // post send (url, data, onSuccess, onError)
+            return;
             post (
                 '/event/new/', 
                 formData,

@@ -69,6 +69,7 @@ function openModal(theme) {
     const modalTheme = document.getElementById("modal-theme");
     const modalTitle = document.getElementById("modal-title");
     const calendarTheme = document.getElementById("calendarTheme");
+    const shareSettingsContainer = document.getElementById("shareSettingsContainer");
 
     // 모달 설정
     //modal.classList.remove("hidden");
@@ -83,6 +84,7 @@ function openModal(theme) {
     } else {
         console.log("공유 캘린더 생성화면 오픈");
         modalTitle.textContent = "👥 공유 캘린더 생성";
+        shareSettingsContainer.style.display = 'block';
         calendarTheme.value = 'team';
     }
 }
@@ -190,7 +192,7 @@ function saveCalendarData() {
 function showToast(message, type) {
     const toast = $(`
         <div class="toast ${type}" style="
-            position: fixed; top: 20px; right: 20px; 
+            position: fixed; bottom: 20px; right: 20px; 
             padding: 15px 20px; z-index: 9999;
             background: ${type === 'success' ? '#4CAF50' : type === 'error' ? '#f44336' : '#2196F3'}; 
             color: white; border-radius: 5px;
@@ -199,6 +201,133 @@ function showToast(message, type) {
     
     $('body').append(toast);
     setTimeout(() => toast.fadeOut(() => toast.remove()), 3000);
+}
+
+$('#btnAddEmail').on('click', function() {
+        addEmailToList();
+});
+
+// 이메일 입력 필드에서 Enter 키 처리
+$('#shareEmailInput').on('keypress', function(e) {
+    if (e.which === 13) { // Enter key
+        e.preventDefault();
+        addEmailToList();
+    }
+});
+
+// 이메일 삭제 (동적으로 생성되는 요소이므로 이벤트 위임 사용)
+$('#sharedEmailsList').on('click', '.btn-remove', function() {
+    $(this).closest('.email-item').remove();
+    updateHiddenEmailsInput();
+});
+
+// 저장 버튼 클릭 시 이메일 목록을 hidden input에 설정
+$('#btnModalSave').on('click', function() {
+    updateHiddenEmailsInput();
+});
+
+// 이메일 추가 함수
+function addEmailToList() {
+    const email = $('#shareEmailInput').val().trim();
+    const defaultPermission = $('#defaultPermission').val();
+    
+    // 유효성 검사
+    if (!email) {
+        alert('이메일을 입력해주세요.');
+        return;
+    }
+    
+    if (!isValidEmail(email)) {
+        alert('올바른 이메일 형식이 아닙니다.');
+        return;
+    }
+    
+    // 중복 검사
+    if (isEmailAlreadyAdded(email)) {
+        alert('이미 추가된 이메일입니다.');
+        return;
+    }
+    
+    // 이메일 아이템 HTML 생성
+    const emailItemHtml = `
+        <div class="email-item" data-email="${email}" data-permission="${defaultPermission}">
+            /span class="email-text">${email}</span>
+            <button type="button" class="btn-remove" title="삭제">×</button>
+        </div>
+    `;
+    
+    // 목록에 추가
+    $('#sharedEmailsList').append(emailItemHtml);
+    
+    // 입력 필드 초기화
+    $('#shareEmailInput').val('');
+    
+    // hidden input 업데이트
+    updateHiddenEmailsInput();
+}
+
+// 이메일 유효성 검사
+function isValidEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
+
+// 중복 이메일 검사
+function isEmailAlreadyAdded(email) {
+    let exists = false;
+    $('#sharedEmailsList .email-item').each(function() {
+        if ($(this).data('email') === email) {
+            exists = true;
+            return false; // break
+        }
+    });
+    return exists;
+}
+
+// hidden input에 이메일 목록 업데이트
+function updateHiddenEmailsInput() {
+    const emails = [];
+    $('#sharedEmailsList .email-item').each(function() {
+        emails.push({
+            email: $(this).data('email'),
+            permission: $(this).data('permission')
+        });
+    });
+    $('#sharedEmails').val(JSON.stringify(emails));
+}
+
+// 공유 이메일 목록 초기화
+function clearSharedEmails() {
+    $('#sharedEmailsList').empty();
+    $('#shareEmailInput').val('');
+    $('#sharedEmails').val('');
+}
+
+// 모달 열기 시 초기화
+function openCalendarModal(isEdit = false, calendarData = null) {
+    if (isEdit && calendarData) {
+        // 편집 모드
+        $('#modal-title').text('캘린더 편집');
+        $('#calendarName').val(calendarData.name);
+        
+        // 공유 캘린더인 경우 이메일 목록 로드
+        if (calendarData.type === 'shared') {
+            $('#sharedCalendar').prop('checked', true);
+            $('#shareSettingsContainer').show();
+            
+            if (calendarData.sharedEmails) {
+                loadExistingEmails(calendarData.sharedEmails);
+            }
+        }
+    } else {
+        // 새 생성 모드
+        $('#modal-title').text('캘린더 생성');
+        $('#personalCalendar').prop('checked', true);
+        $('#shareSettingsContainer').hide();
+        clearSharedEmails();
+    }
+    
+    $('#calendar-modal').show();
 }
 
 

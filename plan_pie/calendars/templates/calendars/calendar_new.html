@@ -38,6 +38,23 @@
                 </div>
 
                 <input type="hidden" id="calendarTheme" name="theme">
+
+                <div id="shareSettingsContainer" class="shareSettingsContainer" style="display: none;">
+                    <label>공유 설정</label>
+                    
+                    <!-- 이메일 입력 -->
+                    <div class="emailInputContainer">
+                        <div class="email-input-group">
+                            <input type="email" id="shareEmailInput" placeholder="공유할 이메일 주소 입력">
+                            <button type="button" id="btnAddEmail" class="btn-add-email">추가</button>
+                        </div>
+                    </div>
+
+                    <!-- 추가된 이메일 목록 -->
+                    <div id="sharedEmailsList" class="shared-emails-list">
+                        <!-- 동적으로 추가될 이메일들 -->
+                    </div>
+                </div>
             </form>
 
             <div class="modal-bottom-group">
