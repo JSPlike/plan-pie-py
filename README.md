@@ -13,7 +13,7 @@ plan pie app with django
  
 이벤트(Event)
 → 특정 캘린더에 소속됨
-→ 참여자 정보는 없음 (정확히 Event 자체에는 participants 필드가 없음)
+→ 참여자 정보는 없음 (정확히 Event 자체에는 participants 필드가 없음) 
 
 캘린더 참여자(CalendarParticipant)
 → 특정 유저가 어떤 Calendar에 대해 어떤 role, status를 가지는지를 관리
