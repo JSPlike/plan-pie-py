@@ -24,36 +24,32 @@
             <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
 
-                <div class="calendarImageContainer">
-                    <label for="calendarName">이미지</label>
-                    <img src="{% static 'image/bg-calendar.png' %}" class="calendarDefaultImage" id="currentCalendarImage">
-                    <button type="button" for="calendarImageInput" id="btnEditCalendarImage" class="btnEditCalendarImage" title="사진 변경" onclick="document.getElementById('calendarImageInput').click();">파일선택</button>
+                <div class="modalInputGroupContainer">
+                    <label for="calendarImageInput">배경</label>
+                    <img src="{% static 'image/bg-calendar2.png' %}" class="calendarDefaultImage" id="currentCalendarImage">
+                    <button type="button" for="calendarImageInput" id="btnEditCalendarImage" class="btnEditCalendarImage" title="사진 변경" onclick="document.getElementById('calendarImageInput').click();">선택</button>
                     <input type="file" id="calendarImageInput" accept="image/*" style="display: none;">
                 </div>
         
                 <!-- 닉네임 -->
-                <div class="calendarNameContainer">
+                <div class="modalInputGroupContainer">
                     <label for="calendarName">이름</label>
                     <input type="text" id="calendarName" name="calendarName" placeholder="캘린더 이름">
                 </div>
 
                 <input type="hidden" id="calendarTheme" name="theme">
 
-                <div id="shareSettingsContainer" class="shareSettingsContainer" style="display: none;">
-                    <label>공유 설정</label>
-                    
-                    <!-- 이메일 입력 -->
-                    <div class="emailInputContainer">
-                        <div class="email-input-group">
-                            <input type="email" id="shareEmailInput" placeholder="공유할 이메일 주소 입력">
-                            <button type="button" id="btnAddEmail" class="btn-add-email">추가</button>
-                        </div>
-                    </div>
 
-                    <!-- 추가된 이메일 목록 -->
-                    <div id="sharedEmailsList" class="shared-emails-list">
-                        <!-- 동적으로 추가될 이메일들 -->
-                    </div>
+                <!-- 이메일 입력 -->
+                <div id="shareSettingsContainer" class="modalInputGroupContainer">
+                    <label for="shareEmailInput">초대</label>
+                    <input type="email" id="shareEmailInput" placeholder="공유할 이메일 주소 입력">
+                    <button type="button" id="btnAddEmail" class="btn-add-email">추가</button>
+                </div>
+
+                <!-- 추가된 이메일 목록 -->
+                <div id="sharedEmailsList" class="shared-emails-list">
+                    <!-- 동적으로 추가될 이메일들 -->
                 </div>
             </form>
 

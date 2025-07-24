@@ -739,6 +739,7 @@
 
 
 /* 공유 설정 컨테이너 */
+/*
 .shareSettingsContainer {
     margin-bottom: 20px;
     padding: 15px;
@@ -748,49 +749,58 @@
 }
 
 .shareSettingsContainer label {
-    display: block;
+    display: inline-block;
     margin-bottom: 10px;
     font-weight: bold;
     color: #333;
 }
-
+*/
 /* 이메일 입력 그룹 */
 .emailInputContainer {
     margin-bottom: 15px;
 }
-
+/*
 .email-input-group {
     display: flex;
-    gap: 10px;
+    align-items: stretch;
+    gap: 8px;
+}
+
+.email-input-group label {
+    margin: 0;
+    margin-right: 10px;
+    font-weight: bold;
+    color: #333;
+    white-space: nowrap;
 }
 
 .email-input-group input[type="email"] {
     flex: 1;
-    padding: 8px 12px;
+    padding: 6px 10px;
     border: 1px solid #ddd;
     border-radius: 4px;
     font-size: 14px;
+    min-width: 0;
 }
+*/
 
 .btn-add-email {
-    padding: 8px 16px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 4px;
+    width: 140px;
+    height: 45px;
+    color: black;
+    background-color: white;
+    border: 0.5px solid #f5f5f5;
+    border-radius: 6px;
+    margin-left: auto;
     cursor: pointer;
-    font-size: 14px;
-    transition: background-color 0.3s;
 }
 
 .btn-add-email:hover {
-    background-color: #45a049;
+    background-color: #f5f5f5;
+    font-weight: 600;
 }
 
-.btn-add-email:disabled {
-    background-color: #cccccc;
-    cursor: not-allowed;
-}
+
 
 /* 공유된 이메일 목록 */
 .shared-emails-list {
@@ -1533,36 +1543,36 @@
     font-size: 13px;
 }
   
-  .popup-btn.yes {
-    background-color: #B78C5C; /* 갈색 */
-    color: white;
-  }
-  
-  .popup-btn.no {
-    background-color: white;
-    color: gray;
-  }
+.popup-btn.yes {
+background-color: #B78C5C; /* 갈색 */
+color: white;
+}
 
-  .popup-btn.yes:hover {
-    background-color: #9E6A3B; /* 진한 갈색 */
-  }
+.popup-btn.no {
+background-color: white;
+color: gray;
+}
 
-  .popup-btn.no:hover {
-    background-color: #D3D3D3;
-  }
-  
-  .hidden {
-    display: none;
-  }
-  
-  @keyframes fadeIn {
-    from { opacity: 0; transform: scale(0.95); }
-    to { opacity: 1; transform: scale(1); }
-  }
+.popup-btn.yes:hover {
+background-color: #9E6A3B; /* 진한 갈색 */
+}
+
+.popup-btn.no:hover {
+background-color: #D3D3D3;
+}
+
+.hidden {
+display: none;
+}
+
+@keyframes fadeIn {
+from { opacity: 0; transform: scale(0.95); }
+to { opacity: 1; transform: scale(1); }
+}
 
 
-  /* 유저 프로필 */
-  .profile-card {
+/* 유저 프로필 */
+.profile-card {
     display: none;
     position: absolute;
     top: 60px;
@@ -1572,19 +1582,19 @@
     box-shadow: -2px 6px 12px rgba(0, 0, 0, 0.3);
     border-radius: 12px;
     z-index: 100;
-  }
+}
 
-  .profile-card.active {
-    display: block;
-  }
+.profile-card.active {
+    display: block; 
+}
 
-  .profile-card-header {
+.profile-card-header {
     display: flex;
     justify-content: flex-end;
     padding: 1rem 1rem 0 1rem;
-  }
+}
 
-  .settings-dropdown {
+.settings-dropdown {
     display: none;
     position: absolute;
     top: 45px;
@@ -1595,85 +1605,85 @@
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     z-index: 200;
     min-width: 100px;
-  }
+}
 
-  .settings-dropdown.active {
-    display: block;
-  }
-  
-  .settings-dropdown ul {
+.settings-dropdown.active {
+    play: block;
+}
+
+.settings-dropdown ul {
     list-style: none;
     margin: 0;
     padding: 0;
-  }
-  
-  .settings-dropdown li a {
+}
+
+.settings-dropdown li a {
     display: block;
     padding: 0.3rem 0.5rem;
     text-decoration: none;
     font-size: 12px;
     color: #333;
-  }
-  
-  .settings-dropdown li a:hover {
+}
+
+.settings-dropdown li a:hover {
     background-color: #f3e5ab;
     font-weight: 600;
-  }
+}
 
-  .profile-card-body {
+.profile-card-body {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     padding: 0 1rem;
-  }
+}
 
-  .profile-card-body img {
+.profile-card-body img {
     width: 100px;
     height: 100px;
     border-radius: 50%;
     object-fit: contain; /* 👈 비율 유지하며 컨테이너에 맞춤 */
-  }
+}
 
-  .profile-card-body .nickname {
+.profile-card-body .nickname {
     margin-top: 10px;
     font-size: 13px;
     color: #333;
-  }
+}
 
-  .profile-card-body .email {
+.profile-card-body .email {
     margin-top: 5px;
     font-size: 13px;
     color: #333;
-  }
+}
 
-  .settings-icon {
+.settings-icon {
     font-size: 20px;
     cursor: pointer;
     color: #888;
-  }
-  .divider {
+}
+.divider {
     border: none;
     height: 1px;
     background-color: #d3d3d3;
-  }
-  
-  .profile-card-footer {
+}
+
+.profile-card-footer {
     display: flex;
     flex-direction: column;
     gap: 0.3rem;
     font-size: 0.8rem;
     padding: 0 1rem 1rem 1rem;
-  }
-  
-  .footer-link {
+}
+
+.footer-link {
     color: #666;
     text-decoration: none;
-  }
-  
-  .footer-link:hover {
+}
+
+.footer-link:hover {
     text-decoration: underline;
-  }
+}
 
 .modal {
     position: fixed;
@@ -1729,7 +1739,8 @@
 
 .modal-content input[type="text"],
 .modal-content input[type="date"],
-.modal-content input[type="file"] {
+.modal-content input[type="file"],
+.modal-content input[type="email"]  {
     width: 100%;
     padding: 0.5rem;
     border: none; /* 전체 border 제거 */
@@ -1741,9 +1752,12 @@
 
 .modal-content input[type="text"]:focus,
 .modal-content input[type="date"]:focus,
-.modal-content input[type="file"]:focus {
+.modal-content input[type="file"]:focus,
+.modal-content input[type="email"]:focus {
     border-bottom: 2px solid #f4e1c1; /* 아래 라인만 보이도록 설정 */
 }
+
+
 
 @media (max-width: 768px) {
     .modal {
@@ -1806,7 +1820,8 @@
     
     .modal-content input[type="text"],
     .modal-content input[type="date"],
-    .modal-content input[type="file"] {
+    .modal-content input[type="file"],
+    .modal-content input[type="email"] {
         padding: 0.75rem;      /* 터치하기 쉽게 패딩 증가 */
         font-size: 16px;       /* iOS 줌 방지를 위해 16px 이상 */
         margin-top: 8px;
@@ -1815,7 +1830,8 @@
     
     .modal-content input[type="text"]:focus,
     .modal-content input[type="date"]:focus,
-    .modal-content input[type="file"]:focus {
+    .modal-content input[type="file"]:focus,
+    .modal-content input[type="email"]:focus {
         border-bottom: 2px solid #f4e1c1;
         transform: none;       /* 모바일에서 변형 효과 제거 */
     }
@@ -2002,9 +2018,10 @@
     gap: 10px;
 }
 
-.calendarImageContainer {
+.modalInputGroupContainer {
     display: flex;
     align-items: center;
+    margin-top: 30px;
 }
 
 .calendarModalForm label {
@@ -2014,8 +2031,8 @@
     min-width: 100px;
 }
 
-.calendarImageContainer img {
-    width: 160px;
+.calendarDefaultImage {
+    width: 140px;
     height: auto;
     max-height: 120px;
     object-fit: contain; /* 👈 비율 유지하며 컨테이너에 맞춤 */
@@ -2038,12 +2055,6 @@
 .btnEditCalendarImage:hover {
     background-color: #f5f5f5;
     font-weight: 600;
-}
-
-.calendarNameContainer {
-    display: flex;
-    align-items: center;
-    margin-top: 50px;
 }
 
 .modal-bottom-group {
@@ -2662,7 +2673,7 @@
         padding: 30px 15px;
     }
 
-    .calendarImageContainer img {
+    .calendarDefaultImage {
         width: 120px;
         max-height: 90px;
     }
