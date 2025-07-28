@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'js/calendar.js' %}"></script>
+    {% if calendars_json %}
+        <script id="calendars_json" type="application/json">{{ calendars_json|safe }}</script>
+    {% endif %}
+
+    {% if pending_calendars_json %}
+        <script id="pending_calendars_json" type="application/json">{{ pending_calendars_json|safe }}</script>
+    {% endif %}
+    
+    <script id="holidays_json" type="application/json">{{ holidays_json|safe }}</script>
+
+    <script id="events_json"   type="application/json">{{ events_json|safe }}</script>
+    {{ block.super }}  <!-- base.html에서 정의된 기본 스크립트도 호출 -->
+{% endblock %}
