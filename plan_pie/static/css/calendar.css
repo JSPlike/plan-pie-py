@@ -1390,6 +1390,7 @@
 /* event-tab */
 .calendar-tab {
     display: flex;
+    text-align: center;
     -webkit-box-align: center;
     align-items: center;
     -webkit-box-pack: justify;
@@ -1401,6 +1402,7 @@
 }
 
 .calendar-tab a {
+    width: 60px;
     padding: 8px 16px;
     border: 1px solid #ccc;
     border-radius: 0;
