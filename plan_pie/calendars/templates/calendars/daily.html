@@ -675,3 +675,9 @@
 }
 </style>
 {% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'js/daily.js' %}"></script>
+
+    {{ block.super }}
+{% endblock %}

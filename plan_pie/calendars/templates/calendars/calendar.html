@@ -6,13 +6,11 @@
     <!-- 공통 헤더 포함 -->
     <nav class="event-header">
         <div class="btnCalList">
-            <button id="calThem" class="calThem">
-                ☰
-            </button>
+            <button id="calThem" class="calThem">☰</button>
         </div>
 
         <div class="logoTitle">
-            <img src="/static/image/pie-logo.png" alt="Plan Pie 로고" style="max-width: 100px; height: auto;" >
+            <img src="/static/image/pie-logo.png" alt="Plan Pie 로고">
         </div>
     
         <!-- 가운데 -->
@@ -27,7 +25,6 @@
             </div>
             <div class="calendar-tab">
                 <a href="{% url 'calendar:monthly' %}"  class="tab-link active-tab" data-url="/event/monthly" data-title="Monthly">Monthly</a>
-                <a href="#" class="tab-link" data-url="/event/weekly" data-title="Weekly" style="display:none;">Weekly</a>
                 <a href="{% url 'calendar:daily' %}"  class="tab-link" data-url="/event/daily" data-title="Daily">Daily</a>
             </div>
             <div class="add-event-section">
@@ -93,5 +90,5 @@
     <script id="holidays_json" type="application/json">{{ holidays_json|safe }}</script>
 
     <script id="events_json"   type="application/json">{{ events_json|safe }}</script>
-    {{ block.super }}  <!-- base.html에서 정의된 기본 스크립트도 호출 -->
+    {{ block.super }}
 {% endblock %}

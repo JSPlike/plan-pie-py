@@ -190,3 +190,17 @@
     </div>
 </div>
 {% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'js/monthly.js' %}"></script>
+
+    {% if calendars_json %}
+        <script id="calendars_json" type="application/json">{{ calendars_json|safe }}</script>
+    {% endif %}
+
+    {% if pending_calendars_json %}
+        <script id="pending_calendars_json" type="application/json">{{ pending_calendars_json|safe }}</script>
+    {% endif %}
+
+    {{ block.super }}
+{% endblock %}

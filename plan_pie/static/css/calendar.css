@@ -202,6 +202,11 @@
     padding-right: 40px;
 }
 
+.logoTitle img {
+    max-width: 100px;
+    height: auto;
+}
+
 @media (max-width: 1000px) {
     .logoTitle {
         display: none;
