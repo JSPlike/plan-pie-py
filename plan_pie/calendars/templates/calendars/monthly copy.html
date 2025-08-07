@@ -1,0 +1,279 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="calendarContainer">
+    <!-- 공통 헤더 포함 -->
+    <nav class="event-header">
+        <div class="btnCalList">
+            <button id="calThem" class="calThem">
+                ☰
+            </button>
+        </div>
+
+        <div class="logoTitle">
+            <img src="/static/image/pie-logo.png" alt="Plan Pie 로고" style="max-width: 100px; height: auto;" >
+        </div>
+    
+        <!-- 가운데 -->
+        <div class="event-header-center">
+            {% if calendars_json %}
+            <div class="calendar-header">
+                <div class="calendar-ym"></div>
+                <div class="calendar-move">
+                    <button id="prev"><i data-lucide="chevron-left" class="icon"></i></button>
+                    <button id="next"><i data-lucide="chevron-right" class="icon"></i></button>
+                </div>
+            </div>
+            <div class="calendar-tab">
+                <a href="#" class="tab-link active-tab" data-url="/event/monthly" data-title="Monthly">Monthly</a>
+                <a href="#" class="tab-link" data-url="/event/weekly" data-title="Weekly" style="display:none;">Weekly</a>
+                <a href="#" class="tab-link" data-url="/event/daily" data-title="Daily">Daily</a>
+            </div>
+            <div class="add-event-section">
+                <button id="toggleEvent" class="btnDefaultQuad">+</button>
+            </div>
+            {% endif %}
+        </div>
+        
+        
+
+        <div class="profile-section">
+            <img src="{% if user.profileimage %}{{ user.profileimage.url }}{% else %}{% static 'image/user.png' %}{% endif %}" id="profile" alt="프로필" class="profile-rounded">
+            <div class="profile-card" id="profileCard">
+                <div class="profile-card-header">
+                    <div class="settings-icon" title="설정" id="settingsBtn">⚙️</div>
+                    <div class="settings-dropdown" id="settingsDropdown">
+                    <ul>
+                        <li><a href="#" data-modal="modalProfileEdit">프로필 수정</a></li>
+                        <li><a href="#">알림 설정</a></li>
+                        <li><a href="#">개인정보 설정</a></li>
+                        <li><a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">로그아웃</a></li>
+
+                        <!-- 숨겨진 로그아웃 폼 -->
+                        <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">
+                            {% csrf_token %}
+                        </form>
+                    </ul>
+                    </div>
+                </div>
+                <div class="profile-card-body">
+                    <img src="{% if user.profileimage %}{{ user.profileimage.url }}{% else %}{% static 'image/user.png' %}{% endif %}" alt="Profile">
+                    <div class="nickname"> {{ user.nickname|default:"미설정" }}</div>
+                    <div class="email">{{ user.email }}</div>
+                </div>
+                <hr class="divider">
+                <div class="profile-card-footer">
+                    <a href="/privacy-policy/" class="footer-link">개인정보처리방침</a>
+                    <a href="/terms-of-service/" class="footer-link">이용약관</a>
+                </div>
+                </div>
+        </div>
+    </nav>
+
+
+    <div class="calendarContent">
+        <div class="section left-section" id="left-section">
+            <ul class="calList">
+                <!-- 항목은 JS로 생성됨 -->
+
+                <!-- 마지막: 달력 추가 버튼 -->
+                <li id="btnAddCal" class="calAddItem">
+                    <div class="calContainer small">
+                        <span class="plus">+</span>
+                        <span class="calTitle">Add Calendar</span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="section centerSection" id="center-section">
+            {% if calendars_json %}
+                <!-- 달력 데이터가 있을 경우 -->
+                <div id="calendar"></div>
+            {% else %}
+                <!-- 달력 데이터가 없을 경우 -->
+                <div class="no-calendar">
+                    <p>현재 참여 중인 캘린더가 없습니다.</p>
+                    <a href="new/" class="btn">새 캘린더 만들기</a>
+                </div>
+            {% endif %}
+        </div>
+        <div class="section right-section" id="right-section">
+            <div class="custom-event-form-wrap">
+                <form id="custom-event-form" class="custom-event-form" action="#">
+                    {% csrf_token %}
+                    <!-- 제목 -->
+                    <div>
+                        <input type="text" id="event-title" name="title" class="event-title" placeholder="Title">
+                    </div>
+                
+                    <!-- 시작일 / 종료일 -->
+                    <div class="date-section">
+                        <div class="event-date">
+
+                            <div class="start-date">
+                                <div class="name-date">시작일</div>
+                                <div class="date-input">
+                                    <input type="text" id="start-date" name="sdate"
+                                    placeholder="날짜 선택"
+                                    readonly>
+                                </div>
+                                <div class="time-input">
+                                    <input type="time" id="start-time" name="stime">
+                                </div>
+                            </div>
+
+                            <div class="end-date">
+                                <div class="name-date">종료일</div>
+                                <div class="date-input"> 
+                                    <input type="text" id="end-date" name="edate"
+                                    placeholder="날짜 선택"
+                                    readonly>
+                                </div>
+                                <div class="time-input">
+                                    <input type="time" id="end-time" name="etime">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 종일 여부 -->
+                        <div class="chekbox-group">
+                            <div class="form-contents">
+                                <input type="checkbox" id="all-day" name="isAllday" checked>
+                                <label for="all-day">종일</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="option-section">
+
+                        <div class="event-option">
+                            <i data-lucide="circle-user-round" class="optIcon"></i>
+                            <div id="participant-list" class="participant-list">
+                                <!-- 기본 참여자 목록 -->
+                                <div class="participant" data-email="joonyoung@potato.co.kr">
+                                    <img src="{% static 'image/user.png' %}" alt="박준영" class="participant-img">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 색상 선택 -->
+                        <div class="event-option">
+                            <i data-lucide="tag" class="optIcon"></i>
+                            <select id="cmbEventColor" name="color">
+                                <option value="#6366f1">🟣 퍼플 블루</option>
+                                <option value="#f472b6">🌸 핑크 로즈</option>
+                                <option value="#34d399">💚 민트 그린</option>
+                                <option value="#facc15">💛 레몬 옐로우</option>
+                                <option value="#60a5fa">💙 스카이 블루</option>
+                                <option value="#fb923c">🧡 코랄 오렌지</option>
+                                <option value="#a78bfa">💜 라벤더</option>
+                                <option value="#000000">🖤 제트 블랙</option>
+                              </select>
+                        </div>
+
+                        <div class="event-option calSelectContainer">
+                            <i data-lucide="calendar" class="optIcon"></i>
+                            <select name="calendar_id">
+                                {% for calendar in calendars %}
+                                    <option value="{{ calendar.id }}" {% if forloop.first %}selected{% endif %}>
+                                        {{ calendar.name }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+            <div class="form-bottom-group">
+                <button id="close-section-btn">
+                    취소
+                </button>
+                <button id="save-section-btn">
+                    저장
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 프로필 수정 모달 -->
+    <div id="modalProfileEdit" class="modal">
+        <div class="modal-content">
+            <!--<span class="close">&times;</span>-->
+            <h3>프로필 수정</h3>
+            <!-- 여기에 프로필 수정 폼 -->
+            <form class="profile-form" id="profileForm" enctype="multipart/form-data">
+                <!-- 프로필 이미지 -->
+                <div class="profile-photo-container">
+                    <img src="{% if user.profileimage %}{{ user.profileimage.url }}{% else %}{% static 'image/user.png' %}{% endif %}" 
+                     alt="프로필 사진" 
+                     class="profile-photo" 
+                     id="currentProfilePhoto">
+
+                    <label for="profilePhotoInput" class="edit-photo-btn" title="사진 변경">
+                        ✏️
+                    </label>
+                    <input type="file" id="profilePhotoInput" accept="image/*" style="display: none;">
+                </div>
+        
+                <!-- 닉네임 -->
+                <div>
+                    <label for="nickname">닉네임</label><br>
+                    <input type="text" id="nickname" name="nickname" placeholder="필수 입력값입니다." value="{{ user.nickname|default:'' }}">
+                </div>
+        
+                <!-- 생년월일 -->
+                <div>
+                    <label for="birthDate">생년월일</label><br>
+                    <input type="text" id="birthDate" name="birthDate"
+                    placeholder="날짜 선택">
+                </div>
+        
+                <!-- 제출 버튼 -->
+                <div class="modal-bottom-group">
+                    <button id="close-modal-btn">
+                        취소
+                    </button>
+                    <button id="save-modal-btn">
+                        저장
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 알림 설정 모달 -->
+    <div id="modalNotification" class="modal">
+        <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        <h2>알림 설정</h2>
+        <!-- 알림 설정 내용 -->
+        </div>
+    </div>
+    
+    <!-- 개인정보 설정 모달 -->
+    <div id="modalPrivacy" class="modal">
+        <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        <h2>개인정보 설정</h2>
+        <!-- 개인정보 내용 -->
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'js/calendar.js' %}"></script>
+    {% if calendars_json %}
+        <script id="calendars_json" type="application/json">{{ calendars_json|safe }}</script>
+    {% endif %}
+
+    {% if pending_calendars_json %}
+        <script id="pending_calendars_json" type="application/json">{{ pending_calendars_json|safe }}</script>
+    {% endif %}
+    
+    <script id="holidays_json" type="application/json">{{ holidays_json|safe }}</script>
+
+    <script id="events_json"   type="application/json">{{ events_json|safe }}</script>
+    {{ block.super }}  <!-- base.html에서 정의된 기본 스크립트도 호출 -->
+{% endblock %}

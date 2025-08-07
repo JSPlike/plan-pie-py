@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="calendarContainer">
+    <!-- 공통 헤더 포함 -->
+    <nav class="event-header">
+        <div class="btnCalList">
+            <button id="calThem" class="calThem">
+                ☰
+            </button>
+        </div>
+
+        <div class="logoTitle">
+            <img src="/static/image/pie-logo.png" alt="Plan Pie 로고" style="max-width: 100px; height: auto;" >
+        </div>
+    
+        <!-- 가운데 -->
+        <div class="event-header-center">
+            {% if calendars_json %}
+            <div class="calendar-header">
+                <div class="calendar-ym"></div>
+                <div class="calendar-move">
+                    <button id="prev"><i data-lucide="chevron-left" class="icon"></i></button>
+                    <button id="next"><i data-lucide="chevron-right" class="icon"></i></button>
+                </div>
+            </div>
+            <div class="calendar-tab">
+                <a href="{% url 'calendar:monthly' %}"  class="tab-link active-tab" data-url="/event/monthly" data-title="Monthly">Monthly</a>
+                <a href="#" class="tab-link" data-url="/event/weekly" data-title="Weekly" style="display:none;">Weekly</a>
+                <a href="{% url 'calendar:daily' %}"  class="tab-link" data-url="/event/daily" data-title="Daily">Daily</a>
+            </div>
+            <div class="add-event-section">
+                <button id="toggleEvent" class="btnDefaultQuad">+</button>
+            </div>
+            {% endif %}
+        </div>
+        
+        
+
+        <div class="profile-section">
+            <img src="{% if user.profileimage %}{{ user.profileimage.url }}{% else %}{% static 'image/user.png' %}{% endif %}" id="profile" alt="프로필" class="profile-rounded">
+            <div class="profile-card" id="profileCard">
+                <div class="profile-card-header">
+                    <div class="settings-icon" title="설정" id="settingsBtn">⚙️</div>
+                    <div class="settings-dropdown" id="settingsDropdown">
+                    <ul>
+                        <li><a href="#" data-modal="modalProfileEdit">프로필 수정</a></li>
+                        <li><a href="#">알림 설정</a></li>
+                        <li><a href="#">개인정보 설정</a></li>
+                        <li><a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">로그아웃</a></li>
+
+                        <!-- 숨겨진 로그아웃 폼 -->
+                        <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">
+                            {% csrf_token %}
+                        </form>
+                    </ul>
+                    </div>
+                </div>
+                <div class="profile-card-body">
+                    <img src="{% if user.profileimage %}{{ user.profileimage.url }}{% else %}{% static 'image/user.png' %}{% endif %}" alt="Profile">
+                    <div class="nickname"> {{ user.nickname|default:"미설정" }}</div>
+                    <div class="email">{{ user.email }}</div>
+                </div>
+                <hr class="divider">
+                <div class="profile-card-footer">
+                    <a href="/privacy-policy/" class="footer-link">개인정보처리방침</a>
+                    <a href="/terms-of-service/" class="footer-link">이용약관</a>
+                </div>
+                </div>
+        </div>
+    </nav>
+    
+    <!-- 캘린더 컨테이너 [Monthly, Daily]-->
+    <div>
+        {% block calendar %}
+        
+        {% endblock %}
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'js/calendar.js' %}"></script>
+    {% if calendars_json %}
+        <script id="calendars_json" type="application/json">{{ calendars_json|safe }}</script>
+    {% endif %}
+
+    {% if pending_calendars_json %}
+        <script id="pending_calendars_json" type="application/json">{{ pending_calendars_json|safe }}</script>
+    {% endif %}
+    
+    <script id="holidays_json" type="application/json">{{ holidays_json|safe }}</script>
+
+    <script id="events_json"   type="application/json">{{ events_json|safe }}</script>
+    {{ block.super }}  <!-- base.html에서 정의된 기본 스크립트도 호출 -->
+{% endblock %}

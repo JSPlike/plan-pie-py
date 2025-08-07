@@ -575,34 +575,40 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function handleDayClick() {
         const clickedDate = getClickedDate(this);
-        selectedDate = clickedDate;
-        
-        // 현재 수정중인 날짜가 있으면
-        if(initialStaDt && initialEndDt) {
-            // 두 날짜의 차이를 구해서 현재 클릭한 날짜부터 차이만큼 다시 그려준다
-            const startDate = new Date(initialStaDt);
-            const endDate = new Date(initialEndDt);
-            const dayDifference = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
-            
-            // 새로운 시작일 설정
-            const newStartDate = new Date(clickedDate);
-            
-            // 새로운 종료일 계산 (시작일 + 기존 기간)
-            const newEndDate = new Date(newStartDate);
-            newEndDate.setDate(newStartDate.getDate() + dayDifference);
-            
-            // 날짜 업데이트
-            initialStaDt = newStartDate.toISOString().split('T')[0]; // YYYY-MM-DD 형식
-            initialEndDt = newEndDate.toISOString().split('T')[0];
-            
-            let title = $('#event-title').val()?.trim() || 'New Event';
 
-            updateFlatpickr(newStartDate, newEndDate);
+        if(selectedDate == null) {
+            selectedDate = clickedDate;
+        } else if (selectedDate == clickedDate) {
 
-            // 화면 다시 그리기 (이 부분은 실제 렌더링 함수명으로 바꿔주세요)
-            drawEvent(title, newStartDate, newEndDate); // 또는 updateDateRange() 등
+        } else {
+            // 현재 수정중인 날짜가 있으면
+            if(initialStaDt && initialEndDt) {
+                // 두 날짜의 차이를 구해서 현재 클릭한 날짜부터 차이만큼 다시 그려준다
+                const startDate = new Date(initialStaDt);
+                const endDate = new Date(initialEndDt);
+                const dayDifference = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
+                
+                // 새로운 시작일 설정
+                const newStartDate = new Date(clickedDate);
+                
+                // 새로운 종료일 계산 (시작일 + 기존 기간)
+                const newEndDate = new Date(newStartDate);
+                newEndDate.setDate(newStartDate.getDate() + dayDifference);
+                
+                // 날짜 업데이트
+                initialStaDt = newStartDate.toISOString().split('T')[0]; // YYYY-MM-DD 형식
+                initialEndDt = newEndDate.toISOString().split('T')[0];
+                
+                let title = $('#event-title').val()?.trim() || 'New Event';
+
+                updateFlatpickr(newStartDate, newEndDate);
+
+                // 화면 다시 그리기 (이 부분은 실제 렌더링 함수명으로 바꿔주세요)
+                drawEvent(title, newStartDate, newEndDate); // 또는 updateDateRange() 등
+            }
         }
-
+        
+        
         setFocusOnDay(this);
     }
     
@@ -879,7 +885,6 @@ document.addEventListener("DOMContentLoaded", function () {
             // JSON으로 출력 확인 (디버깅용)
             console.log(JSON.stringify(formData));
 
-            return;
             post (
                 '/event/new/', 
                 formData,

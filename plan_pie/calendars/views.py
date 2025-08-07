@@ -12,6 +12,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import get_user_model
 from datetime import time
 from django.shortcuts import render
+from django.utils import timezone
+from datetime import datetime
 
 @csrf_exempt 
 def create_event(request):
@@ -250,3 +252,112 @@ def calendar_create(request):
     return render(request, 'calendars/monthly.html', {
         'form': form,
     })
+    
+    
+    
+    
+# daily
+@login_required   
+def daily(request):
+    # 기존 코드...
+
+    # 완료율 계산
+    #completed_events = events.filter(is_completed=True).count()
+    #total_events = events.count()
+    #completion_rate = int((completed_events / total_events * 100)) if total_events > 0 else 0
+
+    # context = {
+    #     'active_tab': 'daily',
+    #     'selected_date': selected_date,
+    #     'events': processed_events,
+    #     'time_slots': time_slots,
+    #     'completed_events': completed_events,
+    #     'total_events': total_events,
+    #     'completion_rate': completion_rate,
+    #     # ... 기존 context
+    # }
+    
+    # 날짜 처리
+    date_str = request.GET.get('date')
+    if date_str:
+        try:
+            selected_date = datetime.strptime(date_str, '%Y-%m-%d').date()
+        except ValueError:
+            selected_date = timezone.now().date()
+    else:
+        selected_date = timezone.now().date()
+    
+    # 이벤트 가져오기 (필드명 수정)
+    events = Event.objects.filter(
+        start_date=selected_date  # date -> start_date로 변경
+    ).order_by('start_time')
+    
+    context = {
+        'active_tab': 'daily',
+        'selected_date': selected_date,
+        'events': events,
+        'time_slots': list(range(24)),
+        'completed_events': 0,  # 임시값
+        'total_events': events.count(),
+        'completion_rate': 0,  # 임시값
+    }
+
+    return render(request, 'calendars/daily.html', context)
+
+@csrf_exempt
+def toggle_event_completion(request, event_id):
+    if request.method == 'POST':
+        try:
+            event = Event.objects.get(id=event_id, user=request.user)
+            event.is_completed = not event.is_completed
+            event.save()
+            
+            return JsonResponse({
+                'success': True,
+                'is_completed': event.is_completed
+            })
+        except Event.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Event not found'})
+    
+    return JsonResponse({'success': False, 'error': 'Invalid request'})
+
+@csrf_exempt
+def update_event_time(request, event_id):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            event = Event.objects.get(id=event_id, user=request.user)
+            
+            new_hour = int(data.get('new_hour'))
+            old_duration = event.end_time.hour - event.start_time.hour
+            
+            event.start_time = event.start_time.replace(hour=new_hour)
+            event.end_time = event.start_time.replace(hour=new_hour + old_duration)
+            event.save()
+            
+            return JsonResponse({'success': True})
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)})
+    
+    return JsonResponse({'success': False, 'error': 'Invalid request'})
+
+@csrf_exempt
+def quick_add_event(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            
+            event = Event.objects.create(
+                user=request.user,
+                title=data.get('title'),
+                date=data.get('date'),
+                start_time=data.get('start_time'),
+                end_time=data.get('end_time'),
+                is_completed=False
+            )
+            
+            return JsonResponse({'success': True, 'event_id': event.id})
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)})
+    
+    return JsonResponse({'success': False, 'error': 'Invalid request'})

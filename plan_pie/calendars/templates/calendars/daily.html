@@ -1,22 +1,677 @@
-{% extends 'base.html' %}
+{% extends 'calendars/calendar.html' %}
 {% load static %}
 
-{% block content %}
+{% block calendar %}
+<div class="daily-view">
+    <!-- 날짜 네비게이션 -->
+    <div class="daily-header">
+        <div class="date-navigation">
+            <button class="btn btn-sm btn-outline-secondary" onclick="changeDate(-1)">◀ 이전</button>
+            <h2 id="current-date">{{ selected_date|date:'Y년 m월 d일 (D)' }}</h2>
+            <button class="btn btn-sm btn-outline-secondary" onclick="changeDate(1)">다음 ▶</button>
+        </div>
+        <div class="daily-actions">
+            <button class="btn btn-primary btn-sm" onclick="goToToday()">오늘</button>
+            <button class="btn btn-success btn-sm" onclick="addEvent()">+ 일정 추가</button>
+            <button class="btn btn-info btn-sm" onclick="toggleCompletedEvents()">완료된 일정 보기</button>
+        </div>
+    </div>
 
-{% endblock %}
+    <!-- 메인 콘텐츠 영역 -->
+    <div class="daily-content">
+        <!-- 드래그 앤 드롭 타임라인 -->
+        <div class="daily-timeline">
+            <div class="timeline-container">
+                <!-- 시간 라벨 -->
+                <div class="time-labels">
+                    {% for hour in time_slots %}
+                        <div class="time-label">{{ hour|stringformat:"02d" }}:00</div>
+                    {% endfor %}
+                </div>
+                
+                <!-- 드롭 존 영역 -->
+                <div class="events-container" id="events-container">
+                    {% for hour in time_slots %}
+                        <div class="hour-slot drop-zone" 
+                             data-hour="{{ hour }}"
+                             ondrop="drop(event)" 
+                             ondragover="allowDrop(event)">
+                            <div class="hour-line"></div>
+                            <div class="time-marker">{{ hour|stringformat:"02d" }}:00</div>
+                            
+                            <!-- 해당 시간의 이벤트들 -->
+                            <div class="events-in-hour">
+                                {% for event in events %}
+                                    {% if event.start_hour == hour %}
+                                        <div class="event-item draggable {% if event.is_completed %}completed{% endif %}" 
+                                             draggable="true"
+                                             data-event-id="{{ event.id }}"
+                                             data-start-time="{{ event.start_time|time:'H:i' }}"
+                                             data-duration="{{ event.duration_minutes }}"
+                                             style="background: linear-gradient(135deg, {{ event.calendar.color }}, {{ event.calendar.color }}dd);
+                                                    height: {{ event.duration_minutes }}px;
+                                                    top: {{ event.start_minute }}px;"
+                                             ondragstart="dragStart(event)">
+                                             
+                                            <!-- 완료 체크박스 -->
+                                            <div class="completion-checkbox" onclick="toggleCompletion({{ event.id }}, event)">
+                                                <input type="checkbox" 
+                                                       {% if event.is_completed %}checked{% endif %}
+                                                       onclick="event.stopPropagation();">
+                                                <span class="checkmark">✓</span>
+                                            </div>
+                                            
+                                            <!-- 이벤트 내용 -->
+                                            <div class="event-content">
+                                                <div class="event-title">{{ event.title }}</div>
+                                                <div class="event-time">
+                                                    {{ event.start_time|time:'H:i' }} - {{ event.end_time|time:'H:i' }}
+                                                    <span class="duration">({{ event.duration_minutes }}분)</span>
+                                                </div>
+                                                {% if event.location %}
+                                                    <div class="event-location">📍 {{ event.location }}</div>
+                                                {% endif %}
+                                            </div>
+                                            
+                                            <!-- 드래그 핸들 -->
+                                            <div class="drag-handle">⋮⋮</div>
+                                            
+                                            <!-- 리사이즈 핸들 -->
+                                            <div class="resize-handle" onmousedown="startResize(event, {{ event.id }})"></div>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
 
-{% block scripts %}
-    <script src="{% static 'js/calendar.js' %}"></script>
-    {% if calendars_json %}
-        <script id="calendars_json" type="application/json">{{ calendars_json|safe }}</script>
-    {% endif %}
+        <!-- 사이드바 -->
+        <div class="daily-sidebar">
+            <!-- 진행률 표시 -->
+            <div class="progress-section">
+                <h3>오늘의 진행률</h3>
+                <div class="progress-circle" data-progress="{{ completion_rate }}">
+                    <svg class="progress-ring" width="100" height="100">
+                        <circle class="progress-ring-background" cx="50" cy="50" r="45"></circle>
+                        <circle class="progress-ring-progress" cx="50" cy="50" r="45"></circle>
+                    </svg>
+                    <div class="progress-text">{{ completion_rate }}%</div>
+                </div>
+                <div class="progress-stats">
+                    <div class="stat">
+                        <span class="number">{{ completed_events }}</span>
+                        <span class="label">완료</span>
+                    </div>
+                    <div class="stat">
+                        <span class="number">{{ total_events }}</span>
+                        <span class="label">전체</span>
+                    </div>
+                </div>
+            </div>
 
-    {% if pending_calendars_json %}
-        <script id="pending_calendars_json" type="application/json">{{ pending_calendars_json|safe }}</script>
-    {% endif %}
-    
-    <script id="holidays_json" type="application/json">{{ holidays_json|safe }}</script>
+            <!-- 일정 목록 -->
+            <div class="events-list">
+                <h4>일정 목록</h4>
+                <div class="filter-tabs">
+                    <button class="filter-tab active" onclick="filterEvents('all')">전체</button>
+                    <button class="filter-tab" onclick="filterEvents('pending')">대기</button>
+                    <button class="filter-tab" onclick="filterEvents('completed')">완료</button>
+                </div>
+                
+                <div class="events-list-container">
+                    {% for event in events %}
+                        <div class="event-summary-item {% if event.is_completed %}completed{% endif %}" 
+                             data-event-id="{{ event.id }}"
+                             data-status="{% if event.is_completed %}completed{% else %}pending{% endif %}">
+                            
+                            <div class="event-checkbox" onclick="toggleCompletion({{ event.id }}, event)">
+                                <input type="checkbox" {% if event.is_completed %}checked{% endif %}>
+                                <span class="checkmark">✓</span>
+                            </div>
+                            
+                            <div class="event-dot" style="background-color: {{ event.calendar.color }}"></div>
+                            
+                            <div class="event-info" onclick="focusEvent({{ event.id }})">
+                                <div class="event-title">{{ event.title }}</div>
+                                <div class="event-time">
+                                    {{ event.start_time|time:'H:i' }} - {{ event.end_time|time:'H:i' }}
+                                </div>
+                                {% if event.description %}
+                                    <div class="event-desc">{{ event.description|truncatechars:30 }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="event-actions">
+                                <button class="btn-icon" onclick="editEvent({{ event.id }})" title="수정">✏️</button>
+                                <button class="btn-icon" onclick="duplicateEvent({{ event.id }})" title="복제">📋</button>
+                                <button class="btn-icon" onclick="deleteEvent({{ event.id }})" title="삭제">🗑️</button>
+                            </div>
+                        </div>
+                    {% empty %}
+                        <div class="no-events">
+                            <div class="empty-state">
+                                <div class="empty-icon">📅</div>
+                                <p>오늘 예정된 일정이 없습니다.</p>
+                                <button class="btn btn-primary btn-sm" onclick="addEvent()">첫 일정 추가하기</button>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
 
-    <script id="events_json"   type="application/json">{{ events_json|safe }}</script>
-    {{ block.super }}  <!-- base.html에서 정의된 기본 스크립트도 호출 -->
+            <!-- 빠른 추가 -->
+            <div class="quick-add">
+                <h4>빠른 일정 추가</h4>
+                <form id="quick-add-form" onsubmit="quickAddEvent(event)">
+                    <input type="text" placeholder="일정 제목" id="quick-title" required>
+                    <div class="time-inputs">
+                        <input type="time" id="quick-start-time" required>
+                        <span>-</span>
+                        <input type="time" id="quick-end-time" required>
+                    </div>
+                    <button type="submit" class="btn btn-success btn-sm">추가</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<style>
+.daily-view {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.daily-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0;
+    border-bottom: 2px solid #e9ecef;
+    margin-bottom: 20px;
+}
+
+.date-navigation {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.date-navigation h2 {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 700;
+    color: #2c3e50;
+    min-width: 300px;
+    text-align: center;
+}
+
+.daily-content {
+    display: grid;
+    grid-template-columns: 1fr 350px;
+    gap: 30px;
+    height: calc(100vh - 250px);
+    overflow: hidden;
+}
+
+.daily-timeline {
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.timeline-container {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    min-height: 1440px; /* 24시간 * 60px */
+}
+
+.time-labels {
+    background: linear-gradient(to bottom, #f8f9fa, #e9ecef);
+    border-right: 2px solid #dee2e6;
+}
+
+.time-label {
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 600;
+    color: #495057;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.events-container {
+    position: relative;
+    background-color: #ffffff;
+}
+
+.hour-slot {
+    height: 60px;
+    position: relative;
+    border-bottom: 1px solid #f1f3f4;
+    transition: background-color 0.2s ease;
+}
+
+.hour-slot.drag-over {
+    background-color: #e3f2fd;
+    border: 2px dashed #2196f3;
+}
+
+.hour-line {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background-color: #e9ecef;
+}
+
+.time-marker {
+    position: absolute;
+    right: 10px;
+    top: 5px;
+    font-size: 10px;
+    color: #adb5bd;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.hour-slot:hover .time-marker {
+    opacity: 1;
+}
+
+.events-in-hour {
+    position: relative;
+    height: 100%;
+    padding: 2px;
+}
+
+.event-item {
+    position: absolute;
+    left: 5px;
+    right: 5px;
+    border-radius: 8px;
+    cursor: move;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    transition: all 0.3s ease;
+    z-index: 10;
+    overflow: hidden;
+    min-height: 30px;
+    border: 2px solid transparent;
+}
+
+.event-item:hover {
+    transform: translateX(3px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    border-color: rgba(255,255,255,0.3);
+}
+
+.event-item.dragging {
+    opacity: 0.7;
+    transform: rotate(3deg);
+    z-index: 1000;
+}
+
+.event-item.completed {
+    opacity: 0.6;
+    filter: grayscale(50%);
+}
+
+.event-item.completed .event-title {
+    text-decoration: line-through;
+}
+
+.completion-checkbox {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    z-index: 20;
+}
+
+.completion-checkbox input {
+    display: none;
+}
+
+.completion-checkbox .checkmark {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    background: rgba(255,255,255,0.9);
+    border: 2px solid rgba(255,255,255,0.7);
+    border-radius: 50%;
+    color: transparent;
+    font-size: 12px;
+    font-weight: bold;
+    transition: all 0.2s ease;
+}
+
+.completion-checkbox input:checked + .checkmark {
+    background: #28a745;
+    color: white;
+    border-color: #28a745;
+}
+
+.event-content {
+    padding: 8px 25px 8px 8px;
+    color: white;
+    font-size: 12px;
+}
+
+.event-title {
+    font-weight: 600;
+    margin-bottom: 2px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.event-time {
+    font-size: 10px;
+    opacity: 0.9;
+}
+
+.duration {
+    font-weight: 500;
+}
+
+.event-location {
+    font-size: 10px;
+    opacity: 0.8;
+    margin-top: 2px;
+}
+
+.drag-handle {
+    position: absolute;
+    left: 2px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(255,255,255,0.7);
+    font-size: 10px;
+    cursor: move;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.event-item:hover .drag-handle {
+    opacity: 1;
+}
+
+.resize-handle {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    cursor: ns-resize;
+    background: rgba(255,255,255,0.3);
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.event-item:hover .resize-handle {
+    opacity: 1;
+}
+
+/* 사이드바 스타일 */
+.daily-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    overflow-y: auto;
+    padding: 0 10px;
+}
+
+.progress-section {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 25px;
+    border-radius: 15px;
+    text-align: center;
+}
+
+.progress-circle {
+    position: relative;
+    display: inline-block;
+    margin: 15px 0;
+}
+
+.progress-ring {
+    transform: rotate(-90deg);
+}
+
+.progress-ring-background {
+    fill: none;
+    stroke: rgba(255,255,255,0.2);
+    stroke-width: 6;
+}
+
+.progress-ring-progress {
+    fill: none;
+    stroke: #00d4aa;
+    stroke-width: 6;
+    stroke-linecap: round;
+    stroke-dasharray: 283;
+    stroke-dashoffset: 283;
+    transition: stroke-dashoffset 0.5s ease-in-out;
+}
+
+.progress-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.progress-stats {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 15px;
+}
+
+.stat .number {
+    display: block;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.stat .label {
+    font-size: 12px;
+    opacity: 0.9;
+}
+
+.events-list {
+    background: white;
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.filter-tabs {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 15px;
+}
+
+.filter-tab {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #dee2e6;
+    background: #f8f9fa;
+    border-radius: 6px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.filter-tab.active,
+.filter-tab:hover {
+    background: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+.event-summary-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #f1f3f4;
+    transition: all 0.2s ease;
+}
+
+.event-summary-item:hover {
+    background: linear-gradient(90deg, #f8f9fa, transparent);
+    border-radius: 8px;
+    margin: 0 -10px;
+    padding: 12px 10px;
+}
+
+.event-summary-item.completed {
+    opacity: 0.6;
+}
+
+.event-checkbox {
+    margin-right: 12px;
+    cursor: pointer;
+}
+
+.event-checkbox input {
+    display: none;
+}
+
+.event-checkbox .checkmark {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border: 2px solid #dee2e6;
+    border-radius: 4px;
+    color: transparent;
+    font-size: 10px;
+    transition: all 0.2s ease;
+}
+
+.event-checkbox input:checked + .checkmark {
+    background: #28a745;
+    border-color: #28a745;
+    color: white;
+}
+
+.event-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 12px;
+    flex-shrink: 0;
+}
+
+.event-info {
+    flex: 1;
+    cursor: pointer;
+}
+
+.event-actions {
+    display: flex;
+    gap: 5px;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.event-summary-item:hover .event-actions {
+    opacity: 1;
+}
+
+.quick-add {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid #e9ecef;
+}
+
+.quick-add form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.time-inputs {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.time-inputs input {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: #6c757d;
+}
+
+.empty-icon {
+    font-size: 48px;
+    margin-bottom: 15px;
+}
+
+/* 현재 시간 라인 */
+.current-time-line {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #ff4757, #ff6b7a);
+    z-index: 100;
+    border-radius: 2px;
+    box-shadow: 0 0 10px rgba(255, 71, 87, 0.5);
+}
+
+.current-time-dot {
+    position: absolute;
+    left: -6px;
+    top: -4px;
+    width: 10px;
+    height: 10px;
+    background: #ff4757;
+    border: 2px solid white;
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(255, 71, 87, 0.5);
+}
+
+/* 드래그 앤 드롭 피드백 */
+.drop-zone.drag-over {
+    background: linear-gradient(90deg, rgba(33, 150, 243, 0.1), rgba(33, 150, 243, 0.05));
+    border-left: 4px solid #2196f3;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.event-item.just-moved {
+    animation: pulse 0.5s ease-in-out;
+}
+</style>
 {% endblock %}

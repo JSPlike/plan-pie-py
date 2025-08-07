@@ -46,6 +46,7 @@ class Event(models.Model):
     is_all_day = models.BooleanField(default=True)
     color = models.CharField(max_length=20, default='#0000FF')
     memo = models.TextField(null=True, blank=True)  # 📝 메모 필드 추가!
+    is_completed = models.BooleanField(default=False)
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
     
