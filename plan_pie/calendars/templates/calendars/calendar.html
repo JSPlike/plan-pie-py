@@ -23,18 +23,18 @@
                     <button id="next"><i data-lucide="chevron-right" class="icon"></i></button>
                 </div>
             </div>
+            {% endif %}
             <div class="calendar-tab">
-                <a href="{% url 'calendar:monthly' %}"  class="tab-link active-tab" data-url="/event/monthly" data-title="Monthly">Monthly</a>
-                <a href="{% url 'calendar:daily' %}"  class="tab-link" data-url="/event/daily" data-title="Daily">Daily</a>
+                <a href="{% url 'calendar:monthly' %}"  class="tab-link {% if request.resolver_match.url_name == 'monthly' %}active-tab{% endif %}" data-url="/calendar/monthly" data-title="Monthly">Monthly</a>
+                <a href="{% url 'calendar:daily' %}"    class="tab-link {% if request.resolver_match.url_name == 'daily' %}active-tab{% endif %}"            data-url="/calendar/daily"   data-title="Daily">Daily</a>
             </div>
+            {% if calendars_json %}
             <div class="add-event-section">
                 <button id="toggleEvent" class="btnDefaultQuad">+</button>
             </div>
             {% endif %}
         </div>
         
-        
-
         <div class="profile-section">
             <img src="{% if user.profileimage %}{{ user.profileimage.url }}{% else %}{% static 'image/user.png' %}{% endif %}" id="profile" alt="프로필" class="profile-rounded">
             <div class="profile-card" id="profileCard">

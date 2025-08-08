@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 # '/' url 진입시 세션체크후 화면 분기
 def home_view(request):
     if request.session.get('sessionid'):
-        return redirect('/calendar/')  # 세션이 있으면 이벤트로
+        return redirect('/calendar/monthly')  # 세션이 있으면 이벤트로
     return redirect('/accounts/login/')  # 세션 없으면 로그인으로
 
 # 회원가입 뷰
@@ -97,7 +97,7 @@ def login(request):
             return JsonResponse({
                 "success": True,
                 "message": "로그인 성공",
-                "redirect_url": "/calendar/"
+                "redirect_url": "/calendar/monthly"
             })
         else:
             return JsonResponse({

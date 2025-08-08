@@ -1422,11 +1422,11 @@
     border-bottom-left-radius: 8px;
     border-right: none;
 }
-.calendar-tab a:nth-child(2) {
+/* .calendar-tab a:nth-child(2) {
     border-left: none;
     border-right: none;
-}
-.calendar-tab a:nth-child(3){
+} */
+.calendar-tab a:nth-child(2){
     border-top-right-radius: 8px;
     border-bottom-right-radius: 8px;
     border-left: none;

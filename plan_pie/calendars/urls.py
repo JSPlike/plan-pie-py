@@ -4,7 +4,7 @@ from .views import monthly, daily, calendar_new, calendar_create, create_event, 
 app_name = 'calendar'  # 'event' 네임스페이스 설정
 
 urlpatterns = [
-    path('', monthly, name="monthly"),
+    path('monthly', monthly, name="monthly"),
     #path('monthly/', monthly, name="monthly"),
     path('daily', daily, name="daily"),
     path('new/', calendar_new, name="calendar_new"),
