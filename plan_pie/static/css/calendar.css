@@ -43,27 +43,9 @@
     height: 60px;
 }
 
-.event-header-center {
-    display: flex;
-    -webkit-box-align: center;
-    align-items: center;
-    -webkit-box-pack: justify;
-    justify-content: space-between;
-    width: 100%;
-    height: 100%;
-}
 
-.add-event-section {
-    position: relative;
-    display: flex;
-    -webkit-box-align: center;
-    align-items: center;
-    -webkit-box-pack: end;
-    justify-content: flex-end;
-    height: 100%;
-    margin-left: auto;
-    padding-right: 18px;
-}
+
+
 
 .btnBlueRound {
     width: 2.5rem;        /* 너비 */
@@ -213,18 +195,93 @@
     }
 }
 
+.event-header-center {
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: justify;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
 .calendar-header {
     white-space: nowrap;
     display: flex;
-    padding: 1px 500px 1px 0px; /* 양 옆에 더 많은 여백 추가 */
     align-items: center;
     justify-content: center;
+    width: auto;
+    margin-left: 20px;
     gap: 12px;
-
     /* 캘린더 헤더 폰트 (년월) */
     font-family: 'Gmarket Sans', sans-serif;
-  }
+}
+
+/* event-tab */
+.calendar-tab {
+    display: flex;
+    text-align: center;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: justify;
+    justify-content: space-between;
+    width: auto;
+    padding: 2px;
+    border: 0.5px solid rgb(237, 237, 237);
+    border-radius: 8px;
+}
+
+.calendar-tab a {
+    width: 60px;
+    padding: 8px 16px;
+    border: 1px solid #ccc;
+    border-radius: 0;
+    text-decoration: none;
+    color: #333;
+    background-color: #f9f9f9;
+    transition: 0.2s;
+}
+
+.calendar-tab a:first-child {
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    border-right: none;
+}
+/* .calendar-tab a:nth-child(2) {
+    border-left: none;
+    border-right: none;
+} */
+.calendar-tab a:nth-child(2){
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    border-left: none;
+}
+
+.calendar-tab a:hover {
+    background-color: #e0e0e0;
+}
+
+.calendar-tab a.active-tab {
+    background-color: #4B2E2B;
+    color: #fff;
+    font-weight: bold;
+}
+
   
+.add-event-section {
+    position: relative;
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: end;
+    justify-content: flex-end;
+    height: 100%;
+    margin-left: auto;
+    padding-right: 18px;
+    flex: 0 0 auto;
+}
+
   /* calendar theme */
 
 
@@ -1392,55 +1449,6 @@
     background: rgba(231, 59, 59, 0.1);
 }
 
-/* event-tab */
-.calendar-tab {
-    display: flex;
-    text-align: center;
-    -webkit-box-align: center;
-    align-items: center;
-    -webkit-box-pack: justify;
-    justify-content: space-between;
-    width: auto;
-    padding: 2px;
-    border: 0.5px solid rgb(237, 237, 237);
-    border-radius: 8px;
-}
-
-.calendar-tab a {
-    width: 60px;
-    padding: 8px 16px;
-    border: 1px solid #ccc;
-    border-radius: 0;
-    text-decoration: none;
-    color: #333;
-    background-color: #f9f9f9;
-    transition: 0.2s;
-}
-
-.calendar-tab a:first-child {
-    border-top-left-radius: 8px;
-    border-bottom-left-radius: 8px;
-    border-right: none;
-}
-/* .calendar-tab a:nth-child(2) {
-    border-left: none;
-    border-right: none;
-} */
-.calendar-tab a:nth-child(2){
-    border-top-right-radius: 8px;
-    border-bottom-right-radius: 8px;
-    border-left: none;
-}
-
-.calendar-tab a:hover {
-    background-color: #e0e0e0;
-}
-
-.calendar-tab a.active-tab {
-    background-color: #4B2E2B;
-    color: #fff;
-    font-weight: bold;
-}
 
 #search-input {
     padding: 5px;

@@ -15,24 +15,22 @@
     
         <!-- 가운데 -->
         <div class="event-header-center">
-            {% if calendars_json %}
-            <div class="calendar-header">
+            <div class="calendar-tab">
+                <a href="{% url 'calendar:monthly' %}"  class="tab-link {% if request.resolver_match.url_name == 'monthly' %}active-tab{% endif %}" data-url="/calendar/monthly" data-title="Monthly">Monthly</a>
+                <a href="{% url 'calendar:daily' %}"    class="tab-link {% if request.resolver_match.url_name == 'daily' %}active-tab{% endif %}"            data-url="/calendar/daily"   data-title="Daily">Daily</a>
+            </div>
+
+            <div class="calendar-header" {% if request.resolver_match.url_name == 'daily' %}style="opacity: 0;"{% endif %}>
                 <div class="calendar-ym"></div>
                 <div class="calendar-move">
                     <button id="prev"><i data-lucide="chevron-left" class="icon"></i></button>
                     <button id="next"><i data-lucide="chevron-right" class="icon"></i></button>
                 </div>
             </div>
-            {% endif %}
-            <div class="calendar-tab">
-                <a href="{% url 'calendar:monthly' %}"  class="tab-link {% if request.resolver_match.url_name == 'monthly' %}active-tab{% endif %}" data-url="/calendar/monthly" data-title="Monthly">Monthly</a>
-                <a href="{% url 'calendar:daily' %}"    class="tab-link {% if request.resolver_match.url_name == 'daily' %}active-tab{% endif %}"            data-url="/calendar/daily"   data-title="Daily">Daily</a>
-            </div>
-            {% if calendars_json %}
-            <div class="add-event-section">
+
+            <div class="add-event-section" {% if request.resolver_match.url_name == 'daily' %}style="opacity: 0;"{% endif %}>
                 <button id="toggleEvent" class="btnDefaultQuad">+</button>
             </div>
-            {% endif %}
         </div>
         
         <div class="profile-section">
